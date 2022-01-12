@@ -4,13 +4,16 @@ from flask import Flask
 
 app = Flask(__name__)
 
+
 @app.route("/")
 def hello_world():
     return "<p>Hello, World!</p>"
 
+
 @app.route("/mirror")
 def mirror():
     return requests.get('http://localhost:3000/api_inventory').content
+
 
 @app.route("/apiSpecs")
 def get_api_specs():
@@ -29,4 +32,4 @@ def get_api_specs():
 def process_spec(api_spec_string):
     open_api_spec = json.loads(api_spec_string)
     print(open_api_spec)
-    return 
+    return
