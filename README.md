@@ -44,3 +44,7 @@ mongodb_password='rootpassword'
 Here you can see two entries of the user API after 2 calls to the `/update`. 
 ![Screenshot from 2022-01-12 19-39-20](https://user-images.githubusercontent.com/58170155/149201767-482adb6d-357d-45c4-8287-c1e658c18260.png)
 
+#### Order of K8s deployment:
+  $ kubectl apply -f kubernetes_config/mongodb_config.yaml
+  $ kubectl apply -f kubernetes_config/mongodb_service.yaml
+  $ kubectl apply -f kubernetes_config/mongodb_pod.yaml

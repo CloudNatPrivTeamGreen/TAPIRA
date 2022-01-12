@@ -10,7 +10,7 @@ from version_parser import Version
 # Variable Definition
 apiclarity_host = 'localhost'
 apiclarity_port = '3000'
-mongodb_host = 'localhost'
+mongodb_host = 'mongo'
 mongodb_port = '27017'
 mongodb_user = 'root'
 mongodb_password = 'rootpassword'
