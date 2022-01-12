@@ -1,0 +1,33 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tapira-deployment
+  labels:
+    app: tapira
+  namespace: tapira
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: tapira
+  template:
+    metadata:
+      labels:
+        app: tapira
+    spec:
+      containers:
+        - name: tapira
+          image: frgpow/tapira
+          ports:
+            - containerPort: 5000
+          env:
+            - name: db_root_password
+              valueFrom:
+                secretKeyRef:
+                  name: tapira-secrets
+                  key: mongodb_password
+            - name: mongodb_host
+              value: mongo
+            - name: mongodb_port
+              value: "27017"

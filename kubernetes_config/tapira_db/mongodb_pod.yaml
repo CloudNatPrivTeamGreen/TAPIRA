@@ -4,9 +4,10 @@ apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: mongo
+  namespace: tapira
 spec:
   serviceName: "mongo"
-  replicas: 3
+  replicas: 1
   selector: 
     matchLabels:
       app: mongo
