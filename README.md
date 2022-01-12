@@ -46,5 +46,6 @@ Here you can see two entries of the user API after 2 calls to the `/update`.
 
 #### Order of K8s deployment:
   $ kubectl apply -f kubernetes_config/mongodb_config.yaml
-  $ kubectl apply -f kubernetes_config/mongodb_service.yaml
+  $ kubectl apply -f kubernetes_config/mongodb_svc.yaml
   $ kubectl apply -f kubernetes_config/mongodb_pod.yaml
+  $ kubectl apply -f kubernetes_config/postgrest_pod.yaml
