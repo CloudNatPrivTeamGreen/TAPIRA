@@ -41,4 +41,6 @@ mongodb_password='rootpassword'
 
 #### 8. If you now trigger http://localhost:3000/update APIRepo will fetch all reconstructed API specs and save them in the DB. If it finds previous definitons of the API specifaction it will increment the version number.
 
+Here you can see two entries of the user API after 2 calls to the `/update`. 
+![Screenshot from 2022-01-12 19-39-20](https://user-images.githubusercontent.com/58170155/149201767-482adb6d-357d-45c4-8287-c1e658c18260.png)
 
