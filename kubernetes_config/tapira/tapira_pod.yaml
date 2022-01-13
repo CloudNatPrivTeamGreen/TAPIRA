@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
         - name: tapira
-          image: frgpow/tapira
+          image: milamber97/tapira
           ports:
             - containerPort: 5000
           env:
