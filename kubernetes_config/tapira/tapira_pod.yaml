@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
         - name: tapira
-          image: frgpow/tapira
+          image: milamber97/tapira
           ports:
             - containerPort: 5000
           env:
@@ -31,3 +31,7 @@ spec:
               value: mongo
             - name: mongodb_port
               value: "27017"
+            - name: api_clarity_host
+              value: postgrest
+            - name: api_clarity_port
+              value: "3000"
