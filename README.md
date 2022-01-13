@@ -20,6 +20,17 @@ A example API specification entry in the database can be found in the `sample_en
 
 #### 3. Install Flask
  * https://flask.palletsprojects.com/en/2.0.x/installation/
+#### 3.(EDITED) Set up a virtual environment for python applications and install the project dependencies via the provided requirements.txt file.
+ ```
+ virtualenv my_venv
+ source ./my_venv/bin/activate
+ pip3 install -r requirements.txt
+ ```
+
+If you want to exit your virtual environment run ``` deactivate```
+If you have added a new dependency to the project run ```pip3 freeze > requirements.txt``` and update the **requirements.txt** file.
+
+Note: The folder created by virtualenv is not supposed to be committed to github. Only the requirements.txt should be maintained.
 
 #### 4. If necessary, edit the credential variables, which can be found at the top in the first few lines of the `apirepo.py` file. They are necessary to connect to the MongoDB and to PostgREST.
 ```
@@ -41,11 +52,18 @@ mongodb_password='rootpassword'
 
 #### 8. If you now trigger http://localhost:3000/update APIRepo will fetch all reconstructed API specs and save them in the DB. If it finds previous definitons of the API specifaction it will increment the version number.
 
+
+##### 9. There is a Dockerfile, which is used to build the docker image.
+
 Here you can see two entries of the user API after 2 calls to the `/update`. 
 ![Screenshot from 2022-01-12 19-39-20](https://user-images.githubusercontent.com/58170155/149201767-482adb6d-357d-45c4-8287-c1e658c18260.png)
 
 #### Order of K8s deployment:
-  $ kubectl apply -f kubernetes_config/mongodb_config.yaml
-  $ kubectl apply -f kubernetes_config/mongodb_svc.yaml
-  $ kubectl apply -f kubernetes_config/mongodb_pod.yaml
-  $ kubectl apply -f kubernetes_config/postgrest_pod.yaml
+  $ kubectl apply -f kubernetes_config/namespace/namespace.yaml
+  $ kubectl apply -f kubernetes_config/secrets/tapira-secrets.yaml
+  $ kubectl apply -f kubernetes_config/tapira_db/mongodb_config.yaml
+  $ kubectl apply -f kubernetes_config/tapira_db/mongodb_svc.yaml
+  $ kubectl apply -f kubernetes_config/tapira_db/mongodb_pod.yaml
+  $ kubectl apply -f kubernetes_config/postgrest/postgrest_pod.yaml
+  $ kubectl apply -f kubernetes_config/tapira/tapira_svc.yaml
+  $ kubectl apply -f kubernetes_config/tapira/tapira_pod.yaml
