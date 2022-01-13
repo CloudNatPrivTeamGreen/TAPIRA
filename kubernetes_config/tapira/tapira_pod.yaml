@@ -2,19 +2,19 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: tapira-deployment
+  name: tapira
   labels:
-    app: tapira
-  namespace: tapira
+    name: tapira
+  namespace: apiclarity
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: tapira
+      name: tapira
   template:
     metadata:
       labels:
-        app: tapira
+        name: tapira
     spec:
       containers:
         - name: tapira

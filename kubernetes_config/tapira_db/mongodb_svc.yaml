@@ -4,7 +4,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: mongo
-  namespace: tapira
+  namespace: apiclarity
 spec:
   ports: 
     - port: 27017

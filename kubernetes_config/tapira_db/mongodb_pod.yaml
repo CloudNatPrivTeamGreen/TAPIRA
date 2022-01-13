@@ -4,7 +4,7 @@ apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: mongo
-  namespace: tapira
+  namespace: apiclarity
 spec:
   serviceName: "mongo"
   replicas: 1
