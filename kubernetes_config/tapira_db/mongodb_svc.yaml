@@ -9,6 +9,7 @@ spec:
   ports: 
     - port: 27017
       name: peer
+      targetPort: 27017
   clusterIP: None
   selector:
     app: mongo
