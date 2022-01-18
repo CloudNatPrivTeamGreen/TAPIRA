@@ -4,6 +4,7 @@ metadata:
   name: postgrest
   labels:
     name: postgrest
+  namespace: apiclarity
 spec:
   containers:
   - name: postgrest

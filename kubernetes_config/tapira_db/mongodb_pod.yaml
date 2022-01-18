@@ -4,7 +4,7 @@ apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: mongo
-  namespace: tapira
+  namespace: apiclarity
 spec:
   serviceName: "mongo"
   replicas: 1
@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
         - name: init-mongo
-          image: mongo:3.4.1
+          image: mongo:3.6
           command:
             - bash
             - /config/init.sh
@@ -26,7 +26,7 @@ spec:
             - name: config
               mountPath: /config
         - name: mongodb
-          image: mongo:3.4.1
+          image: mongo:3.6
           command:
             - mongod
             - --replSet

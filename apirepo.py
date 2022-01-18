@@ -2,18 +2,19 @@ import requests
 import json
 import time
 import datetime
+import os
 from flask_pymongo import PyMongo
 from flask import Flask
 from version_parser import Version
 
 ##################################################
 # Variable Definition
-apiclarity_host = 'localhost'
-apiclarity_port = '3000'
-mongodb_host = 'mongo'
-mongodb_port = '27017'
+apiclarity_host = os.getenv("api_clarity_host")
+apiclarity_port = os.getenv("api_clarity_port")
+mongodb_host = os.getenv("mongodb_host")
+mongodb_port = os.getenv("mongodb_port")
 mongodb_user = 'root'
-mongodb_password = 'rootpassword'
+mongodb_password = os.getenv("mongodb_password")
 #
 ###################################################
 
