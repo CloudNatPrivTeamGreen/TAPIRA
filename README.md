@@ -58,12 +58,6 @@ mongodb_password='rootpassword'
 Here you can see two entries of the user API after 2 calls to the `/update`. 
 ![Screenshot from 2022-01-12 19-39-20](https://user-images.githubusercontent.com/58170155/149201767-482adb6d-357d-45c4-8287-c1e658c18260.png)
 
-#### Order of K8s deployment:
-    $ kubectl apply -f kubernetes_config/namespace/namespace.yaml
-    $ kubectl apply -f kubernetes_config/tapira_db/mongodb_config.yaml
-    $ kubectl apply -f kubernetes_config/tapira_db/mongodb_svc.yaml
-    $ kubectl apply -f kubernetes_config/tapira_db/mongodb_pod.yaml
-    $ kubectl apply -f kubernetes_config/postgrest/postgrest_pod.yaml
-    $ kubectl apply -f kubernetes_config/secrets/tapira-secrets.yaml
-    $ kubectl apply -f kubernetes_config/tapira/tapira_pod.yaml
-    $ kubectl apply -f kubernetes_config/tapira/tapira_svc.yaml
+#### Deploy in Kubernetes:
+    chmod +x deploy.sh
+    ./deploy.sh
