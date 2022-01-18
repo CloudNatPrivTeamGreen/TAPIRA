@@ -1,4 +1,4 @@
-# TAPIRA - TAPIRA: GDPR compliance Tool for **T**ransparent  **API**s in **R**ESTful **A**rchitectures
+# TAPIRA: GDPR compliance Tool for **T**ransparent  **API**s in **R**ESTful **A**rchitectures
  
 This project serves as a proof of concept for our envisioned evolutionary API Repository in TAPIRA.
 It consists of a small backend python application created with flask and a MongoDB database.
