@@ -20,11 +20,7 @@ A example API specification entry in the database can be found in the `sample_en
 docker-compose up -d
 ```
 
-#### 3. Install Flask
-
-- https://flask.palletsprojects.com/en/2.0.x/installation/
-
-#### 3.(EDITED) Set up a virtual environment for python applications and install the project dependencies via the provided requirements.txt file.
+#### 3. Set up a virtual environment for python applications and install the project dependencies via the provided requirements.txt or Pipfile.
 
 Install "pipenv" if not installed with the following command
 
@@ -38,7 +34,7 @@ Change the current directory to the root directory of Tapira and then execute
   pipenv shell
 ```
 
-This will spinup a virtual environment for you. After that execute the following:
+This will spin up a virtual environment for you. After that execute the following:
 
 ```bash
   pipenv install
@@ -51,8 +47,9 @@ Inorder to install any other dependencies execute the following
   pipenv install <package-name>
   pipenv lock -r > requirements.txt
 ```
+The above commands will install the required package, add it to the Pipfile and as well as add to the requirements.txt file.
+#### 4. Entering and exiting the virtual environment.
 
-The above commands will install the required package, add it to the Pipfile and as well as add to the requirements.txt file
 In order to exit from the virtual environment either do ctrl+d or
 
 ```bash
@@ -65,7 +62,7 @@ in your command line. To spin up the virtual environment again execute
 ```
 in the folder where Pipfile is located.
 
-#### 4. If necessary, edit the credential variables, which can be found at the top in the first few lines of the `apirepo.py` file. They are necessary to connect to the MongoDB and to PostgREST.
+#### 5. If necessary, edit the credential variables, which can be found at the top in the first few lines of the `apirepo.py` file. They are necessary to connect to the MongoDB and to PostgREST.
 
 ```
 apiclarity_host='localhost'
@@ -76,17 +73,17 @@ mongodb_user='root'
 mongodb_password='rootpassword'
 ```
 
-#### 5. Execute the following commands:
+#### 6. Execute the following commands:
 
 Execute the following to start the backend `flask run` in the folder where tapira.py is located.
 
-#### 6. The application is now runinning under http://localhost:5000/
+#### 7. The application is now runinning under http://localhost:5000/
 
-#### 7. Generate traffic in your application and review the API specifactions inside APIClarity to generate reconstructed API specifactions.
+#### 8. Generate traffic in your application and review the API specifactions inside APIClarity to generate reconstructed API specifactions.
 
-#### 8. If you now trigger http://localhost:3000/update APIRepo will fetch all reconstructed API specs and save them in the DB. If it finds previous definitons of the API specifaction it will increment the version number.
+#### 9. If you now trigger http://localhost:3000/update APIRepo will fetch all reconstructed API specs and save them in the DB. If it finds previous definitons of the API specifaction it will increment the version number.
 
-##### 9. There is a Dockerfile, which is used to build the docker image.
+##### 10. There is a Dockerfile, which is used to build the docker image.
 
 Here you can see two entries of the user API after 2 calls to the `/update`.
 ![Screenshot from 2022-01-12 19-39-20](https://user-images.githubusercontent.com/58170155/149201767-482adb6d-357d-45c4-8287-c1e658c18260.png)
