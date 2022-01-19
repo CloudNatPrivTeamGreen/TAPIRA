@@ -1,13 +1,7 @@
 import requests
 import json
-from flask import Flask
+from backend import app
 
-app = Flask(__name__)
-
-
-@app.route("/api")
-def hello_world():
-    return "<p>Hello, World!</p>"
 
 
 @app.route("/api/mirror")
