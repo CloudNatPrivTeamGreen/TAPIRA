@@ -2,7 +2,6 @@
 
 kubectl apply -f kubernetes_config/namespace/namespace.yaml
 kubectl apply -f kubernetes_config/tapira_db/mongodb_secrets.yaml
-kubectl apply -f kubernetes_config/tapira_db/mongodb_client.yaml
 kubectl apply -f kubernetes_config/tapira_db/mongodb_deployment.yaml
 kubectl apply -f kubernetes_config/tapira_db/mongodb_nodeport-svc.yaml
 kubectl apply -f kubernetes_config/tapira_db/mongodb_pv.yaml
