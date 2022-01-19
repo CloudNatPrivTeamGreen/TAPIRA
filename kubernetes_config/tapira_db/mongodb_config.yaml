@@ -9,6 +9,9 @@ data:
   init.sh: |
     #!/bin/bash
 
+    # Install ping
+    apt-get update && apt-get -y install iputils-ping
+
     # Need to wait for the readiness health check to pass so that the
     # mongo names resolve. This is kind of wonky.
     until ping -c 1 ${HOSTNAME}.mongo; do

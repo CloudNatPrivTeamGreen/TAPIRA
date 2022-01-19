@@ -22,7 +22,7 @@ spec:
           ports:
             - containerPort: 5000
           env:
-            - name: db_root_password
+            - name: mongodb_password
               valueFrom:
                 secretKeyRef:
                   name: tapira-secrets
