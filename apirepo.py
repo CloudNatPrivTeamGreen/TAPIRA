@@ -13,16 +13,15 @@ apiclarity_host = os.getenv("api_clarity_host")
 apiclarity_port = os.getenv("api_clarity_port")
 mongodb_host = os.getenv("mongodb_host")
 mongodb_port = os.getenv("mongodb_port")
-mongodb_user = 'tapirauser'
+mongodb_user = os.getenv("MONGODB_USER")
 mongodb_password = os.getenv("MONGODB_PASSWORD")
-mongodb_database = os.getenv("MONGODB_DATABASE")
 #
 ###################################################
 
 app = Flask(__name__)
 
-mongodb_client = PyMongo(app, uri="mongodb://%s:%s@%s:%s/%s?authSource=admin" % (
-mongodb_user, mongodb_password, mongodb_host, mongodb_port, mongodb_database))
+mongodb_client = PyMongo(app, uri="mongodb://%s:%s@%s:%s/api_repo?authSource=admin" % (
+mongodb_user, mongodb_password, mongodb_host, mongodb_port))
 db = mongodb_client.db
 
 
