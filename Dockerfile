@@ -1,6 +1,6 @@
 FROM python:3.8-slim-buster
 
-ENV FLASK_APP=apirepo.py
+ENV FLASK_APP=tapira.py
 
 WORKDIR /app
 
