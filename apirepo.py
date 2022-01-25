@@ -13,8 +13,8 @@ apiclarity_host = os.getenv("api_clarity_host")
 apiclarity_port = os.getenv("api_clarity_port")
 mongodb_host = os.getenv("mongodb_host")
 mongodb_port = os.getenv("mongodb_port")
-mongodb_user = 'root'
-mongodb_password = os.getenv("mongodb_password")
+mongodb_user = os.getenv("MONGODB_USER")
+mongodb_password = os.getenv("MONGODB_PASSWORD")
 #
 ###################################################
 
