@@ -19,6 +19,7 @@ Jinja2 = "==3.0.3"
 MarkupSafe = "==2.0.1"
 Werkzeug = "==2.0.2"
 python-dotenv = "*"
+gunicorn = "*"
 
 [dev-packages]
 
