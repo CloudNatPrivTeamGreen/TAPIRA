@@ -3,8 +3,8 @@ import json
 import time
 import datetime
 import os
+from backend import app
 from flask_pymongo import PyMongo
-from flask import Flask
 from version_parser import Version
 
 ##################################################
@@ -18,7 +18,6 @@ mongodb_password = os.getenv("MONGODB_PASSWORD")
 #
 ###################################################
 
-app = Flask(__name__)
 
 mongodb_client = PyMongo(app, uri="mongodb://%s:%s@%s:%s/api_repo?authSource=admin" % (
 mongodb_user, mongodb_password, mongodb_host, mongodb_port))
@@ -35,7 +34,7 @@ class ApiSpecEntry():
 
 # If this endpoint is triggered it calls the APIClarity database,
 # pull all reconstructed APISpecs and updates the internal API Repository with a the new version.
-@app.route("/update")
+@app.route("/api/update")
 def update_api_repository():
     # request against APIClarity postgresql db via PostgREST
     response = requests.get('http://%s:%s/api_inventory' % (apiclarity_host, apiclarity_port))

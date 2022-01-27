@@ -1,0 +1,2 @@
+FLASK_APP=tapira.py
+FLASK_ENV=development
