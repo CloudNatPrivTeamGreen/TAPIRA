@@ -9,3 +9,4 @@ kubectl apply -f kubernetes_config/postgrest/postgrest_pod.yaml
 kubectl apply -f kubernetes_config/secrets/tapira-secrets.yaml
 kubectl apply -f kubernetes_config/tapira/tapira_pod.yaml
 kubectl apply -f kubernetes_config/tapira/tapira_svc.yaml
+kubectl apply -f kubernetes_config/apiclarity-extended.yaml
