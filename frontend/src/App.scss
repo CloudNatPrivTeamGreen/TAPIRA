@@ -1,0 +1,23 @@
+@import "antd/dist/antd.min.css";
+
+.App {
+  text-align: center;
+}
+
+.page-header {
+  display: block;
+  font-size: 2em;
+  margin-top: 0.67em;
+  margin-bottom: 0.67em;
+  margin-left: 0;
+  margin-right: 0;
+  font-weight: bold;
+}
+
+.content {
+  padding: 20px 0 15px 0;
+  width: 80%;
+  margin: auto;
+  background-color: white;
+  box-shadow: 3px 4px 10px rgba(110, 107, 107, 0.5);
+}
