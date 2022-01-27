@@ -3,6 +3,7 @@ apispec-webframeworks==0.5.2
 certifi==2021.10.8
 charset-normalizer==2.0.10
 click==8.0.3
+contextlib2==21.6.0
 Flask==2.0.2
 Flask-PyMongo==2.3.0
 idna==3.3
@@ -13,8 +14,10 @@ marshmallow==3.14.1
 packaging==21.3
 pymongo==4.0.1
 pyparsing==3.0.7
+python-dotenv==0.19.2
 PyYAML==6.0
 requests==2.27.1
+schema==0.7.5
 urllib3==1.26.8
 version-parser==1.0.1
 webargs==8.1.0

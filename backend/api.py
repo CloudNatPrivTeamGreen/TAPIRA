@@ -1,31 +1,25 @@
 import json
+import os
 
 import requests
-from flask import Flask, request, Response
+from flask import request, Response
 from flask_pymongo import PyMongo
 from version_parser import Version
 
+from backend import app
+from backend import models as models
+from backend import openapi_config as config
+
 ##################################################
 # Variable Definition
-# apiclarity_host = os.getenv("api_clarity_host")
-# apiclarity_port = os.getenv("api_clarity_port")
-# mongodb_host = os.getenv("mongodb_host")
-# mongodb_port = os.getenv("mongodb_port")
-# mongodb_user = os.getenv("MONGODB_USER")
-# mongodb_password = os.getenv("MONGODB_PASSWORD")
-from models import *
-from openapi_config import ApiSpecsSchema, spec
-
-apiclarity_host = "localhost"
-apiclarity_port = 9998
-mongodb_host = "192.168.49.2"
-mongodb_port = 32000
-mongodb_user = "adminuser"
-mongodb_password = "password123"
-#
+apiclarity_host = os.getenv("api_clarity_host")
+apiclarity_port = os.getenv("api_clarity_port")
+mongodb_host = os.getenv("mongodb_host")
+mongodb_port = os.getenv("mongodb_port")
+mongodb_user = os.getenv("MONGODB_USER")
+mongodb_password = os.getenv("MONGODB_PASSWORD")
+# #
 ###################################################
-
-app = Flask(__name__)
 
 mongodb_client = PyMongo(app, uri="mongodb://%s:%s@%s:%s/api_repo?authSource=admin" % (
     mongodb_user, mongodb_password, mongodb_host, mongodb_port))
@@ -77,9 +71,9 @@ def get_specifications_by_service():
     api_spec_type = request.args.get("type")
     version = request.args.get("version")
 
-    api_specs = ApiSpecs(list(db.api_specifications.find({"name": service})))
+    api_specs = models.ApiSpecs(list(db.api_specifications.find({"name": service})))
 
-    return ApiSpecsSchema().dump(api_specs)
+    return config.ApiSpecsSchema().dump(api_specs)
 
 
 @app.route("/api/current_version_spec", methods=["GET"])
@@ -101,7 +95,7 @@ def upload_api_spec():
 # Since path inspects the view and its route,
 # we need to be in a Flask request context
 with app.test_request_context():
-    spec.path(view=get_list_services) \
+    config.spec.path(view=get_list_services) \
         .path(view=get_specifications_by_service) \
         .path(view=get_current_version_spec) \
         .path(view=get_api_conflicts) \
@@ -109,7 +103,7 @@ with app.test_request_context():
 
 # We're good to go! Save this to a file for now.
 with open('openapi.json', 'w') as f:
-    json.dump(spec.to_dict(), f)
+    json.dump(config.spec.to_dict(), f)
 
 
 def update_api_spec(apiclarity_spec):
@@ -118,7 +112,7 @@ def update_api_spec(apiclarity_spec):
     port = apiclarity_spec["port"]
     api_spec = json.loads(apiclarity_spec["reconstructed_spec"])
 
-    api_spec_entry = ApiSpecEntry(name, port, version, api_spec)
+    api_spec_entry = models.ApiSpecEntry(name, port, version, api_spec)
     save_api_spec_entry_to_db(api_spec_entry)
     return api_spec_entry
 

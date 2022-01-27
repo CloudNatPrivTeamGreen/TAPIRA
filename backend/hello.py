@@ -1,21 +1,15 @@
 import requests
 import json
-from flask import Flask
-
-app = Flask(__name__)
+from backend import app
 
 
-@app.route("/")
-def hello_world():
-    return "<p>Hello, World!</p>"
 
-
-@app.route("/mirror")
+@app.route("/api/mirror")
 def mirror():
     return requests.get('http://localhost:3000/api_inventory').content
 
 
-@app.route("/apiSpecs")
+@app.route("/api/apiSpecs")
 def get_api_specs():
     response = requests.get('http://localhost:3000/api_inventory')
     response_list = json.loads(response.content.decode('utf-8'))
