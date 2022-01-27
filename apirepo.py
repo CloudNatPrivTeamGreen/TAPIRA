@@ -108,7 +108,7 @@ with app.test_request_context():
         .path(view=upload_api_spec)
 
 # We're good to go! Save this to a file for now.
-with open('openapi.yaml', 'w') as f:
+with open('openapi.json', 'w') as f:
     json.dump(spec.to_dict(), f)
 
 
