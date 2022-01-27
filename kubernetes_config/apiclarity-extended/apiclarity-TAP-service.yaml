@@ -3,14 +3,14 @@ kind: Service
 metadata:
   labels:
     app: apiclarity
-  name: apiclarity-nodeport-TAP-svc
+  name: apiclarity-nodeport-tap-svc
   namespace: apiclarity
 spec:
   ports:
   - port: 9999
     protocol: TCP
     targetPort: 8080
-    nodePort: 9999
+    nodePort: 31999
   selector:
     app: apiclarity
   type: NodePort
