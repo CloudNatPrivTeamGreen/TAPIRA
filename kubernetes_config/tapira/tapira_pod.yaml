@@ -18,17 +18,22 @@ spec:
     spec:
       containers:
         - name: tapira
-          image: milamber97/tapira
+          image: milamber97/tapira:mongodb_config
           ports:
             - containerPort: 5000
           env:
-            - name: mongodb_password
+            - name: MONGODB_USER
+              valueFrom:
+                  secretKeyRef:
+                    name: mongo-creds
+                    key: username
+            - name: MONGODB_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: tapira-secrets
-                  key: mongodb_password
+                  name: mongo-creds
+                  key: password
             - name: mongodb_host
-              value: mongo
+              value: mongo-nodeport-svc
             - name: mongodb_port
               value: "27017"
             - name: api_clarity_host
