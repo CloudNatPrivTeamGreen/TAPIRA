@@ -2,9 +2,30 @@ import React, { useEffect, useState } from 'react';
 import logo from './logo.svg';
 import { DatePicker, message, Input } from 'antd';
 import OpenApiList from './components/OpenApiList';
+import CompareJson from './components/CompareJson';
 import './App.scss';
 
 const { Search } = Input;
+
+const oldData = {
+  name: 'super',
+  age: 18,
+  task: [
+    { name: 'eat', time: '09:00' },
+    { name: 'work', time: '10:00' },
+    { name: 'sleep', time: '22:00' }
+  ]
+};
+const newData = {
+  name: 'coolapt',
+  age: 20,
+  task: [
+    { name: 'eat', time: '09:00' },
+    { name: 'work', time: '10:00' },
+    { name: 'sleep', time: '23:00' },
+    { name: 'running', time: '08:00' }
+  ]
+};
 
 function App() {
   const [currentTime, setCurrentTime] = useState(0); 
@@ -34,6 +55,9 @@ function App() {
         <Search placeholder="input search text" onSearch={onSearch} enterButton style={{ width: 304 }}/>
         <div style={{ margin: '40px 100px' }}>
           <OpenApiList />
+        </div>
+        <div style={{ margin: '40px 60px' }}>
+          <CompareJson oldData={oldData} newData={newData} />
         </div>
       </div>
     </div>
