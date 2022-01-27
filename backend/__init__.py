@@ -1,7 +1,11 @@
-from flask import Flask
-from os import environ
+import os
 
-ENVIRONMENT = environ.get('ENVIRONMENT')
+from flask import Flask
+from dotenv import load_dotenv
+
+load_dotenv()
+
+ENVIRONMENT = os.getenv('ENVIRONMENT')
 
 '''
     "static_folder" tells Flask where is the static folder. By default this is a static directory located in the same directory where the application is. We change it to point to build.
@@ -13,6 +17,4 @@ app = Flask(__name__) if ENVIRONMENT == 'development' else Flask(__name__, stati
 # Flask goes through all the routes in the specified order
 # The first matched route will be triggered
 
-from backend import api
-from backend import routes
-from backend import hello
+from backend import routes, hello, api
