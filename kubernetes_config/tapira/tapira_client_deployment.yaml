@@ -1,0 +1,24 @@
+apiVersion: api/v1
+kind: Deployment
+metadata:
+  name: tapira-client
+  namespace: tapira
+  labels:
+    frontend: tapira-client
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      frontend: tapira-client
+  template:
+    metadata:
+      name: tapira-client-pods
+      namespace: tapira
+      labels:
+        frontend: tapira-client
+    spec:
+      containers:
+      - name: tapira-client-containers
+        image: milamber97/tapira-client:latest
+        ports:
+        - containerPort: 80

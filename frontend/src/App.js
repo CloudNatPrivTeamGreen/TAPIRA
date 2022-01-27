@@ -59,6 +59,7 @@ function App() {
         <div style={{ margin: '40px 60px' }}>
           <CompareJson oldData={oldData} newData={newData} />
         </div>
+        <p>The Current time is {currentTime} </p>
       </div>
     </div>
   );

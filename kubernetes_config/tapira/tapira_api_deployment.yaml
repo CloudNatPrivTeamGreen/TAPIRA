@@ -2,22 +2,27 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: tapira
+  name: tapira-api
+  namespace: tapira
   labels:
     name: tapira
-  namespace: apiclarity
+    backend: tapira-api
 spec:
   replicas: 1
   selector:
     matchLabels:
       name: tapira
+      backend: tapira-api
   template:
     metadata:
+      name: tapira-api-pods
+      namespace: tapira
       labels:
         name: tapira
+        backend: tapira-api
     spec:
       containers:
-        - name: tapira
+        - name: tapira-api-containers
           image: milamber97/tapira:mongodb_config
           ports:
             - containerPort: 5000
