@@ -1,17 +1,16 @@
 apiVersion: v1
 kind: Service
 metadata:
- labels:
-  app: apiclarity
- name: apiclarity-service-node
- namespace: apiclarity
+  labels:
+    app: apiclarity
+  name: apiclarity-nodeport-TAP-svc
+  namespace: apiclarity
 spec:
- selector:
-   app: Tapira-Apiclarity
-   env: prod
- type: ClusterIP
- ports:
- - port: 9999
+  ports:
+  - port: 9999
     protocol: TCP
     targetPort: 8080
     nodePort: 9999
+  selector:
+    app: apiclarity
+  type: NodePort
