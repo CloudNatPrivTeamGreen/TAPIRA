@@ -28,7 +28,7 @@ const newData = {
 };
 
 function App() {
-  const [currentTime, setCurrentTime] = useState(0); 
+  const [currentTime, setCurrentTime] = useState(null); 
   const [date, setDate] = useState(null);
 
   const handleChange = value => {
@@ -42,7 +42,7 @@ function App() {
     fetch('/api/time')
     .then(res => res.json())
     .then(data => {
-      setCurrentTime(data.time);
+      setCurrentTime(new Date(data?.time * 1000));
     });
   }, []);
 
@@ -59,7 +59,7 @@ function App() {
         <div style={{ margin: '40px 60px' }}>
           <CompareJson oldData={oldData} newData={newData} />
         </div>
-        <p>The Current time is {currentTime} </p>
+        <p>The Current time is {currentTime?.toLocaleString()} </p>
       </div>
     </div>
   );

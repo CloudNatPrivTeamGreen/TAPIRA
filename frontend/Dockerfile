@@ -1,8 +1,8 @@
-FROM node:10 as build-stage
+FROM node:latest as build-stage
 
 WORKDIR /react-app
 
-COPY . ./
+COPY . .
 
 RUN npm install && npm run build
 
