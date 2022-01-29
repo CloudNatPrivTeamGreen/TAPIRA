@@ -23,7 +23,7 @@ spec:
     spec:
       containers:
         - name: tapira-api-containers
-          image: milamber97/tapira:mongodb_config
+          image: milamber97/tapira:0.1.0
           ports:
             - containerPort: 5000
           env:

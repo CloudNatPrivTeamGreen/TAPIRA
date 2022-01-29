@@ -4,7 +4,7 @@ metadata:
   labels:
     app: mongo-client
   name: mongo-client
-  namespace: apiclarity
+  namespace: tapira
 
 spec:
   replicas: 1

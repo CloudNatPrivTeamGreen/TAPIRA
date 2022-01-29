@@ -1,4 +1,4 @@
-apiVersion: api/v1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: tapira-client
@@ -19,6 +19,6 @@ spec:
     spec:
       containers:
       - name: tapira-client-containers
-        image: milamber97/tapira-client:latest
+        image: milamber97/tapira-client:0.0.1
         ports:
         - containerPort: 80
