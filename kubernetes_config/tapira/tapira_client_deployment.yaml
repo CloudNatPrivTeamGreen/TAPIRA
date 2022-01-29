@@ -21,4 +21,4 @@ spec:
       - name: tapira-client-containers
         image: milamber97/tapira-client:0.0.1
         ports:
-        - containerPort: 80
+        - containerPort: 8080

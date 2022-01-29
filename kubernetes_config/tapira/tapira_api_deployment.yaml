@@ -42,6 +42,6 @@ spec:
             - name: mongodb_port
               value: "27017"
             - name: api_clarity_host
-              value: postgrest
+              value: postgrest.apiclarity #<<service_name>>.<<namespace>>
             - name: api_clarity_port
               value: "3000"
