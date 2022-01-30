@@ -6,7 +6,10 @@ from backend import globals
 from backend.models import ApiSpecEntry
 from backend.repository import api_spec_repo as repo
 
+version_pattern_string = "<<x.x.x>>"
 version_pattern = re.compile("[0-9]+\\.[0-9]+\\.[0-9]+$")
+
+version_snapshot_string = "<<x.x.x-SNAPSHOT>>"
 version_snapshot_pattern = re.compile("[0-9]+\\.[0-9]+\\.[0-9]+-SNAPSHOT$")
 
 

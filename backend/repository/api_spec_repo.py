@@ -1,6 +1,5 @@
 ##################################################
 # Variable Definition
-import os
 
 import pymongo
 from flask import g
@@ -9,18 +8,9 @@ from flask_pymongo import PyMongo
 from backend import app
 from backend.models import ApiSpecEntry
 
-mongodb_host = os.getenv("mongodb_host", default="192.168.49.2")
-mongodb_port = os.getenv("mongodb_port", default=32000)
-mongodb_user = os.getenv("MONGODB_USER", default="adminuser")
-mongodb_password = os.getenv("MONGODB_PASSWORD", default="password123")
-# #
-###################################################
-
-
 def get_db():
     if 'db' not in g:
-        mongodb_client = PyMongo(app,
-            uri=f'mongodb://{mongodb_user}:{mongodb_password}@{mongodb_host}:{mongodb_port}/api_repo?authSource=admin')
+        mongodb_client = PyMongo(app)
         g.db = mongodb_client.db
 
     return g.db
