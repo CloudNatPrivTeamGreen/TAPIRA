@@ -1,0 +1,199 @@
+---
+info:
+  description: Api for the TAPIRA backend
+  contact:
+    email: test@swagger.io
+  license:
+    name: MIT License
+    url: https://fr.wikipedia.org/wiki/Licence_MIT
+  title: TAPIRA_Api
+  version: 0.1
+paths:
+  "/api/apiclarity_specs":
+    get:
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ApiClaritySpecs"
+        default:
+          "$ref": "#/components/responses/DEFAULT_ERROR"
+      summary: Fetch provided and reconstructed specifications from APIClarity and
+        save them in database.
+      tags:
+        - specs
+  "/api/services":
+    get:
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Services"
+        default:
+          "$ref": "#/components/responses/DEFAULT_ERROR"
+      summary: Get list of service names
+      description: Return list of unique service names with existing specifications.
+      tags:
+        - specs
+  "/api/specifications":
+    get:
+      parameters:
+        - in: query
+          name: service
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: type
+          required: false
+          schema:
+            type: string
+        - in: query
+          name: version
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ApiSpecs"
+        '422':
+          "$ref": "#/components/responses/UNPROCESSABLE_ENTITY"
+        default:
+          "$ref": "#/components/responses/DEFAULT_ERROR"
+      summary: Get filtered api specifications
+      description: Filter api specifications based on parameters.
+      tags:
+        - specs
+  "/api/current_version_spec":
+    get:
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/RecentApiSpec"
+        default:
+          "$ref": "#/components/responses/DEFAULT_ERROR"
+      summary: Get most recent api specification
+      description: Get most recent api specification based on service name.
+      tags:
+        - specs
+  "/api/conflicts":
+    get:
+      responses:
+        default:
+          "$ref": "#/components/responses/DEFAULT_ERROR"
+      tags:
+        - specs
+  "/api/upload":
+    get:
+      responses:
+        default:
+          "$ref": "#/components/responses/DEFAULT_ERROR"
+      tags:
+        - specs
+tags:
+  - name: specs
+    description: Collection and maintenance of specifications
+openapi: 3.0.2
+components:
+  schemas:
+    Error:
+      type: object
+      properties:
+        errors:
+          type: object
+          description: Errors
+        message:
+          type: string
+          description: Error message
+        code:
+          type: integer
+          description: Error code
+        status:
+          type: string
+          description: Error name
+    PaginationMetadata:
+      type: object
+      properties:
+        total:
+          type: integer
+        total_pages:
+          type: integer
+        first_page:
+          type: integer
+        last_page:
+          type: integer
+        page:
+          type: integer
+        previous_page:
+          type: integer
+        next_page:
+          type: integer
+    ApiClaritySpecs:
+      type: object
+      properties:
+        updated_provided_services:
+          type: array
+          items:
+            type: string
+        updated_reconstructed_services:
+          type: array
+          items:
+            type: string
+    Services:
+      type: object
+      properties:
+        services:
+          type: array
+          items:
+            type: string
+    ApiSpecEntry:
+      type: object
+      properties:
+        api_spec:
+          type: string
+        version:
+          type: string
+        created_at_date:
+          type: string
+        name:
+          type: string
+      required:
+        - name
+    ApiSpecs:
+      type: object
+      properties:
+        api_specs:
+          type: array
+          items:
+            "$ref": "#/components/schemas/ApiSpecEntry"
+    RecentApiSpec:
+      type: object
+      properties:
+        service:
+          type: string
+        recent_api_spec:
+          type: string
+  responses:
+    DEFAULT_ERROR:
+      description: Default error response
+      content:
+        application/json:
+          schema:
+            "$ref": "#/components/schemas/Error"
+    UNPROCESSABLE_ENTITY:
+      description: Unprocessable Entity
+      content:
+        application/json:
+          schema:
+            "$ref": "#/components/schemas/Error"
