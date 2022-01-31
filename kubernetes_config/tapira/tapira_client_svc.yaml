@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: tapira-client
+  namespace: tapira
+  labels:
+    frontend: tapira-client
+spec:
+  type: NodePort
+  selector:
+    frontend: tapira-client
+  ports:
+    - port: 8080
+      targetPort: 8080
+      nodePort: 30003
