@@ -7,10 +7,10 @@ metadata:
   namespace: apiclarity
 spec:
   ports:
-  - port: 9999
+  - port: 8080
     protocol: TCP
     targetPort: 8080
     nodePort: 31999
   selector:
-    app: apiclarity
+    app: apiclarity-apiclarity
   type: NodePort
