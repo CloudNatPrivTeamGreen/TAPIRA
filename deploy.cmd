@@ -1,5 +1,3 @@
-#!/bin/bash
-
 kubectl apply -f kubernetes_config/namespace/namespace.yaml
 kubectl apply -f kubernetes_config/tapira_db/mongodb_secrets.yaml
 kubectl apply -f kubernetes_config/tapira_db/mongodb_deployment.yaml
