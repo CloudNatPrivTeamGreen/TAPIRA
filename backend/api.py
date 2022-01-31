@@ -1,4 +1,5 @@
 import json
+import time
 
 import requests
 from flask import request, Response
@@ -17,6 +18,13 @@ blp = Blueprint("specs",
                 url_prefix="/api",
                 description="Collection and maintenance of specifications"
                 )
+
+
+@blp.route("/time")
+@blp.route("/")
+class TestConnection(MethodView):
+    def get(self):
+        return {'time': time.time()}
 
 
 @blp.route("/apiclarity_specs")
