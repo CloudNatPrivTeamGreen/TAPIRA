@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: apiclarity
+  name: apiclarity-nodeport-tap-svc
+  namespace: apiclarity
+spec:
+  ports:
+  - port: 8080
+    protocol: TCP
+    targetPort: 8080
+    nodePort: 31999
+  selector:
+    app: apiclarity-apiclarity
+  type: NodePort
