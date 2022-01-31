@@ -9,6 +9,33 @@ info:
   title: TAPIRA_Api
   version: 0.1
 paths:
+  "/api/":
+    get:
+      responses:
+        default:
+          "$ref": "#/components/responses/DEFAULT_ERROR"
+      tags:
+        - specs
+  "/api/time":
+    get:
+      responses:
+        default:
+          "$ref": "#/components/responses/DEFAULT_ERROR"
+      tags:
+        - specs
+  "/api/housekeeping":
+    get:
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Housekeeping"
+        default:
+          "$ref": "#/components/responses/DEFAULT_ERROR"
+      tags:
+        - specs
   "/api/apiclarity_specs":
     get:
       responses:
@@ -43,11 +70,6 @@ paths:
     get:
       parameters:
         - in: query
-          name: service
-          required: true
-          schema:
-            type: string
-        - in: query
           name: type
           required: false
           schema:
@@ -55,6 +77,11 @@ paths:
         - in: query
           name: version
           required: false
+          schema:
+            type: string
+        - in: query
+          name: service
+          required: true
           schema:
             type: string
       responses:
@@ -74,13 +101,21 @@ paths:
         - specs
   "/api/current_version_spec":
     get:
+      parameters:
+        - in: query
+          name: service
+          required: false
+          schema:
+            type: string
       responses:
         '200':
           description: OK
           content:
             application/json:
               schema:
-                "$ref": "#/components/schemas/RecentApiSpec"
+                "$ref": "#/components/schemas/ApiSpecEntry"
+        '422':
+          "$ref": "#/components/responses/UNPROCESSABLE_ENTITY"
         default:
           "$ref": "#/components/responses/DEFAULT_ERROR"
       summary: Get most recent api specification
@@ -110,18 +145,18 @@ components:
     Error:
       type: object
       properties:
-        errors:
-          type: object
-          description: Errors
         message:
           type: string
           description: Error message
-        code:
-          type: integer
-          description: Error code
+        errors:
+          type: object
+          description: Errors
         status:
           type: string
           description: Error name
+        code:
+          type: integer
+          description: Error code
     PaginationMetadata:
       type: object
       properties:
@@ -139,6 +174,11 @@ components:
           type: integer
         next_page:
           type: integer
+    Housekeeping:
+      type: object
+      properties:
+        status_of_deletion:
+          type: string
     ApiClaritySpecs:
       type: object
       properties:
@@ -160,11 +200,11 @@ components:
     ApiSpecEntry:
       type: object
       properties:
-        api_spec:
-          type: string
         version:
           type: string
         created_at_date:
+          type: string
+        api_spec:
           type: string
         name:
           type: string
@@ -177,13 +217,6 @@ components:
           type: array
           items:
             "$ref": "#/components/schemas/ApiSpecEntry"
-    RecentApiSpec:
-      type: object
-      properties:
-        service:
-          type: string
-        recent_api_spec:
-          type: string
   responses:
     DEFAULT_ERROR:
       description: Default error response
