@@ -18,9 +18,9 @@ class ApiSpecsSchema(Schema):
     api_specs = fields.List(fields.Nested(ApiSpecEntrySchema))
 
 
-class RecentApiSpecSchema(Schema):
-    recent_api_spec = fields.Str()
-    service = fields.Str()
+class CurrentApiResponseSchema(Schema):
+    recent_api_spec = fields.Nested(ApiSpecEntrySchema)
+    service_name = fields.Str()
 
 
 class ServicesSchema(Schema):
@@ -30,3 +30,11 @@ class ServicesSchema(Schema):
 class ApiClaritySpecsSchema(Schema):
     updated_provided_services = fields.List(fields.Str)
     updated_reconstructed_services = fields.List(fields.Str)
+
+
+class HousekeepingSchema(Schema):
+    status_of_deletion = fields.Str()
+
+
+class CurrentApiRequestSchema(Schema):
+    service = fields.Str()

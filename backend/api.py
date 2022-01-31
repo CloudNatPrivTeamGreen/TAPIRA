@@ -27,6 +27,13 @@ class TestConnection(MethodView):
         return {'time': time.time()}
 
 
+@blp.route("/housekeeping")
+class ClearReconstructed(MethodView):
+    @blp.response(200, schema.HousekeepingSchema)
+    def get(self):
+        return {"status_of_deletion": s.delete_all_reconstructed_specs()}
+
+
 @blp.route("/apiclarity_specs")
 class ApiClaritySpecs(MethodView):
     @blp.response(200, schema.ApiClaritySpecsSchema)
@@ -36,7 +43,6 @@ class ApiClaritySpecs(MethodView):
         """
         response = requests.get(f'{config.APICLARITY_URL}/api_inventory')
         apiclarity_specs = json.loads(response.content.decode('utf-8'))
-
         new_provided_services = []
         new_reconstructed_services = []
         s.extract_api_specs(apiclarity_specs, new_provided_services, new_reconstructed_services)
@@ -82,7 +88,8 @@ class Specifications(MethodView):
 
 @blp.route("/current_version_spec")
 class CurrentVersionSpec(MethodView):
-    @blp.response(200, schema.RecentApiSpecSchema)
+    @blp.arguments(schema.CurrentApiRequestSchema, location="query")
+    @blp.response(200, schema.ApiSpecEntrySchema)
     def get(self, args):
         """Get most recent api specification
 
@@ -94,7 +101,11 @@ class CurrentVersionSpec(MethodView):
         if service is None:
             abort(400, "Service name missing from the parameters")
 
-        return {"recent_api_spec": s.get_latest_previous_provided(service), "service_name": service}
+        recent_spec = s.get_latest_previous_provided(service)
+        if recent_spec is None:
+            abort(404, message=f"No spec found for service={service}")
+
+        return schema.ApiSpecEntrySchema().dump(recent_spec)
 
 
 @blp.route("/conflicts")
