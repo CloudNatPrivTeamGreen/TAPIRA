@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: tapira-api-visible
+  namespace: tapira
+  labels:
+    backend: tapira-api
+spec:
+  type: NodePort
+  selector:
+    backend: tapira-api
+  ports:
+    - port: 5000
+      targetPort: 5000

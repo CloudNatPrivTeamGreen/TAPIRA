@@ -2,23 +2,28 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: tapira
+  name: tapira-api
+  namespace: tapira
   labels:
     name: tapira
-  namespace: apiclarity
+    backend: tapira-api
 spec:
   replicas: 1
   selector:
     matchLabels:
       name: tapira
+      backend: tapira-api
   template:
     metadata:
+      name: tapira-api-pods
+      namespace: tapira
       labels:
         name: tapira
+        backend: tapira-api
     spec:
       containers:
-        - name: tapira
-          image: milamber97/tapira:mongodb_config
+        - name: tapira-api-containers
+          image: milamber97/tapira:0.2.0
           ports:
             - containerPort: 5000
           env:
@@ -37,6 +42,6 @@ spec:
             - name: mongodb_port
               value: "27017"
             - name: api_clarity_host
-              value: postgrest
+              value: postgrest.apiclarity #<<service_name>>.<<namespace>>
             - name: api_clarity_port
               value: "3000"
