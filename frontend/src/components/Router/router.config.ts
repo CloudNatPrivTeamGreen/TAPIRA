@@ -1,6 +1,6 @@
 import LoadableComponent from "../Loadable";
 
-interface RouteObject {
+export interface RouteObject {
     path: string;
     exact: boolean;
     name: string;
@@ -18,7 +18,7 @@ export const appRouters: RouteObject[] = [
         name: 'services',
         title: 'Services',
         component: LoadableComponent(() => import('../../scenes/TapiraServicesList')),
-        isLayout: false,
+        isLayout: true,
         showInMenu: true
     },
     {
@@ -27,7 +27,7 @@ export const appRouters: RouteObject[] = [
         name: 'service',
         title: 'Service',
         component: LoadableComponent(() => import('../../scenes/TapiraService')),
-        isLayout: true,
+        isLayout: false,
         showInMenu: false,
     },
 ]
