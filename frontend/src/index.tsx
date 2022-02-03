@@ -1,12 +1,23 @@
+import './index.scss';
+
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.scss';
+
+import { BrowserRouter } from 'react-router-dom';
+import { Provider } from 'mobx-react';
 import App from './App';
+import initializeStores from 'src/stores/storeInitializer';
 import reportWebVitals from './reportWebVitals';
+
+const stores = initializeStores();
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <Provider {...stores}>
+      <BrowserRouter>
+        <App />
+      </BrowserRouter>
+    </Provider>
   </React.StrictMode>,
   document.getElementById('root')
 );
