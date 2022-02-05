@@ -1,0 +1,53 @@
+{
+  "compilerOptions": {
+    "target": "es5",
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "noFallthroughCasesInSwitch": true,
+    "module": "esnext",
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true,
+    "jsx": "react-jsx",
+    "noImplicitAny": false,
+    "experimentalDecorators": true,
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./*"],
+      "@": ["./index.ts", "./index.json", "./index.tsx", "./index.scss", "./index.css"],
+      "@src/*": ["src/*"],
+      "@src": ["src/index.ts", "src/index.json", "src/index.tsx", "src/index.scss", "src/index.css"],
+      "@utils/*": ["src/utils/*"],
+      "@utils": [
+        "src/utils/index.ts",
+        "src/utils/index.json",
+        "src/utils/index.tsx",
+        "src/utils/index.scss",
+        "src/utils/index.css"
+      ],
+      "@components/*": ["src/components/*"],
+      "@components": [
+        "src/components/index.ts",
+        "src/components/index.json",
+        "src/components/index.tsx",
+        "src/components/index.scss",
+        "src/components/index.css"
+      ],
+      "@scenes/*": ["src/scenes/*"],
+      "@services/*": ["src/services/*"]
+    }
+  },
+  "include": [
+    "src"
+  ]
+}
