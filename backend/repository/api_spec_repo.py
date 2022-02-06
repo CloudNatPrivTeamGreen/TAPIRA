@@ -1,15 +1,15 @@
 ##################################################
 # Variable Definition
-import datetime
+import functools
 import json
 
-import pymongo
 from flask import g
 from flask_pymongo import PyMongo
 
 from backend import app
 from backend.models import ApiSpecEntry
-from backend import globals
+from backend.utils import compare_api_spec_versions as compare_versions
+
 
 def get_db():
     if 'db' not in g:
@@ -49,9 +49,14 @@ def find_specs_by_name_and_version(service_name, version):
 
 def find_latest_spec_by_name(service_name):
     specs = list(
-        get_db().api_specifications.find({"service": service_name}).sort("version", pymongo.DESCENDING))
+        get_db().api_specifications.find({"service": service_name}))
     print(f'Found {len(specs)} specs for service_name={service_name}')
-    return None if len(specs) == 0 else ApiSpecEntry(specs[0]["service"], specs[0]["version"],
-                                                     json.loads(json.dumps(specs[0]["api_spec"])),
-                                                     specs[0]["created_at_date"])
 
+    if len(specs) == 0:
+        return None
+
+    latest = sorted(specs, key=functools.cmp_to_key(compare_versions), reverse=True)[0]
+
+    return ApiSpecEntry(latest["service"], latest["version"],
+                        json.loads(json.dumps(latest["api_spec"])),
+                        latest["created_at_date"])
