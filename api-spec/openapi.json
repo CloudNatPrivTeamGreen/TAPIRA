@@ -20,35 +20,13 @@
           }
         },
         "tags": [
-          "specs"
+          "proposals_api"
         ]
       }
     },
     "/api/time": {
       "get": {
         "responses": {
-          "default": {
-            "$ref": "#/components/responses/DEFAULT_ERROR"
-          }
-        },
-        "tags": [
-          "specs"
-        ]
-      }
-    },
-    "/api/housekeeping": {
-      "get": {
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Housekeeping"
-                }
-              }
-            }
-          },
           "default": {
             "$ref": "#/components/responses/DEFAULT_ERROR"
           }
@@ -110,8 +88,8 @@
         "parameters": [
           {
             "in": "query",
-            "name": "type",
-            "required": false,
+            "name": "service",
+            "required": true,
             "schema": {
               "type": "string"
             }
@@ -120,14 +98,6 @@
             "in": "query",
             "name": "version",
             "required": false,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "in": "query",
-            "name": "service",
-            "required": true,
             "schema": {
               "type": "string"
             }
@@ -188,26 +158,49 @@
             "$ref": "#/components/responses/DEFAULT_ERROR"
           }
         },
-        "summary": "Get most recent api specification",
-        "description": "Get most recent api specification based on service name.",
-        "tags": [
-          "specs"
-        ]
-      }
-    },
-    "/api/conflicts": {
-      "get": {
-        "responses": {
-          "default": {
-            "$ref": "#/components/responses/DEFAULT_ERROR"
-          }
-        },
+        "summary": "Get latest api specification",
+        "description": "Get latest api specification based on service name.",
         "tags": [
           "specs"
         ]
       }
     },
     "/api/upload": {
+      "post": {
+        "responses": {
+          "422": {
+            "$ref": "#/components/responses/UNPROCESSABLE_ENTITY"
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UploadResponse"
+                }
+              }
+            }
+          },
+          "default": {
+            "$ref": "#/components/responses/DEFAULT_ERROR"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/Upload"
+              }
+            }
+          }
+        },
+        "tags": [
+          "specs"
+        ]
+      }
+    },
+    "/api/timex": {
       "get": {
         "responses": {
           "default": {
@@ -215,7 +208,90 @@
           }
         },
         "tags": [
-          "specs"
+          "proposals_api"
+        ]
+      }
+    },
+    "/api/service_proposals": {
+      "get": {
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Services"
+                }
+              }
+            }
+          },
+          "default": {
+            "$ref": "#/components/responses/DEFAULT_ERROR"
+          }
+        },
+        "summary": "Get list of service names",
+        "description": "Return list of unique service names with existing proposals for specifications.",
+        "tags": [
+          "proposals_api"
+        ]
+      }
+    },
+    "/api/proposal": {
+      "get": {
+        "parameters": [
+          {
+            "in": "query",
+            "name": "service",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "422": {
+            "$ref": "#/components/responses/UNPROCESSABLE_ENTITY"
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Proposal"
+                }
+              }
+            }
+          },
+          "default": {
+            "$ref": "#/components/responses/DEFAULT_ERROR"
+          }
+        },
+        "summary": "Get proposal for a service",
+        "description": "Get proposal by a service name.",
+        "tags": [
+          "proposals_api"
+        ]
+      }
+    },
+    "/api/housekeeping": {
+      "get": {
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Housekeeping"
+                }
+              }
+            }
+          },
+          "default": {
+            "$ref": "#/components/responses/DEFAULT_ERROR"
+          }
+        },
+        "tags": [
+          "proposals_api"
         ]
       }
     }
@@ -224,6 +300,14 @@
     {
       "name": "specs",
       "description": "Collection and maintenance of specifications"
+    },
+    {
+      "name": "proposals_api",
+      "description": "Collection and maintenance of spec proposals"
+    },
+    {
+      "name": "testing",
+      "description": "Endpoints for easier testing"
     }
   ],
   "openapi": "3.0.2",
@@ -232,6 +316,10 @@
       "Error": {
         "type": "object",
         "properties": {
+          "status": {
+            "type": "string",
+            "description": "Error name"
+          },
           "message": {
             "type": "string",
             "description": "Error message"
@@ -239,10 +327,6 @@
           "errors": {
             "type": "object",
             "description": "Errors"
-          },
-          "status": {
-            "type": "string",
-            "description": "Error name"
           },
           "code": {
             "type": "integer",
@@ -276,24 +360,10 @@
           }
         }
       },
-      "Housekeeping": {
-        "type": "object",
-        "properties": {
-          "status_of_deletion": {
-            "type": "string"
-          }
-        }
-      },
       "ApiClaritySpecs": {
         "type": "object",
         "properties": {
-          "updated_provided_services": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-          "updated_reconstructed_services": {
+          "reconstructed_services": {
             "type": "array",
             "items": {
               "type": "string"
@@ -315,16 +385,16 @@
       "ApiSpecEntry": {
         "type": "object",
         "properties": {
-          "version": {
-            "type": "string"
-          },
-          "created_at_date": {
-            "type": "string"
-          },
           "api_spec": {
             "type": "string"
           },
           "name": {
+            "type": "string"
+          },
+          "version": {
+            "type": "string"
+          },
+          "created_at_date": {
             "type": "string"
           }
         },
@@ -340,6 +410,36 @@
             "items": {
               "$ref": "#/components/schemas/ApiSpecEntry"
             }
+          }
+        }
+      },
+      "Upload": {
+        "type": "object",
+        "properties": {
+          "file": {}
+        }
+      },
+      "UploadResponse": {
+        "type": "object",
+        "properties": {
+          "created_version": {
+            "type": "string"
+          }
+        }
+      },
+      "Proposal": {
+        "type": "object",
+        "properties": {
+          "proposal": {
+            "type": "string"
+          }
+        }
+      },
+      "Housekeeping": {
+        "type": "object",
+        "properties": {
+          "status_of_deletion": {
+            "type": "string"
           }
         }
       }

@@ -15,23 +15,10 @@ paths:
         default:
           "$ref": "#/components/responses/DEFAULT_ERROR"
       tags:
-        - specs
+        - proposals_api
   "/api/time":
     get:
       responses:
-        default:
-          "$ref": "#/components/responses/DEFAULT_ERROR"
-      tags:
-        - specs
-  "/api/housekeeping":
-    get:
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                "$ref": "#/components/schemas/Housekeeping"
         default:
           "$ref": "#/components/responses/DEFAULT_ERROR"
       tags:
@@ -70,18 +57,13 @@ paths:
     get:
       parameters:
         - in: query
-          name: type
-          required: false
+          name: service
+          required: true
           schema:
             type: string
         - in: query
           name: version
           required: false
-          schema:
-            type: string
-        - in: query
-          name: service
-          required: true
           schema:
             type: string
       responses:
@@ -118,42 +100,112 @@ paths:
           "$ref": "#/components/responses/UNPROCESSABLE_ENTITY"
         default:
           "$ref": "#/components/responses/DEFAULT_ERROR"
-      summary: Get most recent api specification
-      description: Get most recent api specification based on service name.
-      tags:
-        - specs
-  "/api/conflicts":
-    get:
-      responses:
-        default:
-          "$ref": "#/components/responses/DEFAULT_ERROR"
+      summary: Get latest api specification
+      description: Get latest api specification based on service name.
       tags:
         - specs
   "/api/upload":
+    post:
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/UploadResponse"
+        '422':
+          "$ref": "#/components/responses/UNPROCESSABLE_ENTITY"
+        default:
+          "$ref": "#/components/responses/DEFAULT_ERROR"
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              "$ref": "#/components/schemas/Upload"
+      tags:
+        - specs
+  "/api/timex":
     get:
       responses:
         default:
           "$ref": "#/components/responses/DEFAULT_ERROR"
       tags:
-        - specs
+        - proposals_api
+  "/api/service_proposals":
+    get:
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Services"
+        default:
+          "$ref": "#/components/responses/DEFAULT_ERROR"
+      summary: Get list of service names
+      description: Return list of unique service names with existing proposals for
+        specifications.
+      tags:
+        - proposals_api
+  "/api/proposal":
+    get:
+      parameters:
+        - in: query
+          name: service
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Proposal"
+        '422':
+          "$ref": "#/components/responses/UNPROCESSABLE_ENTITY"
+        default:
+          "$ref": "#/components/responses/DEFAULT_ERROR"
+      summary: Get proposal for a service
+      description: Get proposal by a service name.
+      tags:
+        - proposals_api
+  "/api/housekeeping":
+    get:
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Housekeeping"
+        default:
+          "$ref": "#/components/responses/DEFAULT_ERROR"
+      tags:
+        - proposals_api
 tags:
   - name: specs
     description: Collection and maintenance of specifications
+  - name: proposals_api
+    description: Collection and maintenance of spec proposals
+  - name: testing
+    description: Endpoints for easier testing
 openapi: 3.0.2
 components:
   schemas:
     Error:
       type: object
       properties:
+        status:
+          type: string
+          description: Error name
         message:
           type: string
           description: Error message
         errors:
           type: object
           description: Errors
-        status:
-          type: string
-          description: Error name
         code:
           type: integer
           description: Error code
@@ -174,19 +226,10 @@ components:
           type: integer
         next_page:
           type: integer
-    Housekeeping:
-      type: object
-      properties:
-        status_of_deletion:
-          type: string
     ApiClaritySpecs:
       type: object
       properties:
-        updated_provided_services:
-          type: array
-          items:
-            type: string
-        updated_reconstructed_services:
+        reconstructed_services:
           type: array
           items:
             type: string
@@ -200,13 +243,13 @@ components:
     ApiSpecEntry:
       type: object
       properties:
-        version:
-          type: string
-        created_at_date:
-          type: string
         api_spec:
           type: string
         name:
+          type: string
+        version:
+          type: string
+        created_at_date:
           type: string
       required:
         - name
@@ -217,6 +260,25 @@ components:
           type: array
           items:
             "$ref": "#/components/schemas/ApiSpecEntry"
+    Upload:
+      type: object
+      properties:
+        file: {}
+    UploadResponse:
+      type: object
+      properties:
+        created_version:
+          type: string
+    Proposal:
+      type: object
+      properties:
+        proposal:
+          type: string
+    Housekeeping:
+      type: object
+      properties:
+        status_of_deletion:
+          type: string
   responses:
     DEFAULT_ERROR:
       description: Default error response
