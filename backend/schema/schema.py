@@ -1,9 +1,9 @@
+from flask_rest_api.fields import Upload
 from marshmallow import Schema, fields
 
 
 class QueryParamsSchema(Schema):
     service = fields.Str(required=True)
-    type = fields.Str(required=False)
     version = fields.Str(required=False)
 
 
@@ -28,13 +28,24 @@ class ServicesSchema(Schema):
 
 
 class ApiClaritySpecsSchema(Schema):
-    updated_provided_services = fields.List(fields.Str)
-    updated_reconstructed_services = fields.List(fields.Str)
+    reconstructed_services = fields.List(fields.Str)
 
 
 class HousekeepingSchema(Schema):
     status_of_deletion = fields.Str()
 
 
-class CurrentApiRequestSchema(Schema):
+class ServiceNameParameterSchema(Schema):
     service = fields.Str()
+
+
+class ProposalSchema(Schema):
+    proposal = fields.Str()
+
+
+class UploadSchema(Schema):
+    file = Upload()
+
+
+class UploadResponseSchema(Schema):
+    created_version = fields.Str()

@@ -5,6 +5,7 @@ click==8.0.3
 contextlib2==21.6.0
 Flask==2.0.2
 Flask-PyMongo==2.3.0
+flask-rest-api==0.17.1
 flask-smorest==0.36.0
 gunicorn==20.1.0
 idna==3.3

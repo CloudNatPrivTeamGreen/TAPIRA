@@ -2,9 +2,8 @@ import datetime
 
 
 class ApiSpecEntry:
-    def __init__(self, name, spec_type, version, api_spec, created_at_date=datetime.datetime.now()):
-        self.name = name
-        self.spec_type = spec_type
+    def __init__(self, service, version, api_spec, created_at_date=datetime.datetime.now()):
+        self.service = service
         self.version = version
         self.api_spec = api_spec
         self.created_at_date = created_at_date

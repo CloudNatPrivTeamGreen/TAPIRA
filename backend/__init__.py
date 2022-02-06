@@ -16,8 +16,16 @@ ENVIRONMENT = os.getenv('ENVIRONMENT')
 app = Flask(__name__) if ENVIRONMENT == 'development' else Flask(__name__, static_folder='./frontend/build',
                                                                  static_url_path='/')
 
-from backend.api import blp
+from backend.api.specs_api import blp as specs_blp
+from backend.api.proposal_api import blp as proposals_blp
+from backend.api.test_apis import test_blp
+
 
 app.config.from_object(Config)
 api_app = Api(app)
-api_app.register_blueprint(blp)
+api_app.register_blueprint(specs_blp)
+print("Specs Blueprint registered")
+
+api_app.register_blueprint(proposals_blp)
+print("Proposals Blueprint registered")
+api_app.register_blueprint(test_blp)

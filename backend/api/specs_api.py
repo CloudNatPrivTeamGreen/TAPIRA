@@ -27,13 +27,6 @@ class TestConnection(MethodView):
         return {'time': time.time()}
 
 
-@blp.route("/housekeeping")
-class ClearReconstructed(MethodView):
-    @blp.response(200, schema.HousekeepingSchema)
-    def get(self):
-        return {"status_of_deletion": s.delete_all_reconstructed_specs()}
-
-
 @blp.route("/apiclarity_specs")
 class ApiClaritySpecs(MethodView):
     @blp.response(200, schema.ApiClaritySpecsSchema)
@@ -43,12 +36,10 @@ class ApiClaritySpecs(MethodView):
         """
         response = requests.get(f'{config.APICLARITY_URL}/api_inventory')
         apiclarity_specs = json.loads(response.content.decode('utf-8'))
-        new_provided_services = []
-        new_reconstructed_services = []
-        s.extract_api_specs(apiclarity_specs, new_provided_services, new_reconstructed_services)
+        reconstructed_services = []
+        s.extract_api_specs(apiclarity_specs, reconstructed_services)
 
-        return {"updated_provided_services": new_provided_services,
-                "updated_reconstructed_services": new_reconstructed_services}
+        return {"reconstructed_services": reconstructed_services}
 
 
 @blp.route("/services")
@@ -74,7 +65,6 @@ class Specifications(MethodView):
         ---
         """
         service = request.args.get("service")
-        spec_type = request.args.get("type")
         version = request.args.get("version")
 
         if service is None:
@@ -82,18 +72,18 @@ class Specifications(MethodView):
         elif version is not None and not s.is_valid_version(version):
             abort(400, f'Please provide version in format:{s.version_pattern_string}')
 
-        api_specs = models.ApiSpecs(s.get_specifications_by_params(service, version, spec_type))
+        api_specs = models.ApiSpecs(s.get_specifications_by_params(service, version))
         return schema.ApiSpecsSchema().dump(api_specs)
 
 
 @blp.route("/current_version_spec")
 class CurrentVersionSpec(MethodView):
-    @blp.arguments(schema.CurrentApiRequestSchema, location="query")
+    @blp.arguments(schema.ServiceNameParameterSchema, location="query")
     @blp.response(200, schema.ApiSpecEntrySchema)
     def get(self, args):
-        """Get most recent api specification
+        """Get latest api specification
 
-        Get most recent api specification based on service name.
+        Get latest api specification based on service name.
         ---
         """
         service = request.args.get("service")
@@ -101,20 +91,25 @@ class CurrentVersionSpec(MethodView):
         if service is None:
             abort(400, "Service name missing from the parameters")
 
-        recent_spec = s.get_latest_previous_provided(service)
+        recent_spec = s.get_latest_spec(service)
         if recent_spec is None:
             abort(404, message=f"No spec found for service={service}")
 
         return schema.ApiSpecEntrySchema().dump(recent_spec)
 
 
-@blp.route("/conflicts")
-class ApiConflicts:
-    def get(self, args):
-        return {"api_conflicts": []}
-
-
 @blp.route("/upload")
-class Upload:
-    def upload_api_spec(self, args):
-        return Response("{'id': 'test_uploaded_id'}", status=200, mimetype="application/json")
+class Upload(MethodView):
+
+    @blp.arguments(schema.UploadSchema, location='files')
+    @blp.response(200, schema.UploadResponseSchema)
+    def post(self, args):
+        if 'file' not in request.files:
+            abort(400, "No file attached in the request")
+
+        file = request.files['file']
+        if file.filename == '':
+            abort(400, "Empty filename")
+
+        created_version = s.insert_provided_spec(file, "catalogue")
+        return {"created_version": created_version}
