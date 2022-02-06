@@ -20,7 +20,7 @@
           }
         },
         "tags": [
-          "proposals_api"
+          "specs"
         ]
       }
     },
@@ -134,7 +134,7 @@
           {
             "in": "query",
             "name": "service",
-            "required": false,
+            "required": true,
             "schema": {
               "type": "string"
             }
@@ -167,6 +167,16 @@
     },
     "/api/upload": {
       "post": {
+        "parameters": [
+          {
+            "in": "query",
+            "name": "service",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "responses": {
           "422": {
             "$ref": "#/components/responses/UNPROCESSABLE_ENTITY"
@@ -200,18 +210,6 @@
         ]
       }
     },
-    "/api/timex": {
-      "get": {
-        "responses": {
-          "default": {
-            "$ref": "#/components/responses/DEFAULT_ERROR"
-          }
-        },
-        "tags": [
-          "proposals_api"
-        ]
-      }
-    },
     "/api/service_proposals": {
       "get": {
         "responses": {
@@ -242,7 +240,7 @@
           {
             "in": "query",
             "name": "service",
-            "required": false,
+            "required": true,
             "schema": {
               "type": "string"
             }
@@ -274,7 +272,7 @@
       }
     },
     "/api/housekeeping": {
-      "get": {
+      "delete": {
         "responses": {
           "200": {
             "description": "OK",
@@ -316,10 +314,6 @@
       "Error": {
         "type": "object",
         "properties": {
-          "status": {
-            "type": "string",
-            "description": "Error name"
-          },
           "message": {
             "type": "string",
             "description": "Error message"
@@ -331,6 +325,10 @@
           "code": {
             "type": "integer",
             "description": "Error code"
+          },
+          "status": {
+            "type": "string",
+            "description": "Error name"
           }
         }
       },
@@ -388,13 +386,13 @@
           "api_spec": {
             "type": "string"
           },
+          "created_at_date": {
+            "type": "string"
+          },
           "name": {
             "type": "string"
           },
           "version": {
-            "type": "string"
-          },
-          "created_at_date": {
             "type": "string"
           }
         },
@@ -417,7 +415,10 @@
         "type": "object",
         "properties": {
           "file": {}
-        }
+        },
+        "required": [
+          "file"
+        ]
       },
       "UploadResponse": {
         "type": "object",
@@ -438,7 +439,7 @@
       "Housekeeping": {
         "type": "object",
         "properties": {
-          "status_of_deletion": {
+          "number_of_deleted": {
             "type": "string"
           }
         }

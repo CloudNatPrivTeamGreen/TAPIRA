@@ -102,14 +102,16 @@ class CurrentVersionSpec(MethodView):
 class Upload(MethodView):
 
     @blp.arguments(schema.UploadSchema, location='files')
+    @blp.arguments(schema.ServiceNameParameterSchema, location="query")
     @blp.response(200, schema.UploadResponseSchema)
-    def post(self, args):
-        if 'file' not in request.files:
-            abort(400, "No file attached in the request")
+    def post(self, file_body, query_params):
+        file = file_body['file']
+        service = query_params['service']
 
-        file = request.files['file']
         if file.filename == '':
             abort(400, "Empty filename")
+        elif service is None:
+            abort(400, "Service name missing from the parameters")
 
-        created_version = s.insert_provided_spec(file, "catalogue")
+        created_version = s.insert_provided_spec(file, service)
         return {"created_version": created_version}

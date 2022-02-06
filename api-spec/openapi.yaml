@@ -15,7 +15,7 @@ paths:
         default:
           "$ref": "#/components/responses/DEFAULT_ERROR"
       tags:
-        - proposals_api
+        - specs
   "/api/time":
     get:
       responses:
@@ -86,7 +86,7 @@ paths:
       parameters:
         - in: query
           name: service
-          required: false
+          required: true
           schema:
             type: string
       responses:
@@ -106,6 +106,12 @@ paths:
         - specs
   "/api/upload":
     post:
+      parameters:
+        - in: query
+          name: service
+          required: true
+          schema:
+            type: string
       responses:
         '200':
           description: OK
@@ -125,13 +131,6 @@ paths:
               "$ref": "#/components/schemas/Upload"
       tags:
         - specs
-  "/api/timex":
-    get:
-      responses:
-        default:
-          "$ref": "#/components/responses/DEFAULT_ERROR"
-      tags:
-        - proposals_api
   "/api/service_proposals":
     get:
       responses:
@@ -153,7 +152,7 @@ paths:
       parameters:
         - in: query
           name: service
-          required: false
+          required: true
           schema:
             type: string
       responses:
@@ -172,7 +171,7 @@ paths:
       tags:
         - proposals_api
   "/api/housekeeping":
-    get:
+    delete:
       responses:
         '200':
           description: OK
@@ -197,9 +196,6 @@ components:
     Error:
       type: object
       properties:
-        status:
-          type: string
-          description: Error name
         message:
           type: string
           description: Error message
@@ -209,6 +205,9 @@ components:
         code:
           type: integer
           description: Error code
+        status:
+          type: string
+          description: Error name
     PaginationMetadata:
       type: object
       properties:
@@ -245,11 +244,11 @@ components:
       properties:
         api_spec:
           type: string
+        created_at_date:
+          type: string
         name:
           type: string
         version:
-          type: string
-        created_at_date:
           type: string
       required:
         - name
@@ -264,6 +263,8 @@ components:
       type: object
       properties:
         file: {}
+      required:
+        - file
     UploadResponse:
       type: object
       properties:
@@ -277,7 +278,7 @@ components:
     Housekeeping:
       type: object
       properties:
-        status_of_deletion:
+        number_of_deleted:
           type: string
   responses:
     DEFAULT_ERROR:

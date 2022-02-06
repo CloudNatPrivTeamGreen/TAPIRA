@@ -14,13 +14,6 @@ blp = Blueprint("proposals_api",
                 )
 
 
-@blp.route("/timex")
-@blp.route("/")
-class TestConnection(MethodView):
-    def get(self):
-        return {'time': time.time()}
-
-
 @blp.route("/service_proposals")
 class Services(MethodView):
     @blp.response(200, schema.ServicesSchema)
@@ -54,5 +47,5 @@ class Proposal(MethodView):
 @blp.route("/housekeeping")
 class ClearReconstructed(MethodView):
     @blp.response(200, schema.HousekeepingSchema)
-    def get(self):
-        return {"status_of_deletion": s.delete_all_proposals()}
+    def delete(self):
+        return {"number_of_deleted": s.delete_all_proposals()}

@@ -32,11 +32,11 @@ class ApiClaritySpecsSchema(Schema):
 
 
 class HousekeepingSchema(Schema):
-    status_of_deletion = fields.Str()
+    number_of_deleted = fields.Str()
 
 
 class ServiceNameParameterSchema(Schema):
-    service = fields.Str()
+    service = fields.Str(required=True)
 
 
 class ProposalSchema(Schema):
@@ -44,7 +44,7 @@ class ProposalSchema(Schema):
 
 
 class UploadSchema(Schema):
-    file = Upload()
+    file = Upload(required=True)
 
 
 class UploadResponseSchema(Schema):

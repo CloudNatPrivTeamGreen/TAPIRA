@@ -113,7 +113,7 @@ def insert_provided_spec(uploaded_file, service_name):
 
     latest_spec: ApiSpecEntry = spec_repo.find_latest_spec_by_name(service_name)
     latest_spec_version = "0.0.1" if is_empty(latest_spec) else latest_spec.version
-
+    print(f'Latest spec version: {latest_spec_version}')
     if not is_valid_version(api_spec_version) or api_spec_version <= latest_spec_version:
         new_spec_version = increment_version(Version(latest_spec_version))
         print(
