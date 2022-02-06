@@ -88,16 +88,16 @@
         "parameters": [
           {
             "in": "query",
-            "name": "service",
-            "required": true,
+            "name": "version",
+            "required": false,
             "schema": {
               "type": "string"
             }
           },
           {
             "in": "query",
-            "name": "version",
-            "required": false,
+            "name": "service",
+            "required": true,
             "schema": {
               "type": "string"
             }
@@ -205,6 +205,8 @@
             }
           }
         },
+        "summary": "Upload existing API specification",
+        "description": "Upload existing API specification and delete current proposals for the same service.",
         "tags": [
           "specs"
         ]
@@ -288,8 +290,47 @@
             "$ref": "#/components/responses/DEFAULT_ERROR"
           }
         },
+        "summary": "Delete all proposals",
+        "description": "Delete all proposals",
         "tags": [
           "proposals_api"
+        ]
+      }
+    },
+    "/test/housekeeping_specs": {
+      "delete": {
+        "parameters": [
+          {
+            "in": "query",
+            "name": "service",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "422": {
+            "$ref": "#/components/responses/UNPROCESSABLE_ENTITY"
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Housekeeping"
+                }
+              }
+            }
+          },
+          "default": {
+            "$ref": "#/components/responses/DEFAULT_ERROR"
+          }
+        },
+        "summary": "Delete all api specifications",
+        "description": "Delete all api specifications",
+        "tags": [
+          "testing"
         ]
       }
     }
@@ -314,21 +355,21 @@
       "Error": {
         "type": "object",
         "properties": {
-          "message": {
+          "status": {
             "type": "string",
-            "description": "Error message"
-          },
-          "errors": {
-            "type": "object",
-            "description": "Errors"
+            "description": "Error name"
           },
           "code": {
             "type": "integer",
             "description": "Error code"
           },
-          "status": {
+          "errors": {
+            "type": "object",
+            "description": "Errors"
+          },
+          "message": {
             "type": "string",
-            "description": "Error name"
+            "description": "Error message"
           }
         }
       },
@@ -386,13 +427,13 @@
           "api_spec": {
             "type": "string"
           },
+          "version": {
+            "type": "string"
+          },
           "created_at_date": {
             "type": "string"
           },
           "name": {
-            "type": "string"
-          },
-          "version": {
             "type": "string"
           }
         },

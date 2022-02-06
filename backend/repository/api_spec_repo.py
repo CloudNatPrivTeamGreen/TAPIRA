@@ -60,3 +60,9 @@ def find_latest_spec_by_name(service_name):
     return ApiSpecEntry(latest["service"], latest["version"],
                         json.loads(json.dumps(latest["api_spec"])),
                         latest["created_at_date"])
+
+
+def delete_all_specs(service_name):
+    deleted_entries = get_db().api_spec_proposals.delete_many({"service": service_name})
+    print(f'Deleted {deleted_entries.deleted_count} api specs')
+    return deleted_entries.deleted_count

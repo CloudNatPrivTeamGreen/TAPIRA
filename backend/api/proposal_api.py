@@ -48,4 +48,9 @@ class Proposal(MethodView):
 class ClearReconstructed(MethodView):
     @blp.response(200, schema.HousekeepingSchema)
     def delete(self):
+        """Delete all proposals
+
+        Delete all proposals
+        ---
+        """
         return {"number_of_deleted": s.delete_all_proposals()}

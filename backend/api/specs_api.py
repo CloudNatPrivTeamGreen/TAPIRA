@@ -105,6 +105,11 @@ class Upload(MethodView):
     @blp.arguments(schema.ServiceNameParameterSchema, location="query")
     @blp.response(200, schema.UploadResponseSchema)
     def post(self, file_body, query_params):
+        """Upload existing API specification
+
+        Upload existing API specification and delete current proposals for the same service.
+        ---
+        """
         file = file_body['file']
         service = query_params['service']
 

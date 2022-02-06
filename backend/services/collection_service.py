@@ -101,6 +101,10 @@ def delete_all_proposals():
     return proposal_repo.delete_all_proposals()
 
 
+def delete_all_specs(service_name):
+    return spec_repo.delete_all_specs(service_name)
+
+
 def get_proposal(service):
     proposal = proposal_repo.find_proposal_by_name(service)
     return None if proposal is None else proposal["proposed_spec"]

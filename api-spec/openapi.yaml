@@ -57,13 +57,13 @@ paths:
     get:
       parameters:
         - in: query
-          name: service
-          required: true
+          name: version
+          required: false
           schema:
             type: string
         - in: query
-          name: version
-          required: false
+          name: service
+          required: true
           schema:
             type: string
       responses:
@@ -129,6 +129,9 @@ paths:
           multipart/form-data:
             schema:
               "$ref": "#/components/schemas/Upload"
+      summary: Upload existing API specification
+      description: Upload existing API specification and delete current proposals
+        for the same service.
       tags:
         - specs
   "/api/service_proposals":
@@ -181,8 +184,33 @@ paths:
                 "$ref": "#/components/schemas/Housekeeping"
         default:
           "$ref": "#/components/responses/DEFAULT_ERROR"
+      summary: Delete all proposals
+      description: Delete all proposals
       tags:
         - proposals_api
+  "/test/housekeeping_specs":
+    delete:
+      parameters:
+        - in: query
+          name: service
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Housekeeping"
+        '422':
+          "$ref": "#/components/responses/UNPROCESSABLE_ENTITY"
+        default:
+          "$ref": "#/components/responses/DEFAULT_ERROR"
+      summary: Delete all api specifications
+      description: Delete all api specifications
+      tags:
+        - testing
 tags:
   - name: specs
     description: Collection and maintenance of specifications
@@ -196,18 +224,18 @@ components:
     Error:
       type: object
       properties:
-        message:
-          type: string
-          description: Error message
-        errors:
-          type: object
-          description: Errors
-        code:
-          type: integer
-          description: Error code
         status:
           type: string
           description: Error name
+        code:
+          type: integer
+          description: Error code
+        errors:
+          type: object
+          description: Errors
+        message:
+          type: string
+          description: Error message
     PaginationMetadata:
       type: object
       properties:
@@ -244,11 +272,11 @@ components:
       properties:
         api_spec:
           type: string
+        version:
+          type: string
         created_at_date:
           type: string
         name:
-          type: string
-        version:
           type: string
       required:
         - name
