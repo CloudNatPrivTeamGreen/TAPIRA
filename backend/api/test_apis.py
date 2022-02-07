@@ -35,3 +35,13 @@ class ClearReconstructed(MethodView):
         if service is None:
             abort(400, "Service name missing from the parameters")
         return {"number_of_deleted": s.delete_all_specs(service)}
+
+
+@test_blp.route("/time")
+@test_blp.route("/")
+class TestConnection(MethodView):
+    def get(self):
+        return {'time': time.time()}
+
+    def post(self):
+        return {'time': time.time()}

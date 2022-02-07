@@ -7,7 +7,7 @@ from flask import g
 from flask_pymongo import PyMongo
 
 from backend import app
-from backend.models import ApiSpecEntry
+from backend.models.models import ApiSpecEntry
 from backend.utils import compare_api_spec_versions as compare_versions
 
 

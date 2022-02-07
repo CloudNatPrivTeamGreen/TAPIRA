@@ -1,11 +1,9 @@
-import datetime
 import json
 import re
 
 from version_parser import Version
 
-from backend import globals
-from backend.models import ApiSpecEntry
+from backend.models.models import ApiSpecEntry
 from backend.repository import api_spec_repo as spec_repo
 from backend.repository import api_spec_proposals_repo as proposal_repo
 from backend.utils import is_not_empty, is_empty

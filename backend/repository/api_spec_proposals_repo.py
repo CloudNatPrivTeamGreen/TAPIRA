@@ -1,13 +1,9 @@
 import datetime
-import json
 
-import pymongo
 from flask import g
 from flask_pymongo import PyMongo
 
 from backend import app
-from backend.models import ApiSpecEntry
-from backend import globals
 
 
 def get_db():

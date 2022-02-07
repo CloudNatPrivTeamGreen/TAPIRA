@@ -19,14 +19,6 @@ blp = Blueprint("specs",
                 description="Collection and maintenance of specifications"
                 )
 
-
-@blp.route("/time")
-@blp.route("/")
-class TestConnection(MethodView):
-    def get(self):
-        return {'time': time.time()}
-
-
 @blp.route("/apiclarity_specs")
 class ApiClaritySpecs(MethodView):
     @blp.response(200, schema.ApiClaritySpecsSchema)

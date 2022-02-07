@@ -12,3 +12,4 @@ class ApiSpecEntry:
 class ApiSpecs:
     def __init__(self, api_specs):
         self.api_specs = api_specs
+

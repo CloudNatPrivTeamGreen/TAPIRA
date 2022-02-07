@@ -5,8 +5,8 @@ APICLARITY_HOST = os.getenv("api_clarity_host", default="localhost")
 APICLARITY_PORT = os.getenv("api_clarity_port", default=9998)
 APICLARITY_URL = f'http://{APICLARITY_HOST}:{APICLARITY_PORT}'
 
-APIDIFF_HOST = os.getenv("apidiff_host", default="192.168.49.2")
-APIDIFF_PORT = os.getenv("apidiff_port", default=32230)
+APIDIFF_HOST = os.getenv("apidiff_host", default="localhost")
+APIDIFF_PORT = os.getenv("apidiff_port", default=8080)
 APIDIFF_URL = f'http://{APIDIFF_HOST}:{APIDIFF_PORT}'
 
 mongodb_host = os.getenv("mongodb_host", default="192.168.49.2")
