@@ -1,0 +1,323 @@
+---
+info:
+  description: Api for the TAPIRA backend
+  contact:
+    email: test@swagger.io
+  license:
+    name: MIT License
+    url: https://fr.wikipedia.org/wiki/Licence_MIT
+  title: TAPIRA_Api
+  version: 0.1
+paths:
+  "/api/":
+    get:
+      responses:
+        default:
+          "$ref": "#/components/responses/DEFAULT_ERROR"
+      tags:
+        - specs
+  "/api/time":
+    get:
+      responses:
+        default:
+          "$ref": "#/components/responses/DEFAULT_ERROR"
+      tags:
+        - specs
+  "/api/apiclarity_specs":
+    get:
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ApiClaritySpecs"
+        default:
+          "$ref": "#/components/responses/DEFAULT_ERROR"
+      summary: Fetch provided and reconstructed specifications from APIClarity and
+        save them in database.
+      tags:
+        - specs
+  "/api/services":
+    get:
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Services"
+        default:
+          "$ref": "#/components/responses/DEFAULT_ERROR"
+      summary: Get list of service names
+      description: Return list of unique service names with existing specifications.
+      tags:
+        - specs
+  "/api/specifications":
+    get:
+      parameters:
+        - in: query
+          name: version
+          required: false
+          schema:
+            type: string
+        - in: query
+          name: service
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ApiSpecs"
+        '422':
+          "$ref": "#/components/responses/UNPROCESSABLE_ENTITY"
+        default:
+          "$ref": "#/components/responses/DEFAULT_ERROR"
+      summary: Get filtered api specifications
+      description: Filter api specifications based on parameters.
+      tags:
+        - specs
+  "/api/current_version_spec":
+    get:
+      parameters:
+        - in: query
+          name: service
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ApiSpecEntry"
+        '422':
+          "$ref": "#/components/responses/UNPROCESSABLE_ENTITY"
+        default:
+          "$ref": "#/components/responses/DEFAULT_ERROR"
+      summary: Get latest api specification
+      description: Get latest api specification based on service name.
+      tags:
+        - specs
+  "/api/upload":
+    post:
+      parameters:
+        - in: query
+          name: service
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/UploadResponse"
+        '422':
+          "$ref": "#/components/responses/UNPROCESSABLE_ENTITY"
+        default:
+          "$ref": "#/components/responses/DEFAULT_ERROR"
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              "$ref": "#/components/schemas/Upload"
+      summary: Upload existing API specification
+      description: Upload existing API specification and delete current proposals
+        for the same service.
+      tags:
+        - specs
+  "/api/service_proposals":
+    get:
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Services"
+        default:
+          "$ref": "#/components/responses/DEFAULT_ERROR"
+      summary: Get list of service names
+      description: Return list of unique service names with existing proposals for
+        specifications.
+      tags:
+        - proposals_api
+  "/api/proposal":
+    get:
+      parameters:
+        - in: query
+          name: service
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Proposal"
+        '422':
+          "$ref": "#/components/responses/UNPROCESSABLE_ENTITY"
+        default:
+          "$ref": "#/components/responses/DEFAULT_ERROR"
+      summary: Get proposal for a service
+      description: Get proposal by a service name.
+      tags:
+        - proposals_api
+  "/api/housekeeping":
+    delete:
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Housekeeping"
+        default:
+          "$ref": "#/components/responses/DEFAULT_ERROR"
+      summary: Delete all proposals
+      description: Delete all proposals
+      tags:
+        - proposals_api
+  "/test/housekeeping_specs":
+    delete:
+      parameters:
+        - in: query
+          name: service
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Housekeeping"
+        '422':
+          "$ref": "#/components/responses/UNPROCESSABLE_ENTITY"
+        default:
+          "$ref": "#/components/responses/DEFAULT_ERROR"
+      summary: Delete all api specifications
+      description: Delete all api specifications
+      tags:
+        - testing
+tags:
+  - name: specs
+    description: Collection and maintenance of specifications
+  - name: proposals_api
+    description: Collection and maintenance of spec proposals
+  - name: testing
+    description: Endpoints for easier testing
+openapi: 3.0.2
+components:
+  schemas:
+    Error:
+      type: object
+      properties:
+        status:
+          type: string
+          description: Error name
+        code:
+          type: integer
+          description: Error code
+        errors:
+          type: object
+          description: Errors
+        message:
+          type: string
+          description: Error message
+    PaginationMetadata:
+      type: object
+      properties:
+        total:
+          type: integer
+        total_pages:
+          type: integer
+        first_page:
+          type: integer
+        last_page:
+          type: integer
+        page:
+          type: integer
+        previous_page:
+          type: integer
+        next_page:
+          type: integer
+    ApiClaritySpecs:
+      type: object
+      properties:
+        reconstructed_services:
+          type: array
+          items:
+            type: string
+    Services:
+      type: object
+      properties:
+        services:
+          type: array
+          items:
+            type: string
+    ApiSpecEntry:
+      type: object
+      properties:
+        api_spec:
+          type: string
+        version:
+          type: string
+        created_at_date:
+          type: string
+        name:
+          type: string
+      required:
+        - name
+    ApiSpecs:
+      type: object
+      properties:
+        api_specs:
+          type: array
+          items:
+            "$ref": "#/components/schemas/ApiSpecEntry"
+    Upload:
+      type: object
+      properties:
+        file: {}
+      required:
+        - file
+    UploadResponse:
+      type: object
+      properties:
+        created_version:
+          type: string
+    Proposal:
+      type: object
+      properties:
+        proposal:
+          type: string
+    Housekeeping:
+      type: object
+      properties:
+        number_of_deleted:
+          type: string
+  responses:
+    DEFAULT_ERROR:
+      description: Default error response
+      content:
+        application/json:
+          schema:
+            "$ref": "#/components/schemas/Error"
+    UNPROCESSABLE_ENTITY:
+      description: Unprocessable Entity
+      content:
+        application/json:
+          schema:
+            "$ref": "#/components/schemas/Error"
