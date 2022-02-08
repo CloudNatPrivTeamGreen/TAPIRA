@@ -49,3 +49,12 @@ class UploadSchema(Schema):
 
 class UploadResponseSchema(Schema):
     created_version = fields.Str()
+
+
+class ApiDiffParameterSchema(Schema):
+    pass
+
+
+class ApiDiffBodySchema(Schema):
+    old_api_spec = fields.Str(data_key="oldApiSpec", required=True)
+    new_api_spec = fields.Str(data_key="newApiSpec", required=True)

@@ -6,6 +6,8 @@ from flask_smorest import Blueprint, abort
 
 from backend.schema import schema
 from backend.services import collection_service as s
+from backend.services import apidiff_service as diff_service
+
 
 blp = Blueprint("proposals_api",
                 "proposals_api",
@@ -54,3 +56,13 @@ class ClearReconstructed(MethodView):
         ---
         """
         return {"number_of_deleted": s.delete_all_proposals()}
+
+
+@blp.route("/apidiff")
+class ApiDiffs(MethodView):
+
+    @blp.arguments(schema.ServiceNameParameterSchema, location="query")
+    @blp.arguments(schema.ApiDiffBodySchema)
+    def get(self, query_params, apidiff_data):
+        diff_service.get_api_diffs(apidiff_data["old_api_spec"], apidiff_data["new_api_spec"])
+        return "OK"
