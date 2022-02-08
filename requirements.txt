@@ -11,11 +11,9 @@ gunicorn==20.1.0
 idna==3.3
 itsdangerous==2.0.1
 Jinja2==3.0.3
-nth-check>=2.0.1
 MarkupSafe==2.0.1
 marshmallow==3.14.1
 packaging==21.3
-postcss>=8.2.13
 pymongo==4.0.1
 pyparsing==3.0.7
 python-dotenv==0.19.2
