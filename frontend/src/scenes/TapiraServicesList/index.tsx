@@ -19,13 +19,11 @@ const TapiraServicesList = (props: any) => {
     await tapiraApiStore.getApiclaritySpecs();
     setServices(tapiraApiStore.apiClaritySpecs);
     setLoading(false);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [tapiraApiStore]);
 
   useEffect(() => {
     getApiClaritySpecs();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [getApiClaritySpecs]);
 
   return (
     <React.Fragment>
