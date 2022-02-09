@@ -23,8 +23,6 @@
     "experimentalDecorators": true,
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./*"],
-      "@": ["./index.ts", "./index.json", "./index.tsx", "./index.scss", "./index.css"],
       "@src/*": ["src/*"],
       "@src": ["src/index.ts", "src/index.json", "src/index.tsx", "src/index.scss", "src/index.css"],
       "@utils/*": ["src/utils/*"],

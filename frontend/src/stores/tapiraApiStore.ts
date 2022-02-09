@@ -3,9 +3,16 @@ import tapiraApiService from '../services/tapiraApiService/tapiraApiService';
 
 class TapiraApiStore {
 
+    @observable 
+    apiClaritySpecs!: Array<string>;
+
+    @observable
+    serviceSpecifications;
+
     @action
     async getApiclaritySpecs() {
         const result = await tapiraApiService.getApiclaritySpecs();
+        this.apiClaritySpecs = result.reconstructed_services;
     }
 
     @action
@@ -16,6 +23,7 @@ class TapiraApiStore {
     @action
     async getSpecificationsForService(serviceName: string) {
         const result = await tapiraApiService.getSpecificationsForService(serviceName);
+        this.serviceSpecifications = result;
     }
 
     @action
