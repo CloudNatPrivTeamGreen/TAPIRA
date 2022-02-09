@@ -1,5 +1,6 @@
 from flask_rest_api.fields import Upload
-from marshmallow import Schema, fields
+from marshmallow import Schema, fields, post_load
+from backend.models.models import *
 
 
 class QueryParamsSchema(Schema):
@@ -10,7 +11,7 @@ class QueryParamsSchema(Schema):
 class ApiSpecEntrySchema(Schema):
     name = fields.Str(required=True)
     version = fields.Str()
-    api_spec = fields.Str()
+    api_spec = fields.Dict()
     created_at_date = fields.Str()
 
 
@@ -40,7 +41,7 @@ class ServiceNameParameterSchema(Schema):
 
 
 class ProposalSchema(Schema):
-    proposal = fields.Str()
+    proposal = fields.Dict()
 
 
 class UploadSchema(Schema):
@@ -56,5 +57,44 @@ class ApiDiffParameterSchema(Schema):
 
 
 class ApiDiffBodySchema(Schema):
-    old_api_spec = fields.Str(data_key="oldApiSpec", required=True)
-    new_api_spec = fields.Str(data_key="newApiSpec", required=True)
+    old_api_spec = fields.Dict(data_key="oldApiSpec", required=True)
+    new_api_spec = fields.Dict(data_key="newApiSpec", required=True)
+
+
+class ApiDiffRequestSchema(Schema):
+    apiSpecPair = fields.Nested(ApiDiffBodySchema)
+
+
+class NewEndpointSchema(Schema):
+    path_url: fields.Str()
+    method: fields.Str()
+    summary: fields.Str()
+    path_is_new: fields.Boolean()
+
+
+class EndpointSchema(Schema):
+    path_url: fields.Str()
+    method: fields.Str()
+    summary: fields.Str()
+    path_is_new: fields.Boolean()
+
+
+class MissingEndpointSchema(Schema):
+    path_url: fields.Str()
+    method: fields.Str()
+    summary: fields.Str()
+    path_is_still_present: fields.Boolean()
+
+
+class ChangedOperationSchema(Schema):
+    path_url: fields.Str()
+    method: fields.Str()
+    changed_fields: fields.List(fields.Str())
+
+
+class ApiDiffsResponseSchema(Schema):
+    general_difference_given: fields.Boolean()
+    potentially_privacy_related_differences_given: fields.Boolean()
+    new_endpoints: fields.List(fields.Nested(EndpointSchema))
+    missing_endpoints: fields.List(fields.Nested(MissingEndpointSchema))
+    changed_operations: fields.List(fields.Nested(ChangedOperationSchema))

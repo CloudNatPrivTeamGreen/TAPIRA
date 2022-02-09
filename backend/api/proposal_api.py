@@ -1,13 +1,10 @@
-import time
-
 from flask import request
 from flask.views import MethodView
 from flask_smorest import Blueprint, abort
 
 from backend.schema import schema
-from backend.services import collection_service as s
 from backend.services import apidiff_service as diff_service
-
+from backend.services import collection_service as s
 
 blp = Blueprint("proposals_api",
                 "proposals_api",
@@ -63,6 +60,8 @@ class ApiDiffs(MethodView):
 
     @blp.arguments(schema.ServiceNameParameterSchema, location="query")
     @blp.arguments(schema.ApiDiffBodySchema)
+    @blp.response(200, schema.ApiDiffsResponseSchema)
     def get(self, query_params, apidiff_data):
-        diff_service.get_api_diffs(apidiff_data["old_api_spec"], apidiff_data["new_api_spec"])
-        return "OK"
+        api_diffs = diff_service.get_api_diffs(apidiff_data["old_api_spec"], apidiff_data["new_api_spec"])
+
+        return schema.ApiDiffsResponseSchema().dump(api_diffs)

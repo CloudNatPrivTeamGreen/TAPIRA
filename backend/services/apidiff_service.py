@@ -1,17 +1,19 @@
 import json
+from types import SimpleNamespace as Namespace
 
+import humps
 import requests
 
 from backend import config
+from backend.models.models import ApiDiffs
 
 
 def get_api_diffs(first_spec, second_spec):
-    # first_spec_corrected = json.loads(first_spec)
-    # second_spec_corrected = json.loads(second_spec)
     response = requests.get(url=f'{config.APIDIFF_URL}/apidiff/relevantChanges',
-                                data=json.dumps({"oldApiSpec": json.dumps(first_spec),
-                                                      "newApiSpec": json.dumps(second_spec)}),
-    headers={"Content-Type": "application/json"})
-    print(f'response:{response}')
+                            json={"oldApiSpec": first_spec,
+                                  "newApiSpec": second_spec})
 
-    return
+    response_body_decamelized = humps.decamelize(response.json())
+    api_diffs: ApiDiffs = json.loads(json.dumps(response_body_decamelized), object_hook=lambda d: Namespace(**d))
+
+    return api_diffs

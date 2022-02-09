@@ -51,5 +51,5 @@ def transform_list_specs(api_specs):
 def transform_spec(spec):
     if spec is None:
         return None
-
-    return json.dumps(spec)
+    spec.api_spec = json.dumps(spec.api_spec)
+    return spec
