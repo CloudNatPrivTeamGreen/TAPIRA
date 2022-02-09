@@ -56,12 +56,11 @@ class ClearReconstructed(MethodView):
 
 
 @blp.route("/apidiff")
-class ApiDiffs(MethodView):
+class ApiDiffsRoute(MethodView):
 
     @blp.arguments(schema.ServiceNameParameterSchema, location="query")
     @blp.arguments(schema.ApiDiffBodySchema)
     @blp.response(200, schema.ApiDiffsResponseSchema)
     def get(self, query_params, apidiff_data):
         api_diffs = diff_service.get_api_diffs(apidiff_data["old_api_spec"], apidiff_data["new_api_spec"])
-
         return schema.ApiDiffsResponseSchema().dump(api_diffs)

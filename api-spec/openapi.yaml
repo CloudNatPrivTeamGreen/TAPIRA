@@ -9,20 +9,6 @@ info:
   title: TAPIRA_Api
   version: 0.1
 paths:
-  "/api/":
-    get:
-      responses:
-        default:
-          "$ref": "#/components/responses/DEFAULT_ERROR"
-      tags:
-        - specs
-  "/api/time":
-    get:
-      responses:
-        default:
-          "$ref": "#/components/responses/DEFAULT_ERROR"
-      tags:
-        - specs
   "/api/apiclarity_specs":
     get:
       responses:
@@ -188,6 +174,33 @@ paths:
       description: Delete all proposals
       tags:
         - proposals_api
+  "/api/apidiff":
+    get:
+      parameters:
+        - in: query
+          name: service
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ApiDiffsResponse"
+        '422':
+          "$ref": "#/components/responses/UNPROCESSABLE_ENTITY"
+        default:
+          "$ref": "#/components/responses/DEFAULT_ERROR"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/ApiDiffBody"
+      tags:
+        - proposals_api
   "/test/housekeeping_specs":
     delete:
       parameters:
@@ -211,6 +224,32 @@ paths:
       description: Delete all api specifications
       tags:
         - testing
+  "/test/":
+    get:
+      responses:
+        default:
+          "$ref": "#/components/responses/DEFAULT_ERROR"
+      tags:
+        - testing
+    post:
+      responses:
+        default:
+          "$ref": "#/components/responses/DEFAULT_ERROR"
+      tags:
+        - testing
+  "/test/time":
+    get:
+      responses:
+        default:
+          "$ref": "#/components/responses/DEFAULT_ERROR"
+      tags:
+        - testing
+    post:
+      responses:
+        default:
+          "$ref": "#/components/responses/DEFAULT_ERROR"
+      tags:
+        - testing
 tags:
   - name: specs
     description: Collection and maintenance of specifications
@@ -224,9 +263,6 @@ components:
     Error:
       type: object
       properties:
-        status:
-          type: string
-          description: Error name
         code:
           type: integer
           description: Error code
@@ -236,6 +272,9 @@ components:
         message:
           type: string
           description: Error message
+        status:
+          type: string
+          description: Error name
     PaginationMetadata:
       type: object
       properties:
@@ -270,14 +309,14 @@ components:
     ApiSpecEntry:
       type: object
       properties:
-        api_spec:
-          type: string
         version:
           type: string
         created_at_date:
           type: string
         name:
           type: string
+        api_spec:
+          type: object
       required:
         - name
     ApiSpecs:
@@ -302,12 +341,84 @@ components:
       type: object
       properties:
         proposal:
-          type: string
+          type: object
     Housekeeping:
       type: object
       properties:
         number_of_deleted:
           type: string
+    ApiDiffBody:
+      type: object
+      properties:
+        oldApiSpec:
+          type: object
+        newApiSpec:
+          type: object
+      required:
+        - newApiSpec
+        - oldApiSpec
+    ChangedOperation:
+      type: object
+      properties:
+        method:
+          type: string
+          nullable: true
+        path_url:
+          type: string
+          nullable: true
+        changed_fields:
+          type: array
+          items:
+            type: string
+            nullable: true
+    MissingEndpoint:
+      type: object
+      properties:
+        path_is_still_present:
+          type: boolean
+        method:
+          type: string
+          nullable: true
+        path_url:
+          type: string
+          nullable: true
+        summary:
+          type: string
+    NewEndpoint:
+      type: object
+      properties:
+        method:
+          type: string
+          nullable: true
+        path_url:
+          type: string
+          nullable: true
+        path_is_new:
+          type: boolean
+        summary:
+          type: string
+          nullable: true
+    ApiDiffsResponse:
+      type: object
+      properties:
+        potentially_privacy_related_differences_given:
+          type: boolean
+          nullable: true
+        changed_operations:
+          type: array
+          items:
+            "$ref": "#/components/schemas/ChangedOperation"
+        general_difference_given:
+          type: boolean
+          nullable: true
+        missing_endpoints:
+          type: array
+          items:
+            "$ref": "#/components/schemas/MissingEndpoint"
+        new_endpoints:
+          type: array
+          items:
+            "$ref": "#/components/schemas/NewEndpoint"
   responses:
     DEFAULT_ERROR:
       description: Default error response

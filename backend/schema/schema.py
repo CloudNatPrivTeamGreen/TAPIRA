@@ -1,6 +1,5 @@
 from flask_rest_api.fields import Upload
-from marshmallow import Schema, fields, post_load
-from backend.models.models import *
+from marshmallow import Schema, fields
 
 
 class QueryParamsSchema(Schema):
@@ -66,35 +65,28 @@ class ApiDiffRequestSchema(Schema):
 
 
 class NewEndpointSchema(Schema):
-    path_url: fields.Str()
-    method: fields.Str()
-    summary: fields.Str()
-    path_is_new: fields.Boolean()
-
-
-class EndpointSchema(Schema):
-    path_url: fields.Str()
-    method: fields.Str()
-    summary: fields.Str()
-    path_is_new: fields.Boolean()
+    path_url = fields.Str(default=None, allow_none=True)
+    method = fields.Str(default=None, allow_none=True)
+    summary = fields.Str(default=None, allow_none=True)
+    path_is_new = fields.Boolean(default=True)
 
 
 class MissingEndpointSchema(Schema):
-    path_url: fields.Str()
-    method: fields.Str()
-    summary: fields.Str()
-    path_is_still_present: fields.Boolean()
+    path_url = fields.Str(default=None, allow_none=True)
+    method = fields.Str(default=None, allow_none=True)
+    summary = fields.Str(default=None)
+    path_is_still_present = fields.Boolean(default=False)
 
 
 class ChangedOperationSchema(Schema):
-    path_url: fields.Str()
-    method: fields.Str()
-    changed_fields: fields.List(fields.Str())
+    path_url = fields.Str(default=None, allow_none=True)
+    method = fields.Str(default=None, allow_none=True)
+    changed_fields = fields.List(fields.Str(default=None, allow_none=True))
 
 
 class ApiDiffsResponseSchema(Schema):
-    general_difference_given: fields.Boolean()
-    potentially_privacy_related_differences_given: fields.Boolean()
-    new_endpoints: fields.List(fields.Nested(EndpointSchema))
-    missing_endpoints: fields.List(fields.Nested(MissingEndpointSchema))
-    changed_operations: fields.List(fields.Nested(ChangedOperationSchema))
+    general_difference_given = fields.Boolean(default=None, allow_none=True)
+    potentially_privacy_related_differences_given = fields.Boolean(default=None, allow_none=True)
+    new_endpoints = fields.List(fields.Nested(NewEndpointSchema))
+    missing_endpoints = fields.List(fields.Nested(MissingEndpointSchema))
+    changed_operations = fields.List(fields.Nested(ChangedOperationSchema))

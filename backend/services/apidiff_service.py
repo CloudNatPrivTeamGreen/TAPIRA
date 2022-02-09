@@ -1,11 +1,10 @@
 import json
-from types import SimpleNamespace as Namespace
 
 import humps
 import requests
 
 from backend import config
-from backend.models.models import ApiDiffs
+from backend.schema.schema import ApiDiffsResponseSchema
 
 
 def get_api_diffs(first_spec, second_spec):
@@ -14,6 +13,5 @@ def get_api_diffs(first_spec, second_spec):
                                   "newApiSpec": second_spec})
 
     response_body_decamelized = humps.decamelize(response.json())
-    api_diffs: ApiDiffs = json.loads(json.dumps(response_body_decamelized), object_hook=lambda d: Namespace(**d))
-
+    api_diffs = ApiDiffsResponseSchema().loads(json.dumps(response_body_decamelized))
     return api_diffs
