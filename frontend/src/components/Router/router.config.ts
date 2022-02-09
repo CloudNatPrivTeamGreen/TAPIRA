@@ -1,5 +1,14 @@
 import LoadableComponent from "../Loadable";
 
+export enum RoutingParameters {
+    ServiceName = ':serviceName'
+}
+
+export enum RoutePaths {
+    Services = '/',
+    Service = '/service/:serviceName'
+}
+
 export interface RouteObject {
     path: string;
     exact: boolean;
@@ -13,7 +22,7 @@ export interface RouteObject {
 
 export const appRouters: RouteObject[] = [
     {
-        path:'/',
+        path: RoutePaths.Services,
         exact: true,
         name: 'services',
         title: 'Services',
@@ -22,7 +31,7 @@ export const appRouters: RouteObject[] = [
         showInMenu: true
     },
     {
-        path: '/service',
+        path: RoutePaths.Service,
         exact: true,
         name: 'service',
         title: 'Service',
