@@ -1,17 +1,18 @@
 import LoadableComponent from "../Loadable";
 
 export enum RoutingParameters {
-    ServiceName = ':serviceName'
+    ServiceName = ':serviceName',
+    Version = ':version'
 }
 
 export enum RoutePaths {
     Services = '/',
-    Service = '/service/:serviceName'
+    Service = '/service/:serviceName',
+    ServiceSpecVersionView = '/service/:serviceName/:version'
 }
 
 export interface RouteObject {
     path: string;
-    exact: boolean;
     name: string;
     title: string;
     component: any;
@@ -23,7 +24,6 @@ export interface RouteObject {
 export const appRouters: RouteObject[] = [
     {
         path: RoutePaths.Services,
-        exact: true,
         name: 'services',
         title: 'Services',
         component: LoadableComponent(() => import('../../scenes/TapiraServicesList')),
@@ -32,12 +32,19 @@ export const appRouters: RouteObject[] = [
     },
     {
         path: RoutePaths.Service,
-        exact: true,
         name: 'service',
         title: 'Service',
         component: LoadableComponent(() => import('../../scenes/TapiraService')),
         isLayout: false,
         showInMenu: false,
+    },
+    {
+        path: RoutePaths.ServiceSpecVersionView,
+        name: 'service spec view',
+        title: 'Service Spec Version View',
+        component: LoadableComponent(() => import('../../scenes/ServiceSpecVersionView')),
+        isLayout: false,
+        showInMenu: false
     },
 ]
 
