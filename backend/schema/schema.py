@@ -49,3 +49,11 @@ class UploadSchema(Schema):
 
 class UploadResponseSchema(Schema):
     created_version = fields.Str()
+
+class ProposedMergeParameterSchema(Schema):
+    context = fields.Str()
+
+class ProposedMergeRequestBodySchema(Schema):
+    old_api = fields.Dict()
+    new_api = fields.Dict()
+    api_diff = fields.Dict()
