@@ -1,7 +1,7 @@
 import { action, observable } from 'mobx';
-import tapiraApiService from '../services/tapiraApiService/tapiraApiService';
+import tapiraApiSpecificationsService from '../services/tapiraApiSpecificationsService';
 
-class TapiraApiStore {
+class TapiraApiSpecificationsStore {
 
     @observable 
     apiClaritySpecs!: Array<string>;
@@ -14,32 +14,32 @@ class TapiraApiStore {
 
     @action
     async getApiclaritySpecs() {
-        const result = await tapiraApiService.getApiclaritySpecs();
+        const result = await tapiraApiSpecificationsService.getApiclaritySpecs();
         this.apiClaritySpecs = result.reconstructed_services;
     }
 
     @action
     async getAllServices() {
-        const result = await tapiraApiService.getAllServices();
+        const result = await tapiraApiSpecificationsService.getAllServices();
     }
 
     @action
     async getSpecificationsForService(serviceName: string) {
-        const result = await tapiraApiService.getSpecificationsForService(serviceName);
+        const result = await tapiraApiSpecificationsService.getSpecificationsForService(serviceName);
         this.serviceSpecifications = result;
     }
 
     @action
     async getCurrentVersionSpecForService(serviceName: string) {
-        const result = await tapiraApiService.getCurrentVersionSpecForService(serviceName);
+        const result = await tapiraApiSpecificationsService.getCurrentVersionSpecForService(serviceName);
         this.currentServiceSpecificationsVersion = result;
     }
 
     @action
     async uploadExistingAPISpecifications(serviceName: string, data: FormData) {
-        const result = await tapiraApiService.uploadExistingAPISpecifications(serviceName, data);
+        const result = await tapiraApiSpecificationsService.uploadExistingAPISpecifications(serviceName, data);
         return result.created_version;
     }
 }
 
-export default TapiraApiStore;
+export default TapiraApiSpecificationsStore;

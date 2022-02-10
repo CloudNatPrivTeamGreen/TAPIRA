@@ -4,16 +4,16 @@ import { Button, Modal, Upload, message } from 'antd';
 import { UploadFile } from 'antd/lib/upload/interface';
 import { InboxOutlined } from '@ant-design/icons';
 import { Stores } from '../../../stores/storeIdentifier';
-import TapiraApiStore from '../../../stores/tapiraApiStore';
+import TapiraApiSpecificationsStore from '../../../stores/tapiraApiSpecificationsStore';
 
 const { Dragger } = Upload;
 
 const UploadJsonModal = ({
   serviceName,
-  tapiraApiStore,
+  tapiraApiSpecificationsStore,
 }: {
   serviceName: string;
-  [Stores.TapiraApiStore]?: TapiraApiStore;
+  [Stores.TapiraApiSpecificationsStore]?: TapiraApiSpecificationsStore;
 }) => {
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
   const [uploadFormData, setUploadFormData] = useState<FormData | null>(null);
@@ -21,15 +21,16 @@ const UploadJsonModal = ({
 
   const onUploadFile = useCallback(
     async (formData: FormData) => {
-      const newVersion = await tapiraApiStore?.uploadExistingAPISpecifications(
-        serviceName,
-        formData
-      );
+      const newVersion =
+        await tapiraApiSpecificationsStore?.uploadExistingAPISpecifications(
+          serviceName,
+          formData
+        );
       message.success(
         `The new version for ${serviceName} was successfully updated. The new version is ${newVersion}`
       );
     },
-    [serviceName, tapiraApiStore]
+    [serviceName, tapiraApiSpecificationsStore]
   );
 
   const showModal = () => setIsModalVisible(true);
@@ -96,4 +97,6 @@ const UploadJsonModal = ({
   );
 };
 
-export default inject(Stores.TapiraApiStore)(observer(UploadJsonModal));
+export default inject(Stores.TapiraApiSpecificationsStore)(
+  observer(UploadJsonModal)
+);
