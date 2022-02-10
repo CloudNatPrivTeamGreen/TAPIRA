@@ -11,11 +11,11 @@ const TapiraService = (props: any) => {
 
   const getSpecifications = useCallback(async () => {
     await tapiraApiStore.getSpecificationsForService(serviceName as string);
-  }, []);
+  }, [serviceName, tapiraApiStore]);
 
   useEffect(() => {
     getSpecifications();
-  }, []);
+  }, [getSpecifications]);
 
   return (
     <React.Fragment>
