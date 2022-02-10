@@ -9,6 +9,9 @@ class TapiraApiStore {
     @observable
     serviceSpecifications;
 
+    @observable
+    currentServiceSpecificationsVersion;
+
     @action
     async getApiclaritySpecs() {
         const result = await tapiraApiService.getApiclaritySpecs();
@@ -29,6 +32,13 @@ class TapiraApiStore {
     @action
     async getCurrentVersionSpecForService(serviceName: string) {
         const result = await tapiraApiService.getCurrentVersionSpecForService(serviceName);
+        this.currentServiceSpecificationsVersion = result;
+    }
+
+    @action
+    async uploadExistingAPISpecifications(serviceName: string, data: FormData) {
+        const result = await tapiraApiService.uploadExistingAPISpecifications(serviceName, data);
+        return result.created_version;
     }
 }
 

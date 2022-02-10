@@ -1,23 +1,31 @@
-import React, { useEffect, useCallback, useState } from "react";
-import { Link } from "react-router-dom";
-import { Collapse, Typography, Button } from "antd";
-import { inject, observer } from "mobx-react";
-import { Stores } from "../../stores/storeIdentifier";
-import TapiraApiStore from "../../stores/tapiraApiStore";
-import {
-  RoutePaths,
-  RoutingParameters,
-} from "../../components/Router/router.config";
+import './index.scss';
+
+import React, { useEffect, useCallback, useState } from 'react';
+import { inject, observer } from 'mobx-react';
+import { Collapse, Typography, Button } from 'antd';
+import UploadJsonModal from '../../components/PartialComponents/UploadJsonModal';
+import { Stores } from '../../stores/storeIdentifier';
+import TapiraApiStore from '../../stores/tapiraApiStore';
 
 const { Title } = Typography;
 const { Panel } = Collapse;
 
-const PanelHeader = ({ serviceName }) => {
+const PanelCallToActions = ({ serviceName }) => {
+  const onClickPreventDefault = (event: React.MouseEvent) => {
+    event.preventDefault();
+    event.stopPropagation();
+  };
+
   return (
     <React.Fragment>
-      <Button style={{ marginRight: "10px" }}>Upload</Button>
-      <Button style={{ marginRight: "10px" }}>Compare</Button>
-      <Button style={{ marginRight: "10px" }}>Evolution</Button>
+      <div
+        className="collapse__panel__cta-container"
+        onClick={(event) => onClickPreventDefault(event)}
+      >
+        <UploadJsonModal serviceName={serviceName} />
+        <Button>Compare</Button>
+        <Button>Evolution</Button>
+      </div>
     </React.Fragment>
   );
 };
@@ -37,7 +45,7 @@ const TapiraServicesList = (props: any) => {
   }, [getApiClaritySpecs]);
 
   const onCollapseCallback = (key: string | string[]) => {
-    if (typeof key === "object") {
+    if (typeof key === 'object') {
       return;
     }
     const index = parseInt(key);
@@ -46,19 +54,25 @@ const TapiraServicesList = (props: any) => {
 
   const panels = services.map((service: string, index: number) => (
     <Panel
-      header={<span style={{ fontSize: "20px" }}>{service}</span>}
-      extra={<PanelHeader serviceName={service} />}
+      className="collapse__panel"
+      header={<span className="header--font-20">{service}</span>}
+      extra={<PanelCallToActions serviceName={service} />}
       key={index}
     >
-      <p>service</p>
+      <span>{service}</span>
     </Panel>
   ));
 
   return (
     <React.Fragment>
       <Title>Services</Title>
-      <div className="content">
-        <Collapse onChange={onCollapseCallback}>{panels}</Collapse>
+      <div className="content services-list">
+        <Collapse
+          className="services-list__collapse"
+          onChange={onCollapseCallback}
+        >
+          {panels}
+        </Collapse>
       </div>
     </React.Fragment>
   );
