@@ -27,10 +27,11 @@ class Test4(MethodView):
         old_api = request_body.get("old_api")
         new_api = request_body.get("new_api")
         api_diff = request_body.get("api_diff")
+        tira_diff = request_body.get("tira_diff")
 
         if context == "validation":
             return s.get_proposed_merge_for_validation(old_api, new_api, api_diff)
         elif context == "comparison":
-            return s.get_proposed_merge_for_comparison(old_api, new_api, api_diff)
+            return s.get_proposed_merge_for_comparison(old_api, new_api, api_diff,tira_diff)
         else:
             abort(400, message = "Invalid context")
