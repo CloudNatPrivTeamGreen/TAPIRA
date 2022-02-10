@@ -1,8 +1,10 @@
 import { Stores } from './storeIdentifier';
-import TapiraApiStore from './tapiraApiStore';
+import TapiraApiProposalsStore from './tapiraApiProposalsStore';
+import TapiraApiSpecificationsStore from './tapiraApiSpecificationsStore';
 
 export default function initializeStores() {
     return  {
-        [Stores.TapiraApiStore]: new TapiraApiStore(),
+        [Stores.TapiraApiSpecificationsStore]: new TapiraApiSpecificationsStore(),
+        [Stores.TapiraApiProposalsStore]: new TapiraApiProposalsStore()
     }
 }

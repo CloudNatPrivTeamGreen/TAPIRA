@@ -1,0 +1,448 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "ApiDiff API",
+    "description": "Spring ApiDiff application",
+    "license": {
+      "name": "Apache 2.0",
+      "url": "http://springdoc.org"
+    },
+    "version": "v0.0.1"
+  },
+  "externalDocs": {
+    "description": "SpringShop Wiki Documentation",
+    "url": "https://springshop.wiki.github.org/docs"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:8080",
+      "description": "Generated server url"
+    }
+  ],
+  "paths": {
+    "/render/fromSamples": {
+      "get": {
+        "tags": [
+          "api-diff-render-controller"
+        ],
+        "operationId": "getDiffWithBasicRenderFromSamples",
+        "parameters": [
+          {
+            "name": "type",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "oldApi",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "newApi",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/render/fromRequestBody": {
+      "get": {
+        "tags": [
+          "api-diff-render-controller"
+        ],
+        "operationId": "getAllApiChangesWithBasicRenderJson_1",
+        "parameters": [
+          {
+            "name": "type",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "apiSpecPair",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/ApiSpecPair"
+            }
+          },
+          {
+            "name": "apiSpecPair1",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/apidiff/tira": {
+      "get": {
+        "tags": [
+          "api-diff-controller"
+        ],
+        "operationId": "getTiraChangesJson_1",
+        "parameters": [
+          {
+            "name": "apiSpecPair",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/ApiSpecPair"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiDiffTira"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/apidiff/tiraFromSamples": {
+      "get": {
+        "tags": [
+          "api-diff-controller"
+        ],
+        "operationId": "getTiraChangesFromSamples",
+        "parameters": [
+          {
+            "name": "oldApi",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "newApi",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiDiffTira"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/apidiff/relevantChanges": {
+      "get": {
+        "tags": [
+          "api-diff-controller"
+        ],
+        "operationId": "getPotentiallyPrivacyRelatedChangesJson_1",
+        "parameters": [
+          {
+            "name": "apiSpecPair",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/ApiSpecPair"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiDiff"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/apidiff/relevantChangesFromSamples": {
+      "get": {
+        "tags": [
+          "api-diff-controller"
+        ],
+        "operationId": "getPotentiallyPrivacyRelatedChangesFromSamples",
+        "parameters": [
+          {
+            "name": "oldApi",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "newApi",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiDiff"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "ApiSpecPair": {
+        "type": "object",
+        "properties": {
+          "oldApiSpec": {
+            "$ref": "#/components/schemas/JsonNode"
+          },
+          "newApiSpec": {
+            "$ref": "#/components/schemas/JsonNode"
+          }
+        }
+      },
+      "JsonNode": {
+        "type": "object"
+      },
+      "ApiDiffTira": {
+        "type": "object",
+        "properties": {
+          "newGlobalTiraAnnotation": {
+            "$ref": "#/components/schemas/JsonNode"
+          },
+          "missingGlobalTiraAnnotation": {
+            "$ref": "#/components/schemas/JsonNode"
+          },
+          "changedGlobalTiraAnnotation": {
+            "$ref": "#/components/schemas/ChangedGlobalTiraAnnotation"
+          },
+          "newSchemaTiraAnnotations": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SchemaTiraAnnotation"
+            }
+          },
+          "missingSchemaTiraAnnotations": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SchemaTiraAnnotation"
+            }
+          },
+          "changedSchemaTiraAnnotations": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ChangedSchemaTiraAnnotation"
+            }
+          }
+        }
+      },
+      "ChangedGlobalTiraAnnotation": {
+        "type": "object",
+        "properties": {
+          "oldGlobalTiraAnnotation": {
+            "$ref": "#/components/schemas/JsonNode"
+          },
+          "newGlobalTiraAnnotation": {
+            "$ref": "#/components/schemas/JsonNode"
+          }
+        }
+      },
+      "ChangedSchemaTiraAnnotation": {
+        "type": "object",
+        "properties": {
+          "schemaName": {
+            "type": "string"
+          },
+          "oldSchemaTiraAnnotation": {
+            "$ref": "#/components/schemas/JsonNode"
+          },
+          "newSchemaTiraAnnotation": {
+            "$ref": "#/components/schemas/JsonNode"
+          }
+        }
+      },
+      "SchemaTiraAnnotation": {
+        "type": "object",
+        "properties": {
+          "schemaName": {
+            "type": "string"
+          },
+          "schemaTiraAnnotation": {
+            "$ref": "#/components/schemas/JsonNode"
+          }
+        }
+      },
+      "ApiDiff": {
+        "type": "object",
+        "properties": {
+          "generalDifferenceGiven": {
+            "type": "boolean"
+          },
+          "potentiallyPrivacyRelatedDifferencesGiven": {
+            "type": "boolean"
+          },
+          "newEndpoints": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/NewEndpoint"
+            }
+          },
+          "missingEndpoints": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/MissingEndpoint"
+            }
+          },
+          "changedOperations": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ChangedOperation"
+            }
+          }
+        }
+      },
+      "ChangedOperation": {
+        "type": "object",
+        "properties": {
+          "pathUrl": {
+            "type": "string"
+          },
+          "method": {
+            "type": "string",
+            "enum": [
+              "POST",
+              "GET",
+              "PUT",
+              "PATCH",
+              "DELETE",
+              "HEAD",
+              "OPTIONS",
+              "TRACE"
+            ]
+          },
+          "changedFields": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "MissingEndpoint": {
+        "type": "object",
+        "properties": {
+          "pathUrl": {
+            "type": "string"
+          },
+          "method": {
+            "type": "string",
+            "enum": [
+              "POST",
+              "GET",
+              "PUT",
+              "PATCH",
+              "DELETE",
+              "HEAD",
+              "OPTIONS",
+              "TRACE"
+            ]
+          },
+          "summary": {
+            "type": "string"
+          },
+          "pathIsStillPresent": {
+            "type": "boolean"
+          }
+        }
+      },
+      "NewEndpoint": {
+        "type": "object",
+        "properties": {
+          "pathUrl": {
+            "type": "string"
+          },
+          "method": {
+            "type": "string",
+            "enum": [
+              "POST",
+              "GET",
+              "PUT",
+              "PATCH",
+              "DELETE",
+              "HEAD",
+              "OPTIONS",
+              "TRACE"
+            ]
+          },
+          "summary": {
+            "type": "string"
+          },
+          "pathIsNew": {
+            "type": "boolean"
+          }
+        }
+      }
+    }
+  }
+}

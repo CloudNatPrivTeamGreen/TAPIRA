@@ -1,21 +1,26 @@
-import React, { useEffect, useCallback } from "react";
-import { useParams } from "react-router-dom";
-import { inject, observer } from "mobx-react";
-import { Stores } from "../../stores/storeIdentifier";
-import TapiraApiStore from "../../stores/tapiraApiStore";
+import React, { useEffect, useCallback } from 'react';
+import { useParams } from 'react-router-dom';
+import { inject, observer } from 'mobx-react';
+import { Stores } from '../../stores/storeIdentifier';
+import TapiraApiSpecificationsStore from '../../stores/tapiraApiSpecificationsStore';
 
 const TapiraService = (props: any) => {
-  const { tapiraApiStore }: { [Stores.TapiraApiStore]: TapiraApiStore } = props;
+  const {
+    tapiraApiSpecificationsStore,
+  }: { [Stores.TapiraApiSpecificationsStore]: TapiraApiSpecificationsStore } =
+    props;
 
   const { serviceName } = useParams();
 
   const getSpecifications = useCallback(async () => {
-    await tapiraApiStore.getSpecificationsForService(serviceName as string);
-  }, []);
+    await tapiraApiSpecificationsStore.getSpecificationsForService(
+      serviceName as string
+    );
+  }, [serviceName, tapiraApiSpecificationsStore]);
 
   useEffect(() => {
     getSpecifications();
-  }, []);
+  }, [getSpecifications]);
 
   return (
     <React.Fragment>
@@ -45,4 +50,6 @@ const TapiraService = (props: any) => {
   );
 };
 
-export default inject(Stores.TapiraApiStore)(observer(TapiraService));
+export default inject(Stores.TapiraApiSpecificationsStore)(
+  observer(TapiraService)
+);

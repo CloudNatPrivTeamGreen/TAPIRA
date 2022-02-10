@@ -1,0 +1,44 @@
+{
+    "generalDifferenceGiven": true,
+    "potentiallyPrivacyRelatedDifferencesGiven": true,
+    "newEndpoints": [],
+    "missingEndpoints": [],
+    "changedOperations": [
+        {
+            "pathUrl": "/catalogue",
+            "method": "GET",
+            "changedFields": [
+                "description",
+                "operationId",
+                "parameters",
+                "apiResponses"
+            ]
+        },
+        {
+            "pathUrl": "/catalogue/{id}",
+            "method": "GET",
+            "changedFields": [
+                "operationId",
+                "parameters",
+                "apiResponses"
+            ]
+        },
+        {
+            "pathUrl": "/catalogue/size",
+            "method": "GET",
+            "changedFields": [
+                "operationId",
+                "parameters",
+                "apiResponses"
+            ]
+        },
+        {
+            "pathUrl": "/tags",
+            "method": "GET",
+            "changedFields": [
+                "operationId",
+                "apiResponses"
+            ]
+        }
+    ]
+}
