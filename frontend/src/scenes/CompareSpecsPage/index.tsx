@@ -5,7 +5,7 @@ import { Typography } from 'antd';
 import { Stores } from '../../stores/storeIdentifier';
 import TapiraApiSpecificationsStore from '../../stores/tapiraApiSpecificationsStore';
 
-let jsonDiff = require('json-diff');
+// let jsonDiff = require('json-diff');
 
 const { Title } = Typography;
 
@@ -29,11 +29,11 @@ const CompareSpecsPage = ({
   useEffect(() => {
     getCurrentVersionSpecCallback();
 
-    const differences = jsonDiff.diffString(
-      tapiraApiSpecificationsStore.currentServiceSpecificationsVersion,
-      tapiraApiSpecificationsStore.specsToCompare
-    );
-    console.log('in useEffect: ', differences);
+    // const differences = jsonDiff.diffString(
+    //   tapiraApiSpecificationsStore.currentServiceSpecificationsVersion,
+    //   tapiraApiSpecificationsStore.specsToCompare
+    // );
+    // console.log('in useEffect: ', differences);
   }, [
     getCurrentVersionSpecCallback,
     tapiraApiSpecificationsStore.currentServiceSpecificationsVersion,
