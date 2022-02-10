@@ -3,32 +3,12 @@ import './index.scss';
 import React, { useEffect, useCallback, useState } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Collapse, Typography, Button } from 'antd';
-import UploadJsonModal from '../../components/PartialComponents/UploadJsonModal';
+import PanelCallToActions from '../../components/PartialComponents/PanelCallToActions';
 import { Stores } from '../../stores/storeIdentifier';
 import TapiraApiSpecificationsStore from '../../stores/tapiraApiSpecificationsStore';
 
 const { Title } = Typography;
 const { Panel } = Collapse;
-
-const PanelCallToActions = ({ serviceName }) => {
-  const onClickPreventDefault = (event: React.MouseEvent) => {
-    event.preventDefault();
-    event.stopPropagation();
-  };
-
-  return (
-    <React.Fragment>
-      <div
-        className="collapse__panel__cta-container"
-        onClick={(event) => onClickPreventDefault(event)}
-      >
-        <UploadJsonModal serviceName={serviceName} />
-        <Button>Compare</Button>
-        <Button>Evolution</Button>
-      </div>
-    </React.Fragment>
-  );
-};
 
 const TapiraServicesList = (props: any) => {
   const {
