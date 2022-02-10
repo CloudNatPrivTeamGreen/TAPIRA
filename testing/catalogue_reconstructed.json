@@ -1,0 +1,263 @@
+"proposed_spec": {
+    "swagger": "2.0",
+    "info": {
+        "description": "This is a generated Open API Spec",
+        "title": "Swagger",
+        "termsOfService": "http://swagger.io/terms/",
+        "contact": {
+            "email": "apiteam@swagger.io"
+        },
+        "license": {
+            "name": "Apache 2.0",
+            "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+        },
+        "version": "1.0.0"
+    },
+    "host": "catalogue:80",
+    "paths": {
+        "/catalogue": {
+            "get": {
+                "produces": [
+                    "application/json; charset=utf-8"
+                ],
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "name": "size",
+                        "in": "query"
+                    },
+                    {
+                        "type": "boolean",
+                        "name": "tags",
+                        "in": "query",
+                        "required": true,
+                        "allowEmptyValue": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/count_description_id_imageUrl_name_price_tag"
+                            }
+                        }
+                    },
+                    "default": {
+                        "description": "Default Response",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "message": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/catalogue/size": {
+            "get": {
+                "produces": [
+                    "application/json; charset=utf-8"
+                ],
+                "parameters": [
+                    {
+                        "type": "boolean",
+                        "name": "tags",
+                        "in": "query",
+                        "required": true,
+                        "allowEmptyValue": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/err_size"
+                        }
+                    },
+                    "default": {
+                        "description": "Default Response",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "message": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/catalogue/{param1}": {
+            "get": {
+                "produces": [
+                    "application/json; charset=utf-8"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/count_description_id_imageUrl_name_price_tag_0"
+                        }
+                    },
+                    "default": {
+                        "description": "Default Response",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "message": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "parameters": [
+                {
+                    "type": "string",
+                    "format": "uuid",
+                    "name": "param1",
+                    "in": "path",
+                    "required": true
+                }
+            ]
+        },
+        "/tags": {
+            "get": {
+                "produces": [
+                    "application/json; charset=utf-8"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/err_tags"
+                        }
+                    },
+                    "default": {
+                        "description": "Default Response",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "message": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "count_description_id_imageUrl_name_price_tag": {
+            "type": "object",
+            "properties": {
+                "count": {
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "imageUrl": {
+                    "type": "array",
+                    "items": {
+                        "type": "string",
+                        "format": "json-pointer"
+                    }
+                },
+                "name": {
+                    "type": "string"
+                },
+                "price": {
+                    "type": "number",
+                    "format": "double"
+                },
+                "tag": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
+        "count_description_id_imageUrl_name_price_tag_0": {
+            "type": "object",
+            "properties": {
+                "count": {
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "imageUrl": {
+                    "type": "array",
+                    "items": {
+                        "type": "string",
+                        "format": "json-pointer"
+                    }
+                },
+                "name": {
+                    "type": "string"
+                },
+                "price": {
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "tag": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
+        "err_size": {
+            "type": "object",
+            "properties": {
+                "err": {
+                    "type": "string"
+                },
+                "size": {
+                    "type": "integer",
+                    "format": "int64"
+                }
+            }
+        },
+        "err_tags": {
+            "type": "object",
+            "properties": {
+                "err": {
+                    "type": "string"
+                },
+                "tags": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            }
+        }
+    }
+}

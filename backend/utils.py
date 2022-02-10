@@ -1,3 +1,5 @@
+import json
+
 from version_parser import Version
 
 
@@ -34,3 +36,20 @@ def compare_api_spec_versions(first_spec, second_spec):
         return 1
     else:
         return -1
+
+
+def transform_list_specs(api_specs):
+    if api_specs is None:
+        return None
+
+    for i in range(len(api_specs)):
+        api_specs[i]["api_spec"] = json.dumps(api_specs[i]["api_spec"])
+
+    return api_specs
+
+
+def transform_spec(spec):
+    if spec is None:
+        return None
+    spec.api_spec = json.dumps(spec.api_spec)
+    return spec

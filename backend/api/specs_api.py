@@ -1,8 +1,7 @@
 import json
-import time
 
 import requests
-from flask import request, Response
+from flask import request
 from flask.views import MethodView
 from flask_smorest import Blueprint, abort
 
@@ -87,7 +86,9 @@ class CurrentVersionSpec(MethodView):
         if recent_spec is None:
             abort(404, message=f"No spec found for service={service}")
 
+        print(schema.ApiSpecEntrySchema().dump(recent_spec))
         return schema.ApiSpecEntrySchema().dump(recent_spec)
+        # return jsonify(transform_spec(recent_spec).api_spec)
 
 
 @blp.route("/upload")

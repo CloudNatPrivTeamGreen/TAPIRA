@@ -1,0 +1,20 @@
+{
+    "generalDifferenceGiven": true,
+    "potentiallyPrivacyRelatedDifferencesGiven": true,
+    "newEndpoints": [
+        {
+            "pathUrl": "/api/",
+            "method": "POST",
+            "summary": null,
+            "pathIsNew": false
+        },
+        {
+            "pathUrl": "/api/time",
+            "method": "POST",
+            "summary": null,
+            "pathIsNew": false
+        }
+    ],
+    "missingEndpoints": [],
+    "changedOperations": []
+}
