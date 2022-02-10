@@ -23,7 +23,7 @@ spec:
     spec:
       containers:
         - name: tapira-api-containers
-          image: milamber97/tapira:0.2.2
+          image: milamber97/tapira:latest
           ports:
             - containerPort: 5000
           env:
