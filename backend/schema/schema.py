@@ -1,5 +1,8 @@
 from flask_rest_api.fields import Upload
 from marshmallow import Schema, fields
+from marshmallow import post_load
+
+from backend.models.models import ApiDiffs
 
 
 class QueryParamsSchema(Schema):
@@ -90,3 +93,8 @@ class ApiDiffsResponseSchema(Schema):
     new_endpoints = fields.List(fields.Nested(NewEndpointSchema))
     missing_endpoints = fields.List(fields.Nested(MissingEndpointSchema))
     changed_operations = fields.List(fields.Nested(ChangedOperationSchema))
+
+    @post_load
+    def make_api_diffs(self, data, **kwargs):
+        print("opaaa")
+        return ApiDiffs(**data)
