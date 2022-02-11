@@ -109,6 +109,7 @@ class ConflictsReponseSchema(Schema):
 
 
 class ChangedGlobalTiraAnnotationSchema(Schema):
+    key = fields.Str(default=None, allow_none=True)
     old_global_tira_annotation = fields.Dict(default=None, allow_none=True)
     new_global_tira_annotation = fields.Dict(default=None, allow_none=True)
 

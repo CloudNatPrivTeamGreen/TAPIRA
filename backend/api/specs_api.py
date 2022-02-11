@@ -12,8 +12,8 @@ from backend.services import collection_service as s
 
 ##################################################
 # Variable Definition
-blp = Blueprint("specs",
-                "specs",
+blp = Blueprint("specs_api",
+                "specs_api",
                 url_prefix="/api",
                 description="Collection and maintenance of specifications"
                 )

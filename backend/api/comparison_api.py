@@ -4,7 +4,7 @@ from flask_smorest import Blueprint, abort
 
 from backend.schema import schema
 from backend.services import comparison_service as s
-
+from backend.services import apidiff_service as diff_service
 
 blp = Blueprint("comparison_api",
                 "comparison_api",
@@ -29,9 +29,27 @@ class Upload(MethodView):
         service = query_params['service']
 
         if file.filename == '':
-            abort(400, message = "Empty filename")
+            abort(400, message="Empty filename")
         elif service is None:
-            abort(400, message = "Service name missing from the parameters")
+            abort(400, message="Service name missing from the parameters")
 
         comparison = s.get_comparison_with_latest_spec(file, service)
         return schema.AllChangesComparisonSchema().dump(comparison)
+
+
+@blp.route("/evolution")
+class Comparison(MethodView):
+
+    @blp.arguments(schema.EvolutionQueryParamsSchema, location="query")
+    @blp.response(200, schema.AllChangesComparisonSchema)
+    def get(self, query_params):
+        """Compare api and tira diffs between two version of specifications for a service.
+
+        Compare api and tira diffs between two version of specifications for a service.
+        ---
+        """
+        service_name = query_params["service"]
+        old_version = query_params["old_version"]
+        new_version = query_params["new_version"]
+        return schema.AllChangesComparisonSchema().dump(
+            diff_service.get_all_diffs_for_two_versions(service_name, old_version, new_version))

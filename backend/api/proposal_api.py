@@ -69,21 +69,3 @@ class ApiDiffsRoute(MethodView):
         service = query_params["service"]
         return schema.ConflictsReponseSchema().dump(
             diff_service.get_conflicts_between_reconstructed_and_current(service))
-
-
-@blp.route("/evolution")
-class Comparison(MethodView):
-
-    @blp.arguments(schema.EvolutionQueryParamsSchema, location="query")
-    @blp.response(200, schema.AllChangesComparisonSchema)
-    def get(self, query_params):
-        """Compare api and tira diffs between two version of specifications for a service.
-
-        Compare api and tira diffs between two version of specifications for a service.
-        ---
-        """
-        service_name = query_params["service"]
-        old_version = query_params["old_version"]
-        new_version = query_params["new_version"]
-        return schema.AllChangesComparisonSchema().dump(
-            diff_service.get_all_diffs_for_two_versions(service_name, old_version, new_version))

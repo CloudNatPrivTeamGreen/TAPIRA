@@ -61,7 +61,6 @@ def get_tira_changes(first_spec, second_spec):
                             json={"oldApiSpec": first_spec,
                                   "newApiSpec": second_spec})
     response_body_decamelized = humps.decamelize(response.json())
-    print(response_body_decamelized)
     return ApiDiffTiraSchema().loads(json.dumps(response_body_decamelized))
 
 
