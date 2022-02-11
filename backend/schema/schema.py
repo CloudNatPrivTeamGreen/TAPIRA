@@ -30,6 +30,10 @@ class ServicesSchema(Schema):
     services = fields.List(fields.Str)
 
 
+class VersionsSchema(Schema):
+    versions = fields.List(fields.Str)
+
+
 class ApiClaritySpecsSchema(Schema):
     reconstructed_services = fields.List(fields.Str)
 
@@ -52,7 +56,6 @@ class UploadSchema(Schema):
 
 class UploadResponseSchema(Schema):
     created_version = fields.Str()
-
 
 
 class ApiDiffParameterSchema(Schema):
@@ -100,8 +103,10 @@ class ApiDiffsResponseSchema(Schema):
         print("opaaa")
         return ApiDiffs(**data)
 
+
 class ProposedMergeParameterSchema(Schema):
     context = fields.Str()
+
 
 class ProposedMergeRequestBodySchema(Schema):
     old_api = fields.Dict()

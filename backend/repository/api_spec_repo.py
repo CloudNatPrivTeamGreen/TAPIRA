@@ -35,6 +35,11 @@ def find_distinct_service_names():
     return names
 
 
+def find_service_versions(service):
+    versions = list(get_db().api_specifications.find({"service": service}, {"version": 1, "_id": 0}))
+    return [versions[i]['version'] for i in range(len(versions))]
+
+
 def find_specs_by_name(service_name):
     specs = list(get_db().api_specifications.find({"service": service_name}))
     print(f'Found {len(specs)} specs for service_name={service_name}')

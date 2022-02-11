@@ -127,3 +127,7 @@ def insert_provided_spec(uploaded_file, service_name):
     proposal_repo.delete_by_name_and_return_timestamp_of_previous(service_name)
 
     return new_spec_version
+
+
+def get_versions(service):
+    return spec_repo.find_service_versions(service)
