@@ -31,7 +31,7 @@
         },
         "summary": "Fetch provided and reconstructed specifications from APIClarity and save them in database.",
         "tags": [
-          "specs"
+          "specs_api"
         ]
       }
     },
@@ -55,7 +55,44 @@
         "summary": "Get list of service names",
         "description": "Return list of unique service names with existing specifications.",
         "tags": [
-          "specs"
+          "specs_api"
+        ]
+      }
+    },
+    "/api/versions": {
+      "get": {
+        "parameters": [
+          {
+            "in": "query",
+            "name": "service",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "422": {
+            "$ref": "#/components/responses/UNPROCESSABLE_ENTITY"
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Versions"
+                }
+              }
+            }
+          },
+          "default": {
+            "$ref": "#/components/responses/DEFAULT_ERROR"
+          }
+        },
+        "summary": "Get list of versions",
+        "description": "Return list of versions for a service.",
+        "tags": [
+          "specs_api"
         ]
       }
     },
@@ -100,7 +137,7 @@
         "summary": "Get filtered api specifications",
         "description": "Filter api specifications based on parameters.",
         "tags": [
-          "specs"
+          "specs_api"
         ]
       }
     },
@@ -137,7 +174,7 @@
         "summary": "Get latest api specification",
         "description": "Get latest api specification based on service name.",
         "tags": [
-          "specs"
+          "specs_api"
         ]
       }
     },
@@ -184,7 +221,7 @@
         "summary": "Upload existing API specification",
         "description": "Upload existing API specification and delete current proposals for the same service.",
         "tags": [
-          "specs"
+          "specs_api"
         ]
       }
     },
@@ -273,7 +310,7 @@
         ]
       }
     },
-    "/api/apidiff": {
+    "/api/conflicts": {
       "get": {
         "parameters": [
           {
@@ -294,7 +331,44 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ApiDiffsResponse"
+                  "$ref": "#/components/schemas/ConflictsReponse"
+                }
+              }
+            }
+          },
+          "default": {
+            "$ref": "#/components/responses/DEFAULT_ERROR"
+          }
+        },
+        "summary": "Finds conflicts between reconstructed and latest spec",
+        "description": "Finds conflicts between reconstructed and latest spec by using the ApiDiff service.",
+        "tags": [
+          "proposals_api"
+        ]
+      }
+    },
+    "/api/comparison": {
+      "get": {
+        "parameters": [
+          {
+            "in": "query",
+            "name": "service",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "422": {
+            "$ref": "#/components/responses/UNPROCESSABLE_ENTITY"
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AllChangesComparison"
                 }
               }
             }
@@ -306,15 +380,110 @@
         "requestBody": {
           "required": true,
           "content": {
-            "application/json": {
+            "multipart/form-data": {
               "schema": {
-                "$ref": "#/components/schemas/ApiDiffBody"
+                "$ref": "#/components/schemas/Upload"
               }
             }
           }
         },
+        "summary": "Upload existing API specification",
+        "description": "Upload existing API specification and delete current proposals for the same service.",
         "tags": [
-          "proposals_api"
+          "comparison_api"
+        ]
+      }
+    },
+    "/api/evolution": {
+      "get": {
+        "parameters": [
+          {
+            "in": "query",
+            "name": "old_version",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "new_version",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "service",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "422": {
+            "$ref": "#/components/responses/UNPROCESSABLE_ENTITY"
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AllChangesComparison"
+                }
+              }
+            }
+          },
+          "default": {
+            "$ref": "#/components/responses/DEFAULT_ERROR"
+          }
+        },
+        "summary": "Compare api and tira diffs between two version of specifications for a service.",
+        "description": "Compare api and tira diffs between two version of specifications for a service.",
+        "tags": [
+          "comparison_api"
+        ]
+      }
+    },
+    "/api/proposed_merge": {
+      "get": {
+        "parameters": [
+          {
+            "in": "query",
+            "name": "context",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "422": {
+            "$ref": "#/components/responses/UNPROCESSABLE_ENTITY"
+          },
+          "200": {
+            "description": "OK"
+          },
+          "default": {
+            "$ref": "#/components/responses/DEFAULT_ERROR"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ProposedMergeRequestBody"
+              }
+            }
+          }
+        },
+        "summary": "Get a proposed merge of both api specifications",
+        "description": "Get a proposed merge of both api specifications in the context of validation or comparison.",
+        "tags": [
+          "merge_api"
         ]
       }
     },
@@ -402,12 +571,20 @@
   },
   "tags": [
     {
-      "name": "specs",
+      "name": "specs_api",
       "description": "Collection and maintenance of specifications"
     },
     {
       "name": "proposals_api",
       "description": "Collection and maintenance of spec proposals"
+    },
+    {
+      "name": "comparison_api",
+      "description": "Comparing a api specification of a service to the latest spec and providing the changes."
+    },
+    {
+      "name": "merge_api",
+      "description": "Providing a proposed merge of two provided API specification in given context."
     },
     {
       "name": "testing",
@@ -420,14 +597,6 @@
       "Error": {
         "type": "object",
         "properties": {
-          "code": {
-            "type": "integer",
-            "description": "Error code"
-          },
-          "errors": {
-            "type": "object",
-            "description": "Errors"
-          },
           "message": {
             "type": "string",
             "description": "Error message"
@@ -435,6 +604,14 @@
           "status": {
             "type": "string",
             "description": "Error name"
+          },
+          "code": {
+            "type": "integer",
+            "description": "Error code"
+          },
+          "errors": {
+            "type": "object",
+            "description": "Errors"
           }
         }
       },
@@ -486,16 +663,27 @@
           }
         }
       },
+      "Versions": {
+        "type": "object",
+        "properties": {
+          "versions": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
       "ApiSpecEntry": {
         "type": "object",
         "properties": {
+          "name": {
+            "type": "string"
+          },
           "version": {
             "type": "string"
           },
           "created_at_date": {
-            "type": "string"
-          },
-          "name": {
             "type": "string"
           },
           "api_spec": {
@@ -550,38 +738,24 @@
           }
         }
       },
-      "ApiDiffBody": {
+      "NewEndpoint": {
         "type": "object",
         "properties": {
-          "oldApiSpec": {
-            "type": "object"
-          },
-          "newApiSpec": {
-            "type": "object"
-          }
-        },
-        "required": [
-          "newApiSpec",
-          "oldApiSpec"
-        ]
-      },
-      "ChangedOperation": {
-        "type": "object",
-        "properties": {
-          "method": {
-            "type": "string",
-            "nullable": true
+          "path_is_new": {
+            "type": "boolean"
           },
           "path_url": {
             "type": "string",
             "nullable": true
           },
-          "changed_fields": {
-            "type": "array",
-            "items": {
-              "type": "string",
-              "nullable": true
-            }
+          "summary": {
+            "type": "string",
+            "default": null,
+            "nullable": true
+          },
+          "method": {
+            "type": "string",
+            "nullable": true
           }
         }
       },
@@ -591,67 +765,225 @@
           "path_is_still_present": {
             "type": "boolean"
           },
-          "method": {
-            "type": "string",
-            "nullable": true
-          },
           "path_url": {
             "type": "string",
             "nullable": true
           },
           "summary": {
-            "type": "string"
+            "type": "string",
+            "default": null,
+            "nullable": true
+          },
+          "method": {
+            "type": "string",
+            "nullable": true
           }
         }
       },
-      "NewEndpoint": {
+      "ChangedOperation": {
         "type": "object",
         "properties": {
-          "method": {
-            "type": "string",
-            "nullable": true
-          },
           "path_url": {
             "type": "string",
             "nullable": true
           },
-          "path_is_new": {
-            "type": "boolean"
-          },
-          "summary": {
+          "method": {
             "type": "string",
             "nullable": true
+          },
+          "changed_fields": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "type": "string",
+              "nullable": true
+            }
           }
         }
       },
       "ApiDiffsResponse": {
         "type": "object",
         "properties": {
+          "new_endpoints": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "$ref": "#/components/schemas/NewEndpoint"
+            }
+          },
+          "missing_endpoints": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "$ref": "#/components/schemas/MissingEndpoint"
+            }
+          },
           "potentially_privacy_related_differences_given": {
             "type": "boolean",
             "nullable": true
-          },
-          "changed_operations": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/ChangedOperation"
-            }
           },
           "general_difference_given": {
             "type": "boolean",
             "nullable": true
           },
-          "missing_endpoints": {
+          "changed_operations": {
             "type": "array",
+            "nullable": true,
             "items": {
-              "$ref": "#/components/schemas/MissingEndpoint"
+              "$ref": "#/components/schemas/ChangedOperation"
+            }
+          }
+        }
+      },
+      "ConflictsReponse": {
+        "type": "object",
+        "properties": {
+          "api_diffs": {
+            "nullable": true,
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ApiDiffsResponse"
+              }
+            ]
+          }
+        }
+      },
+      "ChangedGlobalTiraAnnotation": {
+        "type": "object",
+        "properties": {
+          "new_global_tira_annotation": {
+            "type": "object",
+            "nullable": true
+          },
+          "old_global_tira_annotation": {
+            "type": "object",
+            "nullable": true
+          }
+        }
+      },
+      "SchemaTiraAnnotation": {
+        "type": "object",
+        "properties": {
+          "schema_tira_annotation": {
+            "type": "object",
+            "nullable": true
+          },
+          "schema_name": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "ChangedSchemaTiraAnnotation": {
+        "type": "object",
+        "properties": {
+          "old_schema_tira_annotation": {
+            "type": "object",
+            "nullable": true
+          },
+          "schema_name": {
+            "type": "string",
+            "nullable": true
+          },
+          "new_schema_tira_annotation": {
+            "type": "object",
+            "nullable": true
+          }
+        }
+      },
+      "ApiDiffTira": {
+        "type": "object",
+        "properties": {
+          "changed_global_tira_annotation": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "nullable": true,
+              "allOf": [
+                {
+                  "$ref": "#/components/schemas/ChangedGlobalTiraAnnotation"
+                }
+              ]
             }
           },
-          "new_endpoints": {
+          "new_schema_tira_annotations": {
             "type": "array",
+            "nullable": true,
             "items": {
-              "$ref": "#/components/schemas/NewEndpoint"
+              "$ref": "#/components/schemas/SchemaTiraAnnotation"
             }
+          },
+          "changed_schema_tira_annotations": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "$ref": "#/components/schemas/ChangedSchemaTiraAnnotation"
+            }
+          },
+          "new_global_tira_annotation": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "type": "object"
+            }
+          },
+          "missing_schema_tira_annotations": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "$ref": "#/components/schemas/SchemaTiraAnnotation"
+            }
+          },
+          "missing_global_tira_annotation": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "type": "object"
+            }
+          }
+        }
+      },
+      "AllChangesComparison": {
+        "type": "object",
+        "properties": {
+          "tira_diffs": {
+            "nullable": true,
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ApiDiffTira"
+              }
+            ]
+          },
+          "api_diffs": {
+            "nullable": true,
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ApiDiffsResponse"
+              }
+            ]
+          },
+          "service": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "service"
+        ]
+      },
+      "ProposedMergeRequestBody": {
+        "type": "object",
+        "properties": {
+          "new_api": {
+            "type": "object"
+          },
+          "tira_diff": {
+            "type": "object"
+          },
+          "old_api": {
+            "type": "object"
+          },
+          "api_diff": {
+            "type": "object"
           }
         }
       }
