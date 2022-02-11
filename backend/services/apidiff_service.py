@@ -23,6 +23,17 @@ def get_all_diffs_for_two_versions(service_name, old_version, new_version):
 
     return {"service": service_name, "api_diffs": api_diffs, "tira_diffs": tira_diffs}
 
+def get_all_diffs_for_two_openapi_specs(service_name, old_spec, new_spec): #method for two OpenApi specs and not two ApiSpecEntry
+    if old_spec is None:
+        abort(400, message=f'Old Spec missing for service:{service_name}')
+    elif new_spec is None:
+        abort(400, message=f'New Spec missing for service:{service_name}')
+
+    api_diffs = get_api_diffs(old_spec, new_spec)
+    tira_diffs = get_tira_changes(old_spec, new_spec)
+
+    return {"service": service_name, "api_diffs": api_diffs, "tira_diffs": tira_diffs}
+
 
 def get_conflicts_between_reconstructed_and_current(service_name):
     current_spec = collection_service.get_latest_spec(service_name)
@@ -50,6 +61,7 @@ def get_tira_changes(first_spec, second_spec):
                             json={"oldApiSpec": first_spec,
                                   "newApiSpec": second_spec})
     response_body_decamelized = humps.decamelize(response.json())
+    print(response_body_decamelized)
     return ApiDiffTiraSchema().loads(json.dumps(response_body_decamelized))
 
 

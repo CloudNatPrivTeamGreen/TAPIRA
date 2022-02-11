@@ -17,9 +17,9 @@ blp = Blueprint("comparison_api",
 class Upload(MethodView):
 
     @blp.arguments(schema.UploadSchema, location='files')
-    @blp.arguments(schema.ServiceNameParameterSchema, location="query")
-    @blp.response(200, schema.UploadResponseSchema)
-    def post(self, file_body, query_params):
+    @blp.arguments(schema.ComparisonParameterSchema, location="query")
+    @blp.response(200, schema.AllChangesComparisonSchema)
+    def get(self, file_body, query_params):
         """Upload existing API specification
 
         Upload existing API specification and delete current proposals for the same service.
@@ -29,9 +29,9 @@ class Upload(MethodView):
         service = query_params['service']
 
         if file.filename == '':
-            abort(400, "Empty filename")
+            abort(400, message = "Empty filename")
         elif service is None:
-            abort(400, "Service name missing from the parameters")
+            abort(400, message = "Service name missing from the parameters")
 
-        created_version = s.insert_provided_spec(file, service)
-        return {"created_version": created_version}
+        comparison = s.get_comparison_with_latest_spec(file, service)
+        return schema.AllChangesComparisonSchema().dump(comparison)

@@ -74,14 +74,14 @@ class ApiDiffRequestSchema(Schema):
 class NewEndpointSchema(Schema):
     path_url = fields.Str(default=None, allow_none=True)
     method = fields.Str(default=None, allow_none=True)
-    summary = fields.Str(default=None, allow_none=True)
+    summary = fields.Str(default=None, missing=None, allow_none=True)
     path_is_new = fields.Boolean(default=True)
 
 
 class MissingEndpointSchema(Schema):
     path_url = fields.Str(default=None, allow_none=True)
     method = fields.Str(default=None, allow_none=True)
-    summary = fields.Str(default=None)
+    summary = fields.Str(default=None, missing=None, allow_none=True)
     path_is_still_present = fields.Boolean(default=False)
 
 
@@ -125,9 +125,10 @@ class ChangedSchemaTiraAnnotation(Schema):
 
 
 class ApiDiffTiraSchema(Schema):
-    new_global_tira_annotation = fields.Dict(default=None, allow_none=True)
-    missing_global_tira_annotation = fields.Dict(default=None, allow_none=True)
-    changed_global_tira_annotation = fields.Nested(ChangedGlobalTiraAnnotationSchema, default=None, allow_none=True)
+    new_global_tira_annotation = fields.List(fields.Dict(), default=[], allow_none=True)
+    missing_global_tira_annotation = fields.List(fields.Dict(), default=[], allow_none=True)
+    changed_global_tira_annotation = fields.List(fields.Nested(ChangedGlobalTiraAnnotationSchema, default=None, allow_none=True), default=[],
+                                                  allow_none=True)
 
     new_schema_tira_annotations = fields.List(fields.Nested(SchemaTiraAnnotation), default=[], allow_none=True)
 
@@ -157,3 +158,6 @@ class AllChangesComparisonSchema(Schema):
     service = fields.Str(required=True)
     api_diffs = fields.Nested(ApiDiffsResponseSchema, default=None, allow_none=True)
     tira_diffs = fields.Nested(ApiDiffTiraSchema, default=None, allow_none=True)
+
+class ComparisonParameterSchema(Schema):
+    service = fields.Str(required=True)
