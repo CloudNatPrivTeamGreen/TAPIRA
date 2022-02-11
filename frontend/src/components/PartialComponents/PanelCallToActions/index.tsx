@@ -1,10 +1,15 @@
 import React, { useCallback } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 
 import { Button, message } from 'antd';
 import UploadJsonModal from '../UploadJsonModal';
 import { Stores } from '../../../stores/storeIdentifier';
 import TapiraApiSpecificationsStore from '../../../stores/tapiraApiSpecificationsStore';
+import {
+  RoutePaths,
+  RoutingParameters,
+} from '../../../components/Router/router.config';
 
 const PanelCallToActions = ({
   serviceName,
@@ -13,6 +18,8 @@ const PanelCallToActions = ({
   serviceName: string;
   [Stores.TapiraApiSpecificationsStore]?: TapiraApiSpecificationsStore;
 }) => {
+  const navigate = useNavigate();
+
   const onClickPreventDefault = (event: React.MouseEvent) => {
     event.preventDefault();
     event.stopPropagation();
@@ -44,7 +51,14 @@ const PanelCallToActions = ({
   const onReaderLoad = (event: ProgressEvent<FileReader>) => {
     if (!event.target?.result) return;
 
-    let obj = JSON.parse(event.target?.result as string);
+    let specs = JSON.parse(event.target?.result as string);
+    tapiraApiSpecificationsStore?.saveUploadedSpecToCompare(specs);
+    navigate(
+      RoutePaths.CompareSpecs.toString().replace(
+        RoutingParameters.ServiceName,
+        serviceName
+      )
+    );
   };
 
   const compareUploadedJson = (file: File) => {
