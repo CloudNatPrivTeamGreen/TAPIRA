@@ -7,10 +7,13 @@ class TapiraApiSpecificationsStore {
     apiClaritySpecs!: Array<string>;
 
     @observable
-    serviceSpecifications;
+    serviceSpecifications: any;
 
     @observable
-    currentServiceSpecificationsVersion;
+    currentServiceSpecificationsVersion: any;
+
+    @observable
+    specsToCompare: any;
 
     @action
     async getApiclaritySpecs() {
@@ -32,13 +35,18 @@ class TapiraApiSpecificationsStore {
     @action
     async getCurrentVersionSpecForService(serviceName: string) {
         const result = await tapiraApiSpecificationsService.getCurrentVersionSpecForService(serviceName);
-        this.currentServiceSpecificationsVersion = result;
+        this.currentServiceSpecificationsVersion = result.api_spec;
     }
 
     @action
     async uploadExistingAPISpecifications(serviceName: string, data: FormData) {
         const result = await tapiraApiSpecificationsService.uploadExistingAPISpecifications(serviceName, data);
         return result.created_version;
+    }
+
+    @action
+    saveUploadedSpecToCompare(specs: any) {
+        this.specsToCompare = specs;
     }
 }
 

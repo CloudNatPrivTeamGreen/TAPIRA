@@ -1,37 +1,22 @@
-import React, { useState, useCallback } from 'react';
-import { inject, observer } from 'mobx-react';
-import { Button, Modal, Upload, message } from 'antd';
+import React, { useState } from 'react';
+import { Button, Modal, Upload } from 'antd';
 import { UploadFile } from 'antd/lib/upload/interface';
 import { InboxOutlined } from '@ant-design/icons';
-import { Stores } from '../../../stores/storeIdentifier';
-import TapiraApiSpecificationsStore from '../../../stores/tapiraApiSpecificationsStore';
 
 const { Dragger } = Upload;
 
 const UploadJsonModal = ({
   serviceName,
-  tapiraApiSpecificationsStore,
+  onHandleOk,
+  buttonText,
 }: {
   serviceName: string;
-  [Stores.TapiraApiSpecificationsStore]?: TapiraApiSpecificationsStore;
+  onHandleOk: (file: File) => void;
+  buttonText: string;
 }) => {
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
-  const [uploadFormData, setUploadFormData] = useState<FormData | null>(null);
   const [fileList, setFileList] = useState<UploadFile[]>([]);
-
-  const onUploadFile = useCallback(
-    async (formData: FormData) => {
-      const newVersion =
-        await tapiraApiSpecificationsStore?.uploadExistingAPISpecifications(
-          serviceName,
-          formData
-        );
-      message.success(
-        `The new version for ${serviceName} was successfully updated. The new version is ${newVersion}`
-      );
-    },
-    [serviceName, tapiraApiSpecificationsStore]
-  );
+  const [file, setFile] = useState<File | null>(null);
 
   const showModal = () => setIsModalVisible(true);
   const handleCancel = () => {
@@ -40,8 +25,8 @@ const UploadJsonModal = ({
   };
 
   const handleOk = () => {
-    if (uploadFormData !== null) {
-      onUploadFile(uploadFormData);
+    if (file !== null) {
+      onHandleOk(file);
     }
     setFileList([]);
     setIsModalVisible(false);
@@ -60,19 +45,14 @@ const UploadJsonModal = ({
       if (!item.file) return;
 
       item.file.status = 'done';
-      const blob = new Blob([item.file], {
-        type: 'application/json',
-      });
-      const formData = new FormData();
-      formData.append('file', blob);
-      setUploadFormData(formData);
+      setFile(item.file);
     },
   };
 
   return (
     <React.Fragment>
       <Button type="primary" onClick={showModal}>
-        Upload
+        {buttonText}
       </Button>
       <Modal
         title={`Upload new version for ${serviceName}`}
@@ -97,6 +77,4 @@ const UploadJsonModal = ({
   );
 };
 
-export default inject(Stores.TapiraApiSpecificationsStore)(
-  observer(UploadJsonModal)
-);
+export default UploadJsonModal;
