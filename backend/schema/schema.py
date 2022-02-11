@@ -147,10 +147,10 @@ class ProposedMergeRequestBodySchema(Schema):
     tira_diff = fields.Dict()
 
 
-# class ConflictsQueryParamsSchema(Schema):
-#     service = fields.Str(required=True)
-#     old_version = fields.Str(required=True)
-#     new_version = fields.Str(required=True)
+class EvolutionQueryParamsSchema(Schema):
+    service = fields.Str(required=True)
+    old_version = fields.Str(required=True)
+    new_version = fields.Str(required=True)
 
 
 class AllChangesComparisonSchema(Schema):
