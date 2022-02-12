@@ -8,7 +8,7 @@ export enum RoutingParameters {
 export enum RoutePaths {
     Services = '/',
     Service = '/service/:serviceName',
-    ServiceSpecVersionView = '/service/:serviceName/:version'
+    ServiceSpecVersionView = '/service/:serviceName/:version',
     CompareSpecs = '/service/compare/:serviceName'
 }
 

@@ -10,6 +10,9 @@ class TapiraApiSpecificationsStore {
     serviceSpecifications: any;
 
     @observable
+    serviceSpecificationsVersion: any;
+
+    @observable
     currentServiceSpecificationsVersion: any;
 
     @observable
@@ -30,6 +33,12 @@ class TapiraApiSpecificationsStore {
     async getSpecificationsForService(serviceName: string) {
         const result = await tapiraApiSpecificationsService.getSpecificationsForService(serviceName);
         this.serviceSpecifications = result;
+    }
+
+    @action
+    async getSpecificationsForServiceVersion(serviceName: string, servVersion: string) {
+        const result = await tapiraApiSpecificationsService.getSpecificationsForServiceVersion(serviceName, servVersion);
+        this.serviceSpecificationsVersion = result.api_specs;
     }
 
     @action
