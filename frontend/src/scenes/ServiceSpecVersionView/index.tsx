@@ -29,24 +29,21 @@ const ServiceSpecVersionView = (props) => {
     getSpecs();
   }, [getSpecs]);
 
-  //useEffect(() => {
-    //console.log('%c checking params', 'color: yellow', params);
-  //}, [params]);
-
   const spec = api_specs.map((api_spec: string) => (
     {api_spec}
   ));
   
 
   return <React.Fragment>
-    <Title>Service {params.serviceName} Version {params.version}</Title>
-    <div className="content service-version"><pre>
-      {JSON.stringify(spec, null, 2)}
-      </pre></div>
+    <Title>{params.serviceName} {params.version}</Title>
+    <div className="content service-version">
+      <pre>
+        {JSON.stringify(spec, null, 2)}
+      </pre>
+    </div>
   </React.Fragment>;
 };
 
-//export default ServiceSpecVersionView;
 export default inject(Stores.TapiraApiSpecificationsStore)(
   observer(ServiceSpecVersionView)
 );
