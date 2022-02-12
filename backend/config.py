@@ -9,10 +9,10 @@ APIDIFF_HOST = os.getenv("apidiff_host", default="192.168.49.2")
 APIDIFF_PORT = os.getenv("apidiff_port", default=32230)
 APIDIFF_URL = f'http://{APIDIFF_HOST}:{APIDIFF_PORT}'
 
-mongodb_host = os.getenv("mongodb_host", default="localhost")
-mongodb_port = os.getenv("mongodb_port", default=27017)
-mongodb_user = os.getenv("MONGODB_USER", default="root")
-mongodb_password = os.getenv("MONGODB_PASSWORD", default="rootpassword")
+mongodb_host = os.getenv("mongodb_host", default="192.168.49.2")
+mongodb_port = os.getenv("mongodb_port", default=32000)
+mongodb_user = os.getenv("MONGODB_USER", default="adminuser")
+mongodb_password = os.getenv("MONGODB_PASSWORD", default="password123")
 
 class Config:
     """Default configuration"""
