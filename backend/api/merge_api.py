@@ -15,7 +15,7 @@ blp = Blueprint("merge_api",
 class Test4(MethodView):
     @blp.arguments(schema.ProposedMergeParameterSchema, location="query")
     @blp.arguments(schema.ProposedMergeRequestBodySchema, location="json")
-    @blp.response(200)
+    @blp.response(200, schema.ProposedMergeResponseSchema)
     def get(self, args, request_body):
         """Get a proposed merge of both api specifications
 
@@ -26,12 +26,10 @@ class Test4(MethodView):
 
         old_api = request_body.get("old_api")
         new_api = request_body.get("new_api")
-        api_diff = request_body.get("api_diff")
-        tira_diff = request_body.get("tira_diff")
 
         if context == "validation":
-            return s.get_proposed_merge_for_validation(old_api, new_api, api_diff)
+            return {"proposed_merge": s.get_proposed_merge_for_validation(old_api, new_api)}
         elif context == "comparison":
-            return s.get_proposed_merge_for_comparison(old_api, new_api, api_diff,tira_diff)
+            return {"proposed_merge": s.get_proposed_merge_for_comparison(old_api, new_api)}
         else:
             abort(400, message = "Invalid context")

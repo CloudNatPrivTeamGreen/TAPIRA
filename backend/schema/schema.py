@@ -145,8 +145,9 @@ class ProposedMergeParameterSchema(Schema):
 class ProposedMergeRequestBodySchema(Schema):
     old_api = fields.Dict()
     new_api = fields.Dict()
-    api_diff = fields.Dict()
-    tira_diff = fields.Dict()
+
+class ProposedMergeResponseSchema(Schema):
+    proposed_merge = fields.Dict()
 
 
 class EvolutionQueryParamsSchema(Schema):
