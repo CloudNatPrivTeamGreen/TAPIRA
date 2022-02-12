@@ -20,7 +20,7 @@ from backend.api.specs_api import blp as specs_blp
 from backend.api.proposal_api import blp as proposals_blp
 from backend.api.test_apis import test_blp
 from backend.api.merge_api import blp as merge_blp
-
+from backend.api.comparison_api import blp as comparison_blp
 
 app.config.from_object(Config)
 api_app = Api(app)
@@ -29,6 +29,8 @@ print("Specs Blueprint registered")
 
 api_app.register_blueprint(proposals_blp)
 print("Proposals Blueprint registered")
+api_app.register_blueprint(comparison_blp)
+print("Comparison Blueprint registered")
 api_app.register_blueprint(merge_blp)
 print("Merge Blueprint registered")
 api_app.register_blueprint(test_blp)

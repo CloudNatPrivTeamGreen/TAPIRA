@@ -1,0 +1,274 @@
+{
+    "proposal": {
+        "definitions": {
+            "_embedded": {
+                "properties": {
+                    "address": {
+                        "items": {
+                            "type": "string"
+                        },
+                        "type": "array"
+                    }
+                },
+                "type": "object"
+            },
+            "_embedded_0": {
+                "properties": {
+                    "_embedded": {
+                        "$ref": "#/definitions/_embedded"
+                    }
+                },
+                "type": "object"
+            },
+            "_embedded_1": {
+                "properties": {
+                    "card": {
+                        "items": {
+                            "type": "string"
+                        },
+                        "type": "array"
+                    }
+                },
+                "type": "object"
+            },
+            "_embedded_2": {
+                "properties": {
+                    "_embedded": {
+                        "$ref": "#/definitions/_embedded_1"
+                    }
+                },
+                "type": "object"
+            },
+            "_links": {
+                "properties": {
+                    "addresses": {
+                        "$ref": "#/definitions/addresses"
+                    },
+                    "cards": {
+                        "$ref": "#/definitions/addresses"
+                    },
+                    "customer": {
+                        "$ref": "#/definitions/addresses"
+                    },
+                    "self": {
+                        "$ref": "#/definitions/addresses"
+                    }
+                },
+                "type": "object"
+            },
+            "_links_firstName_id_lastName_username": {
+                "properties": {
+                    "_links": {
+                        "$ref": "#/definitions/_links"
+                    },
+                    "firstName": {
+                        "type": "string"
+                    },
+                    "id": {
+                        "type": "string"
+                    },
+                    "lastName": {
+                        "type": "string"
+                    },
+                    "username": {
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            },
+            "addresses": {
+                "properties": {
+                    "href": {
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            },
+            "email_firstName_lastName_password_username": {
+                "properties": {
+                    "email": {
+                        "type": "string"
+                    },
+                    "firstName": {
+                        "type": "string"
+                    },
+                    "lastName": {
+                        "type": "string"
+                    },
+                    "password": {
+                        "type": "string"
+                    },
+                    "username": {
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            },
+            "id": {
+                "properties": {
+                    "id": {
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            }
+        },
+        "host": "user:80",
+        "info": {
+            "contact": {
+                "email": "apiteam@swagger.io"
+            },
+            "description": "This is a generated Open API Spec",
+            "license": {
+                "name": "Apache 2.0",
+                "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+            },
+            "termsOfService": "http://swagger.io/terms/",
+            "title": "Swagger",
+            "version": "1.0.0"
+        },
+        "paths": {
+            "/customers/{id}": {
+                "get": {
+                    "produces": [
+                        "application/hal+json"
+                    ],
+                    "responses": {
+                        "200": {
+                            "description": "",
+                            "schema": {
+                                "$ref": "#/definitions/_links_firstName_id_lastName_username"
+                            }
+                        },
+                        "default": {
+                            "description": "Default Response",
+                            "schema": {
+                                "properties": {
+                                    "message": {
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "required": true,
+                        "type": "string"
+                    }
+                ]
+            },
+            "/customers/{id}/addresses": {
+                "get": {
+                    "produces": [
+                        "application/hal+json"
+                    ],
+                    "responses": {
+                        "200": {
+                            "description": "",
+                            "schema": {
+                                "$ref": "#/definitions/_embedded_0"
+                            }
+                        },
+                        "default": {
+                            "description": "Default Response",
+                            "schema": {
+                                "properties": {
+                                    "message": {
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "required": true,
+                        "type": "string"
+                    }
+                ]
+            },
+            "/customers/{id}/cards": {
+                "get": {
+                    "produces": [
+                        "application/hal+json"
+                    ],
+                    "responses": {
+                        "200": {
+                            "description": "",
+                            "schema": {
+                                "$ref": "#/definitions/_embedded_2"
+                            }
+                        },
+                        "default": {
+                            "description": "Default Response",
+                            "schema": {
+                                "properties": {
+                                    "message": {
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "required": true,
+                        "type": "string"
+                    }
+                ]
+            },
+            "/register": {
+                "post": {
+                    "consumes": [
+                        "application/json"
+                    ],
+                    "parameters": [
+                        {
+                            "in": "body",
+                            "name": "body",
+                            "schema": {
+                                "$ref": "#/definitions/email_firstName_lastName_password_username"
+                            }
+                        }
+                    ],
+                    "produces": [
+                        "application/hal+json"
+                    ],
+                    "responses": {
+                        "200": {
+                            "description": "",
+                            "schema": {
+                                "$ref": "#/definitions/id"
+                            }
+                        },
+                        "default": {
+                            "description": "Default Response",
+                            "schema": {
+                                "properties": {
+                                    "message": {
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "swagger": "2.0"
+    }
+}

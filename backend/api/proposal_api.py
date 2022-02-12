@@ -55,12 +55,17 @@ class ClearReconstructed(MethodView):
         return {"number_of_deleted": s.delete_all_proposals()}
 
 
-@blp.route("/apidiff")
+@blp.route("/conflicts")
 class ApiDiffsRoute(MethodView):
 
     @blp.arguments(schema.ServiceNameParameterSchema, location="query")
-    @blp.arguments(schema.ApiDiffBodySchema)
-    @blp.response(200, schema.ApiDiffsResponseSchema)
-    def get(self, query_params, apidiff_data):
-        api_diffs = diff_service.get_api_diffs(apidiff_data["old_api_spec"], apidiff_data["new_api_spec"])
-        return schema.ApiDiffsResponseSchema().dump(api_diffs)
+    @blp.response(200, schema.ConflictsReponseSchema)
+    def get(self, query_params):
+        """Finds conflicts between reconstructed and latest spec
+
+        Finds conflicts between reconstructed and latest spec by using the ApiDiff service.
+        ---
+        """
+        service = query_params["service"]
+        return schema.ConflictsReponseSchema().dump(
+            diff_service.get_conflicts_between_reconstructed_and_current(service))

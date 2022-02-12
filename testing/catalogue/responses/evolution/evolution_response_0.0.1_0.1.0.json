@@ -1,0 +1,26 @@
+{
+    "api_diffs": {
+        "changed_operations": [],
+        "general_difference_given": false,
+        "missing_endpoints": [],
+        "new_endpoints": [],
+        "potentially_privacy_related_differences_given": false
+    },
+    "service": "catalogue",
+    "tira_diffs": {
+        "changed_global_tira_annotation": [],
+        "changed_schema_tira_annotations": [],
+        "missing_global_tira_annotation": [],
+        "missing_schema_tira_annotations": [],
+        "new_global_tira_annotation": [
+            {
+                "utilizer": {
+                    "country": "Germany",
+                    "name": "GCloud",
+                    "non_eu_country": false
+                }
+            }
+        ],
+        "new_schema_tira_annotations": []
+    }
+}

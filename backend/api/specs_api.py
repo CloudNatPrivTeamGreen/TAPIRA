@@ -12,8 +12,8 @@ from backend.services import collection_service as s
 
 ##################################################
 # Variable Definition
-blp = Blueprint("specs",
-                "specs",
+blp = Blueprint("specs_api",
+                "specs_api",
                 url_prefix="/api",
                 description="Collection and maintenance of specifications"
                 )
@@ -43,6 +43,21 @@ class Services(MethodView):
         ---
         """
         return {"services": s.get_service_names_with_specs()}
+
+
+@blp.route("/versions")
+class Versions(MethodView):
+    @blp.arguments(schema.ServiceNameParameterSchema, location="query")
+    @blp.response(200, schema.VersionsSchema)
+    def get(self, query_params):
+        """Get list of versions
+
+        Return list of versions for a service.
+        ---
+        """
+
+        service = query_params["service"]
+        return schema.VersionsSchema().dump({"versions": s.get_versions(service)})
 
 
 @blp.route("/specifications")

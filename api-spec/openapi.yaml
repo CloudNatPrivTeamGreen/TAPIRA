@@ -23,7 +23,7 @@ paths:
       summary: Fetch provided and reconstructed specifications from APIClarity and
         save them in database.
       tags:
-        - specs
+        - specs_api
   "/api/services":
     get:
       responses:
@@ -38,7 +38,30 @@ paths:
       summary: Get list of service names
       description: Return list of unique service names with existing specifications.
       tags:
-        - specs
+        - specs_api
+  "/api/versions":
+    get:
+      parameters:
+        - in: query
+          name: service
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Versions"
+        '422':
+          "$ref": "#/components/responses/UNPROCESSABLE_ENTITY"
+        default:
+          "$ref": "#/components/responses/DEFAULT_ERROR"
+      summary: Get list of versions
+      description: Return list of versions for a service.
+      tags:
+        - specs_api
   "/api/specifications":
     get:
       parameters:
@@ -66,7 +89,7 @@ paths:
       summary: Get filtered api specifications
       description: Filter api specifications based on parameters.
       tags:
-        - specs
+        - specs_api
   "/api/current_version_spec":
     get:
       parameters:
@@ -89,7 +112,7 @@ paths:
       summary: Get latest api specification
       description: Get latest api specification based on service name.
       tags:
-        - specs
+        - specs_api
   "/api/upload":
     post:
       parameters:
@@ -119,7 +142,7 @@ paths:
       description: Upload existing API specification and delete current proposals
         for the same service.
       tags:
-        - specs
+        - specs_api
   "/api/service_proposals":
     get:
       responses:
@@ -174,7 +197,7 @@ paths:
       description: Delete all proposals
       tags:
         - proposals_api
-  "/api/apidiff":
+  "/api/conflicts":
     get:
       parameters:
         - in: query
@@ -188,7 +211,92 @@ paths:
           content:
             application/json:
               schema:
-                "$ref": "#/components/schemas/ApiDiffsResponse"
+                "$ref": "#/components/schemas/ConflictsReponse"
+        '422':
+          "$ref": "#/components/responses/UNPROCESSABLE_ENTITY"
+        default:
+          "$ref": "#/components/responses/DEFAULT_ERROR"
+      summary: Finds conflicts between reconstructed and latest spec
+      description: Finds conflicts between reconstructed and latest spec by using
+        the ApiDiff service.
+      tags:
+        - proposals_api
+  "/api/comparison":
+    get:
+      parameters:
+        - in: query
+          name: service
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/AllChangesComparison"
+        '422':
+          "$ref": "#/components/responses/UNPROCESSABLE_ENTITY"
+        default:
+          "$ref": "#/components/responses/DEFAULT_ERROR"
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              "$ref": "#/components/schemas/Upload"
+      summary: Upload existing API specification
+      description: Upload existing API specification and delete current proposals
+        for the same service.
+      tags:
+        - comparison_api
+  "/api/evolution":
+    get:
+      parameters:
+        - in: query
+          name: old_version
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: new_version
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: service
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/AllChangesComparison"
+        '422':
+          "$ref": "#/components/responses/UNPROCESSABLE_ENTITY"
+        default:
+          "$ref": "#/components/responses/DEFAULT_ERROR"
+      summary: Compare api and tira diffs between two version of specifications for
+        a service.
+      description: Compare api and tira diffs between two version of specifications
+        for a service.
+      tags:
+        - comparison_api
+  "/api/proposed_merge":
+    get:
+      parameters:
+        - in: query
+          name: context
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
         '422':
           "$ref": "#/components/responses/UNPROCESSABLE_ENTITY"
         default:
@@ -198,9 +306,12 @@ paths:
         content:
           application/json:
             schema:
-              "$ref": "#/components/schemas/ApiDiffBody"
+              "$ref": "#/components/schemas/ProposedMergeRequestBody"
+      summary: Get a proposed merge of both api specifications
+      description: Get a proposed merge of both api specifications in the context
+        of validation or comparison.
       tags:
-        - proposals_api
+        - merge_api
   "/test/housekeeping_specs":
     delete:
       parameters:
@@ -251,10 +362,16 @@ paths:
       tags:
         - testing
 tags:
-  - name: specs
+  - name: specs_api
     description: Collection and maintenance of specifications
   - name: proposals_api
     description: Collection and maintenance of spec proposals
+  - name: comparison_api
+    description: Comparing a api specification of a service to the latest spec and providing
+      the changes.
+  - name: merge_api
+    description: Providing a proposed merge of two provided API specification in given
+      context.
   - name: testing
     description: Endpoints for easier testing
 openapi: 3.0.2
@@ -263,18 +380,18 @@ components:
     Error:
       type: object
       properties:
-        code:
-          type: integer
-          description: Error code
-        errors:
-          type: object
-          description: Errors
         message:
           type: string
           description: Error message
         status:
           type: string
           description: Error name
+        code:
+          type: integer
+          description: Error code
+        errors:
+          type: object
+          description: Errors
     PaginationMetadata:
       type: object
       properties:
@@ -306,14 +423,21 @@ components:
           type: array
           items:
             type: string
+    Versions:
+      type: object
+      properties:
+        versions:
+          type: array
+          items:
+            type: string
     ApiSpecEntry:
       type: object
       properties:
+        name:
+          type: string
         version:
           type: string
         created_at_date:
-          type: string
-        name:
           type: string
         api_spec:
           type: object
@@ -347,78 +471,173 @@ components:
       properties:
         number_of_deleted:
           type: string
-    ApiDiffBody:
+    NewEndpoint:
       type: object
       properties:
-        oldApiSpec:
-          type: object
-        newApiSpec:
-          type: object
-      required:
-        - newApiSpec
-        - oldApiSpec
-    ChangedOperation:
-      type: object
-      properties:
-        method:
-          type: string
-          nullable: true
+        path_is_new:
+          type: boolean
         path_url:
           type: string
           nullable: true
-        changed_fields:
-          type: array
-          items:
-            type: string
-            nullable: true
+        summary:
+          type: string
+          default:
+          nullable: true
+        method:
+          type: string
+          nullable: true
     MissingEndpoint:
       type: object
       properties:
         path_is_still_present:
           type: boolean
-        method:
-          type: string
-          nullable: true
         path_url:
           type: string
           nullable: true
         summary:
           type: string
-    NewEndpoint:
+          default:
+          nullable: true
+        method:
+          type: string
+          nullable: true
+    ChangedOperation:
       type: object
       properties:
-        method:
-          type: string
-          nullable: true
         path_url:
           type: string
           nullable: true
-        path_is_new:
-          type: boolean
-        summary:
+        method:
           type: string
           nullable: true
+        changed_fields:
+          type: array
+          nullable: true
+          items:
+            type: string
+            nullable: true
     ApiDiffsResponse:
       type: object
       properties:
+        new_endpoints:
+          type: array
+          nullable: true
+          items:
+            "$ref": "#/components/schemas/NewEndpoint"
+        missing_endpoints:
+          type: array
+          nullable: true
+          items:
+            "$ref": "#/components/schemas/MissingEndpoint"
         potentially_privacy_related_differences_given:
+          type: boolean
+          nullable: true
+        general_difference_given:
           type: boolean
           nullable: true
         changed_operations:
           type: array
+          nullable: true
           items:
             "$ref": "#/components/schemas/ChangedOperation"
-        general_difference_given:
-          type: boolean
+    ConflictsReponse:
+      type: object
+      properties:
+        api_diffs:
           nullable: true
-        missing_endpoints:
+          allOf:
+            - "$ref": "#/components/schemas/ApiDiffsResponse"
+    ChangedGlobalTiraAnnotation:
+      type: object
+      properties:
+        new_global_tira_annotation:
+          type: object
+          nullable: true
+        old_global_tira_annotation:
+          type: object
+          nullable: true
+    SchemaTiraAnnotation:
+      type: object
+      properties:
+        schema_tira_annotation:
+          type: object
+          nullable: true
+        schema_name:
+          type: string
+          nullable: true
+    ChangedSchemaTiraAnnotation:
+      type: object
+      properties:
+        old_schema_tira_annotation:
+          type: object
+          nullable: true
+        schema_name:
+          type: string
+          nullable: true
+        new_schema_tira_annotation:
+          type: object
+          nullable: true
+    ApiDiffTira:
+      type: object
+      properties:
+        changed_global_tira_annotation:
           type: array
+          nullable: true
           items:
-            "$ref": "#/components/schemas/MissingEndpoint"
-        new_endpoints:
+            nullable: true
+            allOf:
+              - "$ref": "#/components/schemas/ChangedGlobalTiraAnnotation"
+        new_schema_tira_annotations:
           type: array
+          nullable: true
           items:
-            "$ref": "#/components/schemas/NewEndpoint"
+            "$ref": "#/components/schemas/SchemaTiraAnnotation"
+        changed_schema_tira_annotations:
+          type: array
+          nullable: true
+          items:
+            "$ref": "#/components/schemas/ChangedSchemaTiraAnnotation"
+        new_global_tira_annotation:
+          type: array
+          nullable: true
+          items:
+            type: object
+        missing_schema_tira_annotations:
+          type: array
+          nullable: true
+          items:
+            "$ref": "#/components/schemas/SchemaTiraAnnotation"
+        missing_global_tira_annotation:
+          type: array
+          nullable: true
+          items:
+            type: object
+    AllChangesComparison:
+      type: object
+      properties:
+        tira_diffs:
+          nullable: true
+          allOf:
+            - "$ref": "#/components/schemas/ApiDiffTira"
+        api_diffs:
+          nullable: true
+          allOf:
+            - "$ref": "#/components/schemas/ApiDiffsResponse"
+        service:
+          type: string
+      required:
+        - service
+    ProposedMergeRequestBody:
+      type: object
+      properties:
+        new_api:
+          type: object
+        tira_diff:
+          type: object
+        old_api:
+          type: object
+        api_diff:
+          type: object
   responses:
     DEFAULT_ERROR:
       description: Default error response

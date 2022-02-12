@@ -1,18 +1,18 @@
 import os
 
 
-APICLARITY_HOST = os.getenv("api_clarity_host", default="localhost")
-APICLARITY_PORT = os.getenv("api_clarity_port", default=9998)
+APICLARITY_HOST = os.getenv("api_clarity_host", default="192.168.49.2")
+APICLARITY_PORT = os.getenv("api_clarity_port", default=32231)
 APICLARITY_URL = f'http://{APICLARITY_HOST}:{APICLARITY_PORT}'
 
-APIDIFF_HOST = os.getenv("apidiff_host", default="localhost")
-APIDIFF_PORT = os.getenv("apidiff_port", default=8080)
+APIDIFF_HOST = os.getenv("apidiff_host", default="192.168.49.2")
+APIDIFF_PORT = os.getenv("apidiff_port", default=32230)
 APIDIFF_URL = f'http://{APIDIFF_HOST}:{APIDIFF_PORT}'
 
-mongodb_host = os.getenv("mongodb_host", default="192.168.49.2")
-mongodb_port = os.getenv("mongodb_port", default=32000)
-mongodb_user = os.getenv("MONGODB_USER", default="adminuser")
-mongodb_password = os.getenv("MONGODB_PASSWORD", default="password123")
+mongodb_host = os.getenv("mongodb_host", default="localhost")
+mongodb_port = os.getenv("mongodb_port", default=27017)
+mongodb_user = os.getenv("MONGODB_USER", default="root")
+mongodb_password = os.getenv("MONGODB_PASSWORD", default="rootpassword")
 
 class Config:
     """Default configuration"""

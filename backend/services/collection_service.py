@@ -48,7 +48,6 @@ def get_api_service_name(api_spec):
 
 
 def increment_version(current_version: Version):
-
     return '%d.%d.%d' % (
         current_version.get_major_version(), current_version.get_minor_version(),
         (current_version.get_build_version() + 1))
@@ -77,6 +76,14 @@ def get_specifications_by_params(service_name, version):
         return spec_repo.find_specs_by_name(service_name)
     else:
         return spec_repo.find_specs_by_name_and_version(service_name, version)
+
+
+def get_single_spec_by_name_and_version(service_name, version):
+    specs = spec_repo.find_specs_by_name_and_version(service_name, version)
+    if specs is not None and len(specs) >= 1:
+        return specs[0]
+    else:
+        return None
 
 
 def extract_api_specs(apiclarity_specs, update_new_reconstructed_services):
@@ -127,3 +134,7 @@ def insert_provided_spec(uploaded_file, service_name):
     proposal_repo.delete_by_name_and_return_timestamp_of_previous(service_name)
 
     return new_spec_version
+
+
+def get_versions(service):
+    return spec_repo.find_service_versions(service)
