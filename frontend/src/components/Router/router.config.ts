@@ -2,6 +2,7 @@ import LoadableComponent from '../Loadable';
 
 export enum RoutingParameters {
   ServiceName = ':serviceName',
+  Version = ':version',
 }
 
 export enum RoutePaths {

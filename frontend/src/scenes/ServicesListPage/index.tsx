@@ -7,7 +7,10 @@ import { Collapse, Typography, List } from 'antd';
 import PanelCallToActions from '../../components/PartialComponents/PanelCallToActions';
 import { Stores } from '../../stores/storeIdentifier';
 import TapiraApiSpecificationsStore from '../../stores/tapiraApiSpecificationsStore';
-import { RoutePaths } from '../../components/Router/router.config';
+import {
+  RoutePaths,
+  RoutingParameters,
+} from '../../components/Router/router.config';
 
 const { Title } = Typography;
 const { Panel } = Collapse;
@@ -61,7 +64,12 @@ const TapiraServicesList = (props: any) => {
           dataSource={versionTags}
           renderItem={(version) => (
             <List.Item>
-              <Link to={RoutePaths.Service}>
+              <Link
+                to={RoutePaths.Service.replace(
+                  RoutingParameters.ServiceName,
+                  service
+                ).replace(RoutingParameters.Version, version)}
+              >
                 <strong>Spec version:</strong> {version}
               </Link>
             </List.Item>

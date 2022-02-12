@@ -12,9 +12,6 @@ class TapiraApiSpecificationsStore {
   currentServiceSpecificationsVersion: any;
 
   @observable
-  specsToCompare: any;
-
-  @observable
   versionTags!: Array<string>;
 
   @action
@@ -64,11 +61,6 @@ class TapiraApiSpecificationsStore {
         data
       );
     return result.created_version;
-  }
-
-  @action
-  saveUploadedSpecToCompare(specs: any) {
-    this.specsToCompare = specs;
   }
 }
 
