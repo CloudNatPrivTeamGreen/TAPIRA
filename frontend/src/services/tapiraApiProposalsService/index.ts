@@ -2,11 +2,6 @@ import http from '../httpService';
 
 class TapiraApiProposalsService {
 
-    public async getApiClaritySpecs() {
-        const result = await http.get('apiclarity_specs');
-        return result.data;
-    }
-
     public async deletePorposedSpecifications() {
         const result = await http.delete('housekeeping');
         return result.data;

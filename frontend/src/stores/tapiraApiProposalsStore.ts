@@ -4,11 +4,6 @@ import tapiraApiProposalsService from '../services/tapiraApiProposalsService';
 class TapiraApiProposalsStore {
 
     @action
-    async getApiclaritySpecs() {
-        const result = await tapiraApiProposalsService.getApiClaritySpecs();
-    }
-
-    @action
     async deletePorposedSpecifications() {
         const result =  await tapiraApiProposalsService.deletePorposedSpecifications();
     }

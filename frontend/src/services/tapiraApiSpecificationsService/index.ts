@@ -12,6 +12,11 @@ class TapiraApiSpecificationsService {
         return result.data;
     }
 
+    public async getSpecVersionsForService(serviceName: string) {
+        const result = await http.get('versions', { params: { service: serviceName }});
+        return result.data;
+    }
+
     public async getSpecificationsForService(serviceName: string) {
         const result = await http.get('specifications', { params: { service: serviceName }});
         return result.data;
