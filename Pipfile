@@ -29,6 +29,8 @@ schema = "==0.7.5"
 webargs = "==8.1.0"
 colorama = "==0.4.4"
 PyYAML = "==6.0"
+flask-smorest = "*"
+flask-rest-api = "*"
 
 [dev-packages]
 

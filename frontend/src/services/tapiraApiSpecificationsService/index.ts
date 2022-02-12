@@ -1,6 +1,6 @@
 import http from '../httpService';
 
-class TapiraApiService {
+class TapiraApiSpecificationsService {
 
     public async getApiclaritySpecs() {
         const result = await http.get('apiclarity_specs');
@@ -38,4 +38,4 @@ class TapiraApiService {
     }
 }
 
-export default new TapiraApiService();
+export default new TapiraApiSpecificationsService();

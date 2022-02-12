@@ -2,43 +2,26 @@ import './index.scss';
 
 import React, { useEffect, useCallback, useState } from 'react';
 import { inject, observer } from 'mobx-react';
-import { Collapse, Typography, Button } from 'antd';
-import UploadJsonModal from '../../components/PartialComponents/UploadJsonModal';
+import { Collapse, Typography } from 'antd';
+import PanelCallToActions from '../../components/PartialComponents/PanelCallToActions';
 import { Stores } from '../../stores/storeIdentifier';
-import TapiraApiStore from '../../stores/tapiraApiStore';
+import TapiraApiSpecificationsStore from '../../stores/tapiraApiSpecificationsStore';
 
 const { Title } = Typography;
 const { Panel } = Collapse;
 
-const PanelCallToActions = ({ serviceName }) => {
-  const onClickPreventDefault = (event: React.MouseEvent) => {
-    event.preventDefault();
-    event.stopPropagation();
-  };
-
-  return (
-    <React.Fragment>
-      <div
-        className="collapse__panel__cta-container"
-        onClick={(event) => onClickPreventDefault(event)}
-      >
-        <UploadJsonModal serviceName={serviceName} />
-        <Button>Compare</Button>
-        <Button>Evolution</Button>
-      </div>
-    </React.Fragment>
-  );
-};
-
 const TapiraServicesList = (props: any) => {
-  const { tapiraApiStore }: { [Stores.TapiraApiStore]: TapiraApiStore } = props;
+  const {
+    tapiraApiSpecificationsStore,
+  }: { [Stores.TapiraApiSpecificationsStore]: TapiraApiSpecificationsStore } =
+    props;
   const [services, setServices] = useState<Array<string>>(new Array<string>());
   const [openPanelIndex, setOpenPanelIndex] = useState<string | null>(null);
 
   const getApiClaritySpecs = useCallback(async () => {
-    await tapiraApiStore.getApiclaritySpecs();
-    setServices(tapiraApiStore.apiClaritySpecs);
-  }, [tapiraApiStore]);
+    await tapiraApiSpecificationsStore.getApiclaritySpecs();
+    setServices(tapiraApiSpecificationsStore.apiClaritySpecs);
+  }, [tapiraApiSpecificationsStore]);
 
   useEffect(() => {
     getApiClaritySpecs();
@@ -78,4 +61,6 @@ const TapiraServicesList = (props: any) => {
   );
 };
 
-export default inject(Stores.TapiraApiStore)(observer(TapiraServicesList));
+export default inject(Stores.TapiraApiSpecificationsStore)(
+  observer(TapiraServicesList)
+);
