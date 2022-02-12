@@ -36,8 +36,10 @@ def find_distinct_service_names():
 
 
 def find_service_versions(service):
-    versions = list(get_db().api_specifications.find({"service": service}, {"version": 1, "_id": 0}))
-    return [versions[i]['version'] for i in range(len(versions))]
+    version_specs = list(get_db().api_specifications.find({"service": service}, {"version": 1, "_id": 0}))
+
+    sorted_desc = sorted(version_specs, key=functools.cmp_to_key(compare_versions), reverse=True)
+    return [sorted_desc[i]['version'] for i in range(len(sorted_desc))]
 
 
 def find_specs_by_name(service_name):
