@@ -2,11 +2,11 @@ import json
 
 import humps
 import requests
+from flask_smorest import abort
 
 from backend import config
 from backend.schema.schema import ApiDiffsResponseSchema, ApiDiffTiraSchema
 from backend.services import collection_service
-from flask_smorest import abort
 
 
 def get_all_diffs_for_two_versions(service_name, old_version, new_version):
@@ -23,7 +23,9 @@ def get_all_diffs_for_two_versions(service_name, old_version, new_version):
 
     return {"service": service_name, "api_diffs": api_diffs, "tira_diffs": tira_diffs}
 
-def get_all_diffs_for_two_openapi_specs(service_name, old_spec, new_spec): #method for two OpenApi specs and not two ApiSpecEntry
+
+def get_all_diffs_for_two_openapi_specs(service_name, old_spec,
+                                        new_spec):  # method for two OpenApi specs and not two ApiSpecEntry
     if old_spec is None:
         abort(400, message=f'Old Spec missing for service:{service_name}')
     elif new_spec is None:
@@ -64,5 +66,3 @@ def get_tira_changes(first_spec, second_spec):
     return ApiDiffTiraSchema().loads(json.dumps(response_body_decamelized))
 
 
-def is_empty(list_changes: []):
-    return list_changes is None or len(list_changes) == 0

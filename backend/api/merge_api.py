@@ -19,7 +19,7 @@ class Test4(MethodView):
     @blp.arguments(schema.ProposedMergeParameterSchema, location="query")
     @blp.arguments(schema.ProposedMergeRequestBodySchema, location="json")
     @blp.response(200)
-    def get(self, args, request_body):
+    def post(self, args, request_body):
         """Get a proposed merge of both api specifications
 
         Get a proposed merge of both api specifications in the context of validation or comparison.

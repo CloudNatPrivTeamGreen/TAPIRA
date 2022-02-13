@@ -3,8 +3,8 @@ from flask.views import MethodView
 from flask_smorest import Blueprint, abort
 
 from backend.schema import schema
-from backend.services import apidiff_service as diff_service
 from backend.services import collection_service as s
+from backend.services import conflicts_service
 
 blp = Blueprint("proposals_api",
                 "proposals_api",
@@ -56,10 +56,23 @@ class ClearReconstructed(MethodView):
 
 
 @blp.route("/conflicts")
+class ServiceConflicts(MethodView):
+
+    @blp.response(200, schema.ServicesSchema)
+    def post(self):
+        """Returns list of services with conflicts
+
+        Returns list of services with conflicts. If none provided specs compare with empty.
+        ---
+        """
+        return {"services": conflicts_service.get_all_reconstructed_and_create_conflicts()}
+
+
+@blp.route("/conflict")
 class ApiDiffsRoute(MethodView):
 
     @blp.arguments(schema.ServiceNameParameterSchema, location="query")
-    @blp.response(200, schema.ConflictsReponseSchema)
+    @blp.response(200, schema.AllChangesComparisonSchema)
     def get(self, query_params):
         """Finds conflicts between reconstructed and latest spec
 
@@ -67,5 +80,5 @@ class ApiDiffsRoute(MethodView):
         ---
         """
         service = query_params["service"]
-        return schema.ConflictsReponseSchema().dump(
-            diff_service.get_conflicts_between_reconstructed_and_current(service))
+        return schema.AllChangesComparisonSchema().dump(
+            {"service": service, "tira_diffs": None, "api_diffs": conflicts_service.get_conflict(service)})
