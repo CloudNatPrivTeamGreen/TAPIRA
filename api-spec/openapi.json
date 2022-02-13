@@ -101,16 +101,16 @@
         "parameters": [
           {
             "in": "query",
-            "name": "service",
-            "required": true,
+            "name": "version",
+            "required": false,
             "schema": {
               "type": "string"
             }
           },
           {
             "in": "query",
-            "name": "version",
-            "required": false,
+            "name": "service",
+            "required": true,
             "schema": {
               "type": "string"
             }
@@ -311,6 +311,30 @@
       }
     },
     "/api/conflicts": {
+      "post": {
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Services"
+                }
+              }
+            }
+          },
+          "default": {
+            "$ref": "#/components/responses/DEFAULT_ERROR"
+          }
+        },
+        "summary": "Returns list of services with conflicts",
+        "description": "Returns list of services with conflicts. If none provided specs compare with empty.",
+        "tags": [
+          "proposals_api"
+        ]
+      }
+    },
+    "/api/conflict": {
       "get": {
         "parameters": [
           {
@@ -331,7 +355,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ConflictsReponse"
+                  "$ref": "#/components/schemas/AllChangesComparison"
                 }
               }
             }
@@ -399,6 +423,14 @@
         "parameters": [
           {
             "in": "query",
+            "name": "new_version",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
             "name": "service",
             "required": true,
             "schema": {
@@ -408,14 +440,6 @@
           {
             "in": "query",
             "name": "old_version",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "in": "query",
-            "name": "new_version",
             "required": true,
             "schema": {
               "type": "string"
@@ -597,9 +621,9 @@
       "Error": {
         "type": "object",
         "properties": {
-          "message": {
-            "type": "string",
-            "description": "Error message"
+          "code": {
+            "type": "integer",
+            "description": "Error code"
           },
           "status": {
             "type": "string",
@@ -609,9 +633,9 @@
             "type": "object",
             "description": "Errors"
           },
-          "code": {
-            "type": "integer",
-            "description": "Error code"
+          "message": {
+            "type": "string",
+            "description": "Error message"
           }
         }
       },
@@ -677,13 +701,13 @@
       "ApiSpecEntry": {
         "type": "object",
         "properties": {
+          "name": {
+            "type": "string"
+          },
           "api_spec": {
             "type": "object"
           },
           "version": {
-            "type": "string"
-          },
-          "name": {
             "type": "string"
           },
           "created_at_date": {
@@ -738,16 +762,58 @@
           }
         }
       },
-      "NewEndpoint": {
+      "MissingEndpoint": {
+        "type": "object",
+        "properties": {
+          "summary": {
+            "type": "string",
+            "default": null,
+            "nullable": true
+          },
+          "method": {
+            "type": "string",
+            "nullable": true
+          },
+          "path_is_still_present": {
+            "type": "boolean"
+          },
+          "path_url": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "ChangedOperation": {
         "type": "object",
         "properties": {
           "method": {
             "type": "string",
             "nullable": true
           },
+          "path_url": {
+            "type": "string",
+            "nullable": true
+          },
+          "changed_fields": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "type": "string",
+              "nullable": true
+            }
+          }
+        }
+      },
+      "NewEndpoint": {
+        "type": "object",
+        "properties": {
           "summary": {
             "type": "string",
             "default": null,
+            "nullable": true
+          },
+          "method": {
+            "type": "string",
             "nullable": true
           },
           "path_url": {
@@ -759,57 +825,19 @@
           }
         }
       },
-      "ChangedOperation": {
-        "type": "object",
-        "properties": {
-          "method": {
-            "type": "string",
-            "nullable": true
-          },
-          "changed_fields": {
-            "type": "array",
-            "nullable": true,
-            "items": {
-              "type": "string",
-              "nullable": true
-            }
-          },
-          "path_url": {
-            "type": "string",
-            "nullable": true
-          }
-        }
-      },
-      "MissingEndpoint": {
-        "type": "object",
-        "properties": {
-          "method": {
-            "type": "string",
-            "nullable": true
-          },
-          "path_is_still_present": {
-            "type": "boolean"
-          },
-          "summary": {
-            "type": "string",
-            "default": null,
-            "nullable": true
-          },
-          "path_url": {
-            "type": "string",
-            "nullable": true
-          }
-        }
-      },
       "ApiDiffsResponse": {
         "type": "object",
         "properties": {
-          "new_endpoints": {
+          "missing_endpoints": {
             "type": "array",
             "nullable": true,
             "items": {
-              "$ref": "#/components/schemas/NewEndpoint"
+              "$ref": "#/components/schemas/MissingEndpoint"
             }
+          },
+          "potentially_privacy_related_differences_given": {
+            "type": "boolean",
+            "nullable": true
           },
           "changed_operations": {
             "type": "array",
@@ -818,48 +846,31 @@
               "$ref": "#/components/schemas/ChangedOperation"
             }
           },
-          "missing_endpoints": {
+          "new_endpoints": {
             "type": "array",
             "nullable": true,
             "items": {
-              "$ref": "#/components/schemas/MissingEndpoint"
+              "$ref": "#/components/schemas/NewEndpoint"
             }
           },
           "general_difference_given": {
             "type": "boolean",
             "nullable": true
-          },
-          "potentially_privacy_related_differences_given": {
-            "type": "boolean",
-            "nullable": true
           }
         }
       },
-      "ConflictsReponse": {
+      "ChangedGlobalTiraAnnotation": {
         "type": "object",
         "properties": {
-          "api_diffs": {
-            "nullable": true,
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/ApiDiffsResponse"
-              }
-            ]
-          }
-        }
-      },
-      "ChangedSchemaTiraAnnotation": {
-        "type": "object",
-        "properties": {
-          "schema_name": {
+          "key": {
             "type": "string",
             "nullable": true
           },
-          "new_schema_tira_annotation": {
+          "new_global_tira_annotation": {
             "type": "object",
             "nullable": true
           },
-          "old_schema_tira_annotation": {
+          "old_global_tira_annotation": {
             "type": "object",
             "nullable": true
           }
@@ -878,19 +889,19 @@
           }
         }
       },
-      "ChangedGlobalTiraAnnotation": {
+      "ChangedSchemaTiraAnnotation": {
         "type": "object",
         "properties": {
-          "new_global_tira_annotation": {
+          "new_schema_tira_annotation": {
             "type": "object",
             "nullable": true
           },
-          "key": {
+          "old_schema_tira_annotation": {
+            "type": "object",
+            "nullable": true
+          },
+          "schema_name": {
             "type": "string",
-            "nullable": true
-          },
-          "old_global_tira_annotation": {
-            "type": "object",
             "nullable": true
           }
         }
@@ -898,18 +909,18 @@
       "ApiDiffTira": {
         "type": "object",
         "properties": {
-          "changed_schema_tira_annotations": {
+          "new_global_tira_annotation": {
             "type": "array",
             "nullable": true,
             "items": {
-              "$ref": "#/components/schemas/ChangedSchemaTiraAnnotation"
+              "type": "object"
             }
           },
-          "missing_schema_tira_annotations": {
+          "missing_global_tira_annotation": {
             "type": "array",
             "nullable": true,
             "items": {
-              "$ref": "#/components/schemas/SchemaTiraAnnotation"
+              "type": "object"
             }
           },
           "changed_global_tira_annotation": {
@@ -924,25 +935,25 @@
               ]
             }
           },
-          "new_schema_tira_annotations": {
+          "missing_schema_tira_annotations": {
             "type": "array",
             "nullable": true,
             "items": {
               "$ref": "#/components/schemas/SchemaTiraAnnotation"
             }
           },
-          "missing_global_tira_annotation": {
+          "changed_schema_tira_annotations": {
             "type": "array",
             "nullable": true,
             "items": {
-              "type": "object"
+              "$ref": "#/components/schemas/ChangedSchemaTiraAnnotation"
             }
           },
-          "new_global_tira_annotation": {
+          "new_schema_tira_annotations": {
             "type": "array",
             "nullable": true,
             "items": {
-              "type": "object"
+              "$ref": "#/components/schemas/SchemaTiraAnnotation"
             }
           }
         }
@@ -950,9 +961,6 @@
       "AllChangesComparison": {
         "type": "object",
         "properties": {
-          "service": {
-            "type": "string"
-          },
           "api_diffs": {
             "nullable": true,
             "allOf": [
@@ -968,6 +976,9 @@
                 "$ref": "#/components/schemas/ApiDiffTira"
               }
             ]
+          },
+          "service": {
+            "type": "string"
           }
         },
         "required": [

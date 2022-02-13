@@ -48,21 +48,30 @@ def find_proposal_by_name(service):
     return get_db().api_spec_proposals.find_one({"service": service})
 
 
-# def insert_conflict(service_name, api_diffs: ApiDiffs, old_version, new_version):
-#     print(f'Inserting conflicts for service: {service_name} and versions {old_version}<->{new_version}')
-#
-#     return get_db().spec_conflicts.insert_one(
-#         {"service": service_name, "old_version": old_version, "new_version": new_version,
-#          "api_diffs": api_diffs.__dict__})
-#
-#
-# def delete_conflict_by_service_name_and_versions(service, old_version, new_version):
-#     deleted = get_db().spec_conflicts.delete_one(
-#         {"service": service, "old_version": old_version, "version2": new_version})
-#
-#     if deleted.deleted_count == 1:
-#         print(f'{service}: deleted conflict for versions: {old_version}<->{new_version}')
-#
-#
-# def delete_all_conflicts_by_service_name(service):
-#     deleted = get_db().spec_conflicts.delete_many({"service": service})
+def insert_conflict(service_name, api_diffs: ApiDiffs):
+    print(f'Inserting conflicts for service: {service_name}')
+
+    return get_db().spec_conflicts.insert_one(
+        {"service": service_name,
+         "api_diffs": api_diffs.__dict__})
+
+
+def find_conflict(service_name):
+    conflict = get_db().spec_conflicts.find_one({"service": service_name})
+    return None if conflict is None else conflict["api_diffs"]
+
+
+def delete_conflict_by_service_name_and_versions(service, old_version, new_version):
+    deleted = get_db().spec_conflicts.delete_one(
+        {"service": service, "old_version": old_version, "version2": new_version})
+
+    if deleted.deleted_count == 1:
+        print(f'{service}: deleted conflict for versions: {old_version}<->{new_version}')
+
+
+def delete_all_conflicts_by_service_name(service):
+    deleted = get_db().spec_conflicts.delete_many({"service": service})
+
+
+def delete_all_conflicts():
+    deleted = get_db().spec_conflicts.delete_many({})

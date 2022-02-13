@@ -95,6 +95,8 @@ def extract_api_specs(apiclarity_specs, update_new_reconstructed_services):
             continue
 
         proposal_repo.delete_by_name_and_return_timestamp_of_previous(service_name)
+        proposal_repo.delete_all_conflicts_by_service_name(service_name)
+
         reconstructed_spec = json.loads(get_reconstructed_spec(spec_wrapper))
         proposal_repo.insert_api_spec_proposal(service_name, reconstructed_spec)
 
@@ -132,6 +134,7 @@ def insert_provided_spec(uploaded_file, service_name):
     print(f"Inserting new api spec for service={service_name} and deleting existing proposal for it")
     spec_repo.insert_api_spec(service_name, new_spec_version, api_spec)
     proposal_repo.delete_by_name_and_return_timestamp_of_previous(service_name)
+    proposal_repo.delete_all_conflicts_by_service_name(service_name)
 
     return new_spec_version
 
