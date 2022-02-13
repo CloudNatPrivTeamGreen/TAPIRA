@@ -271,17 +271,17 @@ paths:
     get:
       parameters:
         - in: query
+          name: old_version
+          required: true
+          schema:
+            type: string
+        - in: query
           name: new_version
           required: true
           schema:
             type: string
         - in: query
           name: service
-          required: true
-          schema:
-            type: string
-        - in: query
-          name: old_version
           required: true
           schema:
             type: string
@@ -303,7 +303,7 @@ paths:
       tags:
         - comparison_api
   "/api/proposed_merge":
-    get:
+    post:
       parameters:
         - in: query
           name: context
@@ -396,18 +396,18 @@ components:
     Error:
       type: object
       properties:
-        code:
-          type: integer
-          description: Error code
+        message:
+          type: string
+          description: Error message
         status:
           type: string
           description: Error name
         errors:
           type: object
           description: Errors
-        message:
-          type: string
-          description: Error message
+        code:
+          type: integer
+          description: Error code
     PaginationMetadata:
       type: object
       properties:
@@ -449,13 +449,13 @@ components:
     ApiSpecEntry:
       type: object
       properties:
-        name:
-          type: string
-        api_spec:
-          type: object
         version:
           type: string
         created_at_date:
+          type: string
+        api_spec:
+          type: object
+        name:
           type: string
       required:
         - name
@@ -487,13 +487,24 @@ components:
       properties:
         number_of_deleted:
           type: string
-    MissingEndpoint:
+    NewEndpoint:
       type: object
       properties:
+        method:
+          type: string
+          nullable: true
+        path_is_new:
+          type: boolean
+        path_url:
+          type: string
+          nullable: true
         summary:
           type: string
           default:
           nullable: true
+    MissingEndpoint:
+      type: object
+      properties:
         method:
           type: string
           nullable: true
@@ -502,13 +513,14 @@ components:
         path_url:
           type: string
           nullable: true
+        summary:
+          type: string
+          default:
+          nullable: true
     ChangedOperation:
       type: object
       properties:
         method:
-          type: string
-          nullable: true
-        path_url:
           type: string
           nullable: true
         changed_fields:
@@ -517,37 +529,12 @@ components:
           items:
             type: string
             nullable: true
-    NewEndpoint:
-      type: object
-      properties:
-        summary:
-          type: string
-          default:
-          nullable: true
-        method:
-          type: string
-          nullable: true
         path_url:
           type: string
           nullable: true
-        path_is_new:
-          type: boolean
     ApiDiffsResponse:
       type: object
       properties:
-        missing_endpoints:
-          type: array
-          nullable: true
-          items:
-            "$ref": "#/components/schemas/MissingEndpoint"
-        potentially_privacy_related_differences_given:
-          type: boolean
-          nullable: true
-        changed_operations:
-          type: array
-          nullable: true
-          items:
-            "$ref": "#/components/schemas/ChangedOperation"
         new_endpoints:
           type: array
           nullable: true
@@ -556,48 +543,76 @@ components:
         general_difference_given:
           type: boolean
           nullable: true
+        missing_endpoints:
+          type: array
+          nullable: true
+          items:
+            "$ref": "#/components/schemas/MissingEndpoint"
+        changed_operations:
+          type: array
+          nullable: true
+          items:
+            "$ref": "#/components/schemas/ChangedOperation"
+        potentially_privacy_related_differences_given:
+          type: boolean
+          nullable: true
+    SchemaTiraAnnotation:
+      type: object
+      properties:
+        schema_tira_annotation:
+          type: object
+          nullable: true
+        schema_name:
+          type: string
+          nullable: true
+    ChangedSchemaTiraAnnotation:
+      type: object
+      properties:
+        old_schema_tira_annotation:
+          type: object
+          nullable: true
+        new_schema_tira_annotation:
+          type: object
+          nullable: true
+        schema_name:
+          type: string
+          nullable: true
     ChangedGlobalTiraAnnotation:
       type: object
       properties:
-        key:
-          type: string
-          nullable: true
         new_global_tira_annotation:
           type: object
           nullable: true
         old_global_tira_annotation:
           type: object
           nullable: true
-    SchemaTiraAnnotation:
-      type: object
-      properties:
-        schema_name:
-          type: string
-          nullable: true
-        schema_tira_annotation:
-          type: object
-          nullable: true
-    ChangedSchemaTiraAnnotation:
-      type: object
-      properties:
-        new_schema_tira_annotation:
-          type: object
-          nullable: true
-        old_schema_tira_annotation:
-          type: object
-          nullable: true
-        schema_name:
+        key:
           type: string
           nullable: true
     ApiDiffTira:
       type: object
       properties:
-        new_global_tira_annotation:
+        missing_global_tira_annotation:
           type: array
           nullable: true
           items:
             type: object
-        missing_global_tira_annotation:
+        new_schema_tira_annotations:
+          type: array
+          nullable: true
+          items:
+            "$ref": "#/components/schemas/SchemaTiraAnnotation"
+        changed_schema_tira_annotations:
+          type: array
+          nullable: true
+          items:
+            "$ref": "#/components/schemas/ChangedSchemaTiraAnnotation"
+        missing_schema_tira_annotations:
+          type: array
+          nullable: true
+          items:
+            "$ref": "#/components/schemas/SchemaTiraAnnotation"
+        new_global_tira_annotation:
           type: array
           nullable: true
           items:
@@ -609,21 +624,6 @@ components:
             nullable: true
             allOf:
               - "$ref": "#/components/schemas/ChangedGlobalTiraAnnotation"
-        missing_schema_tira_annotations:
-          type: array
-          nullable: true
-          items:
-            "$ref": "#/components/schemas/SchemaTiraAnnotation"
-        changed_schema_tira_annotations:
-          type: array
-          nullable: true
-          items:
-            "$ref": "#/components/schemas/ChangedSchemaTiraAnnotation"
-        new_schema_tira_annotations:
-          type: array
-          nullable: true
-          items:
-            "$ref": "#/components/schemas/SchemaTiraAnnotation"
     AllChangesComparison:
       type: object
       properties:

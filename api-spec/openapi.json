@@ -423,6 +423,14 @@
         "parameters": [
           {
             "in": "query",
+            "name": "old_version",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
             "name": "new_version",
             "required": true,
             "schema": {
@@ -432,14 +440,6 @@
           {
             "in": "query",
             "name": "service",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "in": "query",
-            "name": "old_version",
             "required": true,
             "schema": {
               "type": "string"
@@ -472,7 +472,7 @@
       }
     },
     "/api/proposed_merge": {
-      "get": {
+      "post": {
         "parameters": [
           {
             "in": "query",
@@ -621,9 +621,9 @@
       "Error": {
         "type": "object",
         "properties": {
-          "code": {
-            "type": "integer",
-            "description": "Error code"
+          "message": {
+            "type": "string",
+            "description": "Error message"
           },
           "status": {
             "type": "string",
@@ -633,9 +633,9 @@
             "type": "object",
             "description": "Errors"
           },
-          "message": {
-            "type": "string",
-            "description": "Error message"
+          "code": {
+            "type": "integer",
+            "description": "Error code"
           }
         }
       },
@@ -701,16 +701,16 @@
       "ApiSpecEntry": {
         "type": "object",
         "properties": {
-          "name": {
+          "version": {
+            "type": "string"
+          },
+          "created_at_date": {
             "type": "string"
           },
           "api_spec": {
             "type": "object"
           },
-          "version": {
-            "type": "string"
-          },
-          "created_at_date": {
+          "name": {
             "type": "string"
           }
         },
@@ -762,14 +762,30 @@
           }
         }
       },
-      "MissingEndpoint": {
+      "NewEndpoint": {
         "type": "object",
         "properties": {
+          "method": {
+            "type": "string",
+            "nullable": true
+          },
+          "path_is_new": {
+            "type": "boolean"
+          },
+          "path_url": {
+            "type": "string",
+            "nullable": true
+          },
           "summary": {
             "type": "string",
             "default": null,
             "nullable": true
-          },
+          }
+        }
+      },
+      "MissingEndpoint": {
+        "type": "object",
+        "properties": {
           "method": {
             "type": "string",
             "nullable": true
@@ -779,6 +795,11 @@
           },
           "path_url": {
             "type": "string",
+            "nullable": true
+          },
+          "summary": {
+            "type": "string",
+            "default": null,
             "nullable": true
           }
         }
@@ -790,10 +811,6 @@
             "type": "string",
             "nullable": true
           },
-          "path_url": {
-            "type": "string",
-            "nullable": true
-          },
           "changed_fields": {
             "type": "array",
             "nullable": true,
@@ -801,51 +818,16 @@
               "type": "string",
               "nullable": true
             }
-          }
-        }
-      },
-      "NewEndpoint": {
-        "type": "object",
-        "properties": {
-          "summary": {
-            "type": "string",
-            "default": null,
-            "nullable": true
-          },
-          "method": {
-            "type": "string",
-            "nullable": true
           },
           "path_url": {
             "type": "string",
             "nullable": true
-          },
-          "path_is_new": {
-            "type": "boolean"
           }
         }
       },
       "ApiDiffsResponse": {
         "type": "object",
         "properties": {
-          "missing_endpoints": {
-            "type": "array",
-            "nullable": true,
-            "items": {
-              "$ref": "#/components/schemas/MissingEndpoint"
-            }
-          },
-          "potentially_privacy_related_differences_given": {
-            "type": "boolean",
-            "nullable": true
-          },
-          "changed_operations": {
-            "type": "array",
-            "nullable": true,
-            "items": {
-              "$ref": "#/components/schemas/ChangedOperation"
-            }
-          },
           "new_endpoints": {
             "type": "array",
             "nullable": true,
@@ -856,22 +838,23 @@
           "general_difference_given": {
             "type": "boolean",
             "nullable": true
-          }
-        }
-      },
-      "ChangedGlobalTiraAnnotation": {
-        "type": "object",
-        "properties": {
-          "key": {
-            "type": "string",
-            "nullable": true
           },
-          "new_global_tira_annotation": {
-            "type": "object",
-            "nullable": true
+          "missing_endpoints": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "$ref": "#/components/schemas/MissingEndpoint"
+            }
           },
-          "old_global_tira_annotation": {
-            "type": "object",
+          "changed_operations": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "$ref": "#/components/schemas/ChangedOperation"
+            }
+          },
+          "potentially_privacy_related_differences_given": {
+            "type": "boolean",
             "nullable": true
           }
         }
@@ -879,12 +862,12 @@
       "SchemaTiraAnnotation": {
         "type": "object",
         "properties": {
-          "schema_name": {
-            "type": "string",
-            "nullable": true
-          },
           "schema_tira_annotation": {
             "type": "object",
+            "nullable": true
+          },
+          "schema_name": {
+            "type": "string",
             "nullable": true
           }
         }
@@ -892,15 +875,32 @@
       "ChangedSchemaTiraAnnotation": {
         "type": "object",
         "properties": {
-          "new_schema_tira_annotation": {
-            "type": "object",
-            "nullable": true
-          },
           "old_schema_tira_annotation": {
             "type": "object",
             "nullable": true
           },
+          "new_schema_tira_annotation": {
+            "type": "object",
+            "nullable": true
+          },
           "schema_name": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "ChangedGlobalTiraAnnotation": {
+        "type": "object",
+        "properties": {
+          "new_global_tira_annotation": {
+            "type": "object",
+            "nullable": true
+          },
+          "old_global_tira_annotation": {
+            "type": "object",
+            "nullable": true
+          },
+          "key": {
             "type": "string",
             "nullable": true
           }
@@ -909,14 +909,35 @@
       "ApiDiffTira": {
         "type": "object",
         "properties": {
-          "new_global_tira_annotation": {
+          "missing_global_tira_annotation": {
             "type": "array",
             "nullable": true,
             "items": {
               "type": "object"
             }
           },
-          "missing_global_tira_annotation": {
+          "new_schema_tira_annotations": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "$ref": "#/components/schemas/SchemaTiraAnnotation"
+            }
+          },
+          "changed_schema_tira_annotations": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "$ref": "#/components/schemas/ChangedSchemaTiraAnnotation"
+            }
+          },
+          "missing_schema_tira_annotations": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "$ref": "#/components/schemas/SchemaTiraAnnotation"
+            }
+          },
+          "new_global_tira_annotation": {
             "type": "array",
             "nullable": true,
             "items": {
@@ -933,27 +954,6 @@
                   "$ref": "#/components/schemas/ChangedGlobalTiraAnnotation"
                 }
               ]
-            }
-          },
-          "missing_schema_tira_annotations": {
-            "type": "array",
-            "nullable": true,
-            "items": {
-              "$ref": "#/components/schemas/SchemaTiraAnnotation"
-            }
-          },
-          "changed_schema_tira_annotations": {
-            "type": "array",
-            "nullable": true,
-            "items": {
-              "$ref": "#/components/schemas/ChangedSchemaTiraAnnotation"
-            }
-          },
-          "new_schema_tira_annotations": {
-            "type": "array",
-            "nullable": true,
-            "items": {
-              "$ref": "#/components/schemas/SchemaTiraAnnotation"
             }
           }
         }
