@@ -2,6 +2,9 @@ import { action, observable } from 'mobx';
 import tapiraApiSpecificationsService from '../services/tapiraApiSpecificationsService';
 
 class TapiraApiSpecificationsStore {
+  @observable
+  apiClaritySpecs!: Array<string>;
+
 
     @observable 
     apiClaritySpecs!: Array<string>;
@@ -18,6 +21,9 @@ class TapiraApiSpecificationsStore {
     @observable
     specsToCompare: any;
 
+    @observable
+    versionTags!: Array<string>;
+
     @action
     async getApiclaritySpecs() {
         const result = await tapiraApiSpecificationsService.getApiclaritySpecs();
@@ -29,11 +35,11 @@ class TapiraApiSpecificationsStore {
         const result = await tapiraApiSpecificationsService.getAllServices();
     }
 
-    @action
-    async getSpecificationsForService(serviceName: string) {
-        const result = await tapiraApiSpecificationsService.getSpecificationsForService(serviceName);
-        this.serviceSpecifications = result;
-    }
+    //@action
+    //async getSpecificationsForService(serviceName: string) {
+        //const result = await tapiraApiSpecificationsService.getSpecificationsForService(serviceName);
+        //this.serviceSpecifications = result;
+    //}
 
     @action
     async getSpecificationsForServiceVersion(serviceName: string, servVersion: string) {
@@ -57,6 +63,26 @@ class TapiraApiSpecificationsStore {
     saveUploadedSpecToCompare(specs: any) {
         this.specsToCompare = specs;
     }
+
+  @action
+  async getSpecVersionsForService(serviceName: string) {
+    const result =
+      await tapiraApiSpecificationsService.getSpecVersionsForService(
+        serviceName
+      );
+    this.versionTags = result.versions;
+  }
+
+  @action
+  async getSpecificationsForService(serviceName: string, version: string) {
+    const result =
+      await tapiraApiSpecificationsService.getSpecificationsForService(
+        serviceName,
+        version
+      );
+    this.serviceSpecifications = result;
+  }
+
 }
 
 export default TapiraApiSpecificationsStore;

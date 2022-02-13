@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Button, Modal, Upload } from 'antd';
+import { ButtonType } from 'antd/lib/button/button';
 import { UploadFile } from 'antd/lib/upload/interface';
 import { InboxOutlined } from '@ant-design/icons';
 
@@ -9,10 +10,12 @@ const UploadJsonModal = ({
   serviceName,
   onHandleOk,
   buttonText,
+  buttonType,
 }: {
   serviceName: string;
   onHandleOk: (file: File) => void;
   buttonText: string;
+  buttonType?: ButtonType;
 }) => {
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
   const [fileList, setFileList] = useState<UploadFile[]>([]);
@@ -51,7 +54,7 @@ const UploadJsonModal = ({
 
   return (
     <React.Fragment>
-      <Button type="primary" onClick={showModal}>
+      <Button type={buttonType ?? 'default'} onClick={showModal}>
         {buttonText}
       </Button>
       <Modal

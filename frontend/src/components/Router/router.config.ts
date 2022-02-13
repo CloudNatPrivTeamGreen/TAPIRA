@@ -1,4 +1,4 @@
-import LoadableComponent from "../Loadable";
+import LoadableComponent from '../Loadable';
 
 export enum RoutingParameters {
     ServiceName = ':serviceName',
@@ -13,14 +13,14 @@ export enum RoutePaths {
 }
 
 export interface RouteObject {
-    path: string;
-    exact: boolean;
-    name: string;
-    title: string;
-    component: any;
-    isLayout: boolean;
-    showInMenu: boolean;
-    permission?: string; 
+  path: string;
+  exact: boolean;
+  name: string;
+  title: string;
+  component: any;
+  isLayout: boolean;
+  showInMenu: boolean;
+  permission?: string;
 }
 
 export const appRouters: RouteObject[] = [

@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "3e1863bfe5a99a1d5529ba9549cdf39d0633e461015819d23a5ce66c9766eb44"
+            "sha256": "f9928b5e59dd0ed7adf9bc56f6d147526f874dfc067af59382a6fb43245784a0"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -17,9 +17,6 @@
     },
     "default": {
         "apispec": {
-            "extras": [
-                "yaml"
-            ],
             "hashes": [
                 "sha256:5bc5404b19259aeeb307ce9956e2c1a97722c6a130ef414671dfc21acd622afc",
                 "sha256:d167890e37f14f3f26b588ff2598af35faa5c27612264ea1125509c8ff860834"
@@ -230,6 +227,14 @@
             "markers": "python_version >= '3.6'",
             "version": "==21.3"
         },
+        "pyhumps": {
+            "hashes": [
+                "sha256:0ecf7fee84503b45afdd3841ec769b529d32dfaed855e07046ff8babcc0ab831",
+                "sha256:8d7e9865d6ddb6e64a2e97d951b78b5cc827d3d66cda1297310fc83b2ddf51dc"
+            ],
+            "index": "pypi",
+            "version": "==3.5.3"
+        },
         "pymongo": {
             "hashes": [
                 "sha256:0238e53b452ab699b5e2e3f8af2557844c80ab0d0c7a0e066226882838e72756",
@@ -389,6 +394,14 @@
             ],
             "index": "pypi",
             "version": "==0.7.5"
+        },
+        "setuptools": {
+            "hashes": [
+                "sha256:43a5575eea6d3459789316e1596a3d2a0d215260cacf4189508112f35c9a145b",
+                "sha256:66b8598da112b8dc8cd941d54cf63ef91d3b50657b374457eda5851f3ff6a899"
+            ],
+            "markers": "python_version >= '3.7'",
+            "version": "==60.8.2"
         },
         "urllib3": {
             "hashes": [

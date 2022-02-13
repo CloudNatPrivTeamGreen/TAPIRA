@@ -48,7 +48,6 @@ def get_api_service_name(api_spec):
 
 
 def increment_version(current_version: Version):
-
     return '%d.%d.%d' % (
         current_version.get_major_version(), current_version.get_minor_version(),
         (current_version.get_build_version() + 1))
@@ -79,6 +78,14 @@ def get_specifications_by_params(service_name, version):
         return spec_repo.find_specs_by_name_and_version(service_name, version)
 
 
+def get_single_spec_by_name_and_version(service_name, version):
+    specs = spec_repo.find_specs_by_name_and_version(service_name, version)
+    if specs is not None and len(specs) >= 1:
+        return specs[0]
+    else:
+        return None
+
+
 def extract_api_specs(apiclarity_specs, update_new_reconstructed_services):
     for spec_wrapper in apiclarity_specs:
         service_name = get_api_service_name(spec_wrapper)
@@ -88,6 +95,8 @@ def extract_api_specs(apiclarity_specs, update_new_reconstructed_services):
             continue
 
         proposal_repo.delete_by_name_and_return_timestamp_of_previous(service_name)
+        proposal_repo.delete_all_conflicts_by_service_name(service_name)
+
         reconstructed_spec = json.loads(get_reconstructed_spec(spec_wrapper))
         proposal_repo.insert_api_spec_proposal(service_name, reconstructed_spec)
 
@@ -125,5 +134,10 @@ def insert_provided_spec(uploaded_file, service_name):
     print(f"Inserting new api spec for service={service_name} and deleting existing proposal for it")
     spec_repo.insert_api_spec(service_name, new_spec_version, api_spec)
     proposal_repo.delete_by_name_and_return_timestamp_of_previous(service_name)
+    proposal_repo.delete_all_conflicts_by_service_name(service_name)
 
     return new_spec_version
+
+
+def get_versions(service):
+    return spec_repo.find_service_versions(service)
