@@ -1,5 +1,5 @@
-name: GitHub Actions Demo
-on: [push]
+name: TAPIRA ACTION 1 - Manual Dispatch functionality Test N.1
+on: workflow_dispatch
 jobs:
   Explore-GitHub-Actions:
     runs-on: ubuntu-latest
