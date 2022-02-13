@@ -13,7 +13,7 @@ const TapiraService = (props: any) => {
   const { serviceName } = useParams();
 
   const getSpecifications = useCallback(async () => {
-    await tapiraApiSpecificationsStore.getSpecificationsForService(
+    await tapiraApiSpecificationsStore.getCurrentVersionSpecForService(
       serviceName as string
     );
   }, [serviceName, tapiraApiSpecificationsStore]);

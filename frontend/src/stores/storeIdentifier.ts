@@ -1,4 +1,5 @@
 export enum Stores {
     TapiraApiSpecificationsStore = 'tapiraApiSpecificationsStore',
-    TapiraApiProposalsStore = 'tapiraApiProposalsStore'
+    TapiraApiProposalsStore = 'tapiraApiProposalsStore',
+    TapiraApiComparisonStore = 'tapiraApiComparisonStore'
 }

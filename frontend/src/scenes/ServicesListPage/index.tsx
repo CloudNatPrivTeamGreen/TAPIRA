@@ -1,11 +1,16 @@
 import './index.scss';
 
 import React, { useEffect, useCallback, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
-import { Collapse, Typography } from 'antd';
+import { Collapse, Typography, List } from 'antd';
 import PanelCallToActions from '../../components/PartialComponents/PanelCallToActions';
 import { Stores } from '../../stores/storeIdentifier';
 import TapiraApiSpecificationsStore from '../../stores/tapiraApiSpecificationsStore';
+import {
+  RoutePaths,
+  RoutingParameters,
+} from '../../components/Router/router.config';
 
 const { Title } = Typography;
 const { Panel } = Collapse;
@@ -16,12 +21,23 @@ const TapiraServicesList = (props: any) => {
   }: { [Stores.TapiraApiSpecificationsStore]: TapiraApiSpecificationsStore } =
     props;
   const [services, setServices] = useState<Array<string>>(new Array<string>());
-  const [openPanelIndex, setOpenPanelIndex] = useState<string | null>(null);
+  const [versionTags, setVersionTags] = useState<Array<string> | null>(null);
+  const [openPanelIndex, setOpenPanelIndex] = useState<number>();
 
   const getApiClaritySpecs = useCallback(async () => {
     await tapiraApiSpecificationsStore.getApiclaritySpecs();
     setServices(tapiraApiSpecificationsStore.apiClaritySpecs);
   }, [tapiraApiSpecificationsStore]);
+
+  const getSpecVersion = useCallback(
+    async (serviceName: string) => {
+      await tapiraApiSpecificationsStore.getSpecVersionsForService(serviceName);
+      if (tapiraApiSpecificationsStore.versionTags.length > 0)
+        setVersionTags(tapiraApiSpecificationsStore.versionTags);
+      else setVersionTags(null);
+    },
+    [tapiraApiSpecificationsStore]
+  );
 
   useEffect(() => {
     getApiClaritySpecs();
@@ -32,7 +48,8 @@ const TapiraServicesList = (props: any) => {
       return;
     }
     const index = parseInt(key);
-    setOpenPanelIndex(services[index]);
+    setOpenPanelIndex(index);
+    getSpecVersion(services[index]);
   };
 
   const panels = services.map((service: string, index: number) => (
@@ -42,7 +59,26 @@ const TapiraServicesList = (props: any) => {
       extra={<PanelCallToActions serviceName={service} />}
       key={index}
     >
-      <span>{service}</span>
+      {openPanelIndex === index && versionTags?.length && (
+        <List
+          size="small"
+          bordered
+          dataSource={versionTags}
+          renderItem={(version) => (
+            <List.Item>
+              <Link
+                to={RoutePaths.Service.replace(
+                  RoutingParameters.ServiceName,
+                  service
+                ).replace(RoutingParameters.Version, version)}
+              >
+                <strong>Spec version:</strong> {version}
+              </Link>
+            </List.Item>
+          )}
+        />
+      )}
+      {versionTags === null && 'No versions available'}
     </Panel>
   ));
 
@@ -51,6 +87,7 @@ const TapiraServicesList = (props: any) => {
       <Title>Services</Title>
       <div className="content services-list">
         <Collapse
+          accordion
           className="services-list__collapse"
           onChange={onCollapseCallback}
         >
