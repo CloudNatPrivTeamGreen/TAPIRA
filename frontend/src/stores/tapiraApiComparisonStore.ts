@@ -3,7 +3,7 @@ import tapiraApiComparisonService from '../services/tapiraApiComparisonService';
 
 class TapiraApiComparisonStore {
   @observable
-  compareSpecReponse: any;
+  compareSpecResponse: any;
 
   @action
   async compareSpecsForService(serviceName: string, data: FormData) {
@@ -11,7 +11,7 @@ class TapiraApiComparisonStore {
       serviceName,
       data
     );
-    this.compareSpecReponse = result;
+    this.compareSpecResponse = result;
   }
 
   @action

@@ -32,7 +32,9 @@ const TapiraServicesList = (props: any) => {
   const getSpecVersion = useCallback(
     async (serviceName: string) => {
       await tapiraApiSpecificationsStore.getSpecVersionsForService(serviceName);
-      setVersionTags(tapiraApiSpecificationsStore.versionTags);
+      if (tapiraApiSpecificationsStore.versionTags.length > 0)
+        setVersionTags(tapiraApiSpecificationsStore.versionTags);
+      else setVersionTags(null);
     },
     [tapiraApiSpecificationsStore]
   );
@@ -76,6 +78,7 @@ const TapiraServicesList = (props: any) => {
           )}
         />
       )}
+      {versionTags === null && 'No versions available'}
     </Panel>
   ));
 
