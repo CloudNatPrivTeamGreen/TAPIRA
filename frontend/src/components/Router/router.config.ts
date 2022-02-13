@@ -14,6 +14,7 @@ export enum RoutePaths {
 
 export interface RouteObject {
     path: string;
+    exact: boolean;
     name: string;
     title: string;
     component: any;
@@ -25,6 +26,7 @@ export interface RouteObject {
 export const appRouters: RouteObject[] = [
     {
         path: RoutePaths.Services,
+        exact: true,
         name: 'services',
         title: 'Services',
         component: LoadableComponent(() => import('../../scenes/ServicesListPage')),
@@ -33,6 +35,7 @@ export const appRouters: RouteObject[] = [
     },
     {
         path: RoutePaths.Service,
+        exact: true,
         name: 'service',
         title: 'Service',
         component: LoadableComponent(() => import('../../scenes/ServicePage')),
@@ -41,6 +44,7 @@ export const appRouters: RouteObject[] = [
     },
     {
         path: RoutePaths.ServiceSpecVersionView,
+        exact: true,
         name: 'service spec view',
         title: 'Service Spec Version View',
         component: LoadableComponent(() => import('../../scenes/ServiceSpecVersionView')),
