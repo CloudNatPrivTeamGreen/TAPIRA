@@ -5,6 +5,8 @@ import { Divider, List, Descriptions } from 'antd';
 import { CheckCircleOutlined, CloseCircleOutlined } from '@ant-design/icons';
 import {
   IApiDiffs,
+  INewEndpoint,
+  IMissingEndpoint,
   IChangedOperation,
 } from '../../../services/tapiraApiComparisonService/comparison-api-dtos';
 import { Utils } from '../../../utils/utils';
@@ -17,69 +19,37 @@ const ApiDiffView = ({ api_diffs }: { api_diffs: IApiDiffs | undefined }) => {
   if (api_diffs?.missing_endpoints?.length) {
     displayList.push(Utils.nameof<IApiDiffs>('missing_endpoints'));
   }
-  let newEndpoints;
-  if (api_diffs?.new_endpoints?.length) {
-    newEndpoints = (
-      <React.Fragment>
-        <Divider orientation="left">New Endpoints</Divider>
-        <List
-          className="api-diff-view__new_endpoints"
-          size="small"
-          bordered
-          dataSource={api_diffs?.new_endpoints}
-          renderItem={(item) => (
-            <List.Item>
-              <Descriptions>
-                {Object.keys(item).map((key: string) => (
-                  <Descriptions.Item label={Utils.capitalizePropertyName(key)}>
-                    {typeof item[key] === 'boolean' && item[key] === true && (
-                      <CheckCircleOutlined className="diff-check-circle" />
-                    )}
-                    {typeof item[key] === 'boolean' && item[key] === false && (
-                      <CloseCircleOutlined className="diff-close-circle" />
-                    )}
-                    {typeof item[key] !== 'boolean' && item[key]}
-                  </Descriptions.Item>
-                ))}
-              </Descriptions>
-            </List.Item>
-          )}
-        />
-      </React.Fragment>
-    );
-  }
 
-  let missingEndpoints;
-  if (api_diffs?.missing_endpoints?.length) {
-    missingEndpoints = (
-      <React.Fragment>
-        <Divider orientation="left">Missing Endpoints</Divider>
-        <List
-          className="api-diff-view__missing_endpoints"
-          size="small"
-          bordered
-          dataSource={api_diffs?.missing_endpoints}
-          renderItem={(item) => (
-            <List.Item>
-              <Descriptions>
-                {Object.keys(item).map((key: string) => (
-                  <Descriptions.Item label={Utils.capitalizePropertyName(key)}>
-                    {typeof item[key] === 'boolean' && item[key] === true && (
-                      <CheckCircleOutlined className="diff-check-circle" />
-                    )}
-                    {typeof item[key] === 'boolean' && item[key] === false && (
-                      <CloseCircleOutlined className="diff-close-circle" />
-                    )}
-                    {typeof item[key] !== 'boolean' && item[key]}
-                  </Descriptions.Item>
-                ))}
-              </Descriptions>
-            </List.Item>
-          )}
-        />
-      </React.Fragment>
-    );
-  }
+  const listView = displayList.map((apiDiffKey: string) => (
+    <React.Fragment key={apiDiffKey}>
+      <Divider orientation="left">
+        {Utils.capitalizePropertyName(apiDiffKey)}
+      </Divider>
+      <List
+        className={`api-diff-view__${apiDiffKey}`}
+        size="small"
+        bordered
+        dataSource={api_diffs?.[apiDiffKey]}
+        renderItem={(item: IMissingEndpoint | INewEndpoint) => (
+          <List.Item>
+            <Descriptions>
+              {Object.keys(item).map((key: string) => (
+                <Descriptions.Item label={Utils.capitalizePropertyName(key)}>
+                  {typeof item[key] === 'boolean' && item[key] === true && (
+                    <CheckCircleOutlined className="diff-check-circle" />
+                  )}
+                  {typeof item[key] === 'boolean' && item[key] === false && (
+                    <CloseCircleOutlined className="diff-close-circle" />
+                  )}
+                  {typeof item[key] !== 'boolean' && item[key]}
+                </Descriptions.Item>
+              ))}
+            </Descriptions>
+          </List.Item>
+        )}
+      />
+    </React.Fragment>
+  ));
 
   let changedOperations;
   if (api_diffs?.changed_operations?.length) {
@@ -115,8 +85,7 @@ const ApiDiffView = ({ api_diffs }: { api_diffs: IApiDiffs | undefined }) => {
   return (
     <React.Fragment>
       <div className="api-diff-view">
-        {newEndpoints}
-        {missingEndpoints}
+        {listView}
         {changedOperations}
       </div>
     </React.Fragment>
