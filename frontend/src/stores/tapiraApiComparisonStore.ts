@@ -5,6 +5,9 @@ class TapiraApiComparisonStore {
   @observable
   compareSpecResponse: any;
 
+  @observable
+  evolutionResponse: any;
+
   @action
   async compareSpecsForService(serviceName: string, data: FormData) {
     const result = await tapiraApiComparisonService.compareSpecsForService(
@@ -25,6 +28,7 @@ class TapiraApiComparisonStore {
       oldVersion,
       newVersion
     );
+    this.evolutionResponse = result;
   }
 }
 

@@ -8,7 +8,8 @@ export enum RoutingParameters {
 export enum RoutePaths {
   Services = '/',
   Service = '/service/:serviceName/:version',
-  CompareSpecs = '/service/compare/:serviceName',
+  CompareSpecs = '/compare/:serviceName',
+  Evolution = '/evolution/:serviceName',
 }
 
 export interface RouteObject {
@@ -47,6 +48,15 @@ export const appRouters: RouteObject[] = [
     name: 'compare service specs',
     title: 'Compare Service Specs',
     component: LoadableComponent(() => import('../../scenes/CompareSpecsPage')),
+    isLayout: false,
+    showInMenu: false,
+  },
+  {
+    path: RoutePaths.Evolution,
+    exact: true,
+    name: 'evolution',
+    title: 'Evolution',
+    component: LoadableComponent(() => import('../../scenes/EvolutionPage')),
     isLayout: false,
     showInMenu: false,
   },
