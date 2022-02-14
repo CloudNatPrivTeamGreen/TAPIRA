@@ -1,7 +1,7 @@
 import axios from 'axios';
 import qs from 'qs';
 
-import AppConsts from '../lib/appconst';
+import AppConsts from '../utils/appconst';
 
 const http = axios.create({
     baseURL: AppConsts.appBaseUrl,

@@ -36,9 +36,11 @@ export const appRouters: RouteObject[] = [
   {
     path: RoutePaths.Service,
     exact: true,
-    name: 'service',
-    title: 'Service',
-    component: LoadableComponent(() => import('../../scenes/ServicePage')),
+    name: 'service spec view',
+    title: 'Service Spec Version View',
+    component: LoadableComponent(
+      () => import('../../scenes/ServiceSpecVersionView')
+    ),
     isLayout: false,
     showInMenu: false,
   },

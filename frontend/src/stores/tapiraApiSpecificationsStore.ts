@@ -12,6 +12,9 @@ class TapiraApiSpecificationsStore {
   currentServiceSpecificationsVersion: any;
 
   @observable
+  specsToCompare: any;
+
+  @observable
   versionTags!: Array<string>;
 
   @action
@@ -23,25 +26,6 @@ class TapiraApiSpecificationsStore {
   @action
   async getAllServices() {
     const result = await tapiraApiSpecificationsService.getAllServices();
-  }
-
-  @action
-  async getSpecVersionsForService(serviceName: string) {
-    const result =
-      await tapiraApiSpecificationsService.getSpecVersionsForService(
-        serviceName
-      );
-    this.versionTags = result.versions;
-  }
-
-  @action
-  async getSpecificationsForService(serviceName: string, version: string) {
-    const result =
-      await tapiraApiSpecificationsService.getSpecificationsForService(
-        serviceName,
-        version
-      );
-    this.serviceSpecifications = result;
   }
 
   @action
@@ -61,6 +45,30 @@ class TapiraApiSpecificationsStore {
         data
       );
     return result.created_version;
+  }
+
+  @action
+  saveUploadedSpecToCompare(specs: any) {
+    this.specsToCompare = specs;
+  }
+
+  @action
+  async getSpecVersionsForService(serviceName: string) {
+    const result =
+      await tapiraApiSpecificationsService.getSpecVersionsForService(
+        serviceName
+      );
+    this.versionTags = result.versions;
+  }
+
+  @action
+  async getSpecificationsForService(serviceName: string, version: string) {
+    const result =
+      await tapiraApiSpecificationsService.getSpecificationsForService(
+        serviceName,
+        version
+      );
+    this.serviceSpecifications = result.api_specs;
   }
 }
 
