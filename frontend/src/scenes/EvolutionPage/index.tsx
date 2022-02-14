@@ -70,9 +70,11 @@ const EvolutionPage = ({
   }, [selectedA, selectedB, serviceName, tapiraApiComparisonStore]);
 
   useEffect(() => {
-    createCallbackForSpecVersions();
+    if (versionListA === undefined) {
+      createCallbackForSpecVersions();
+    }
     createCallbackForEvolution();
-  }, [createCallbackForEvolution, createCallbackForSpecVersions]);
+  }, [createCallbackForEvolution, createCallbackForSpecVersions, versionListA]);
 
   const onChangeListA = (value: string) => {
     if (tapiraApiSpecificationsStore?.versionTags) {
@@ -110,7 +112,7 @@ const EvolutionPage = ({
       <div className="content specs-evolution">
         <Row>
           <Col span={8} offset={2}>
-            <Title level={4}>Version B</Title>
+            <Title level={4}>Version A</Title>
             <Select
               placeholder="select a version"
               style={{ width: 180 }}
