@@ -11,6 +11,7 @@ import {
   RoutePaths,
   RoutingParameters,
 } from '../../components/Router/router.config';
+import VersionUploadContext from '../../contexts/version-upload-context';
 
 const { Title } = Typography;
 const { Panel } = Collapse;
@@ -52,6 +53,10 @@ const TapiraServicesList = (props: any) => {
     getSpecVersion(services[index]);
   };
 
+  const onNewVersionUpload = () => {
+    if (openPanelIndex !== undefined) getSpecVersion(services[openPanelIndex]);
+  };
+
   const panels = services.map((service: string, index: number) => (
     <Panel
       className="collapse__panel"
@@ -86,13 +91,15 @@ const TapiraServicesList = (props: any) => {
     <React.Fragment>
       <Title>Services</Title>
       <div className="content services-list">
-        <Collapse
-          accordion
-          className="services-list__collapse"
-          onChange={onCollapseCallback}
-        >
-          {panels}
-        </Collapse>
+        <VersionUploadContext.Provider value={{ onNewVersionUpload }}>
+          <Collapse
+            accordion
+            className="services-list__collapse"
+            onChange={onCollapseCallback}
+          >
+            {panels}
+          </Collapse>
+        </VersionUploadContext.Provider>
       </div>
     </React.Fragment>
   );
