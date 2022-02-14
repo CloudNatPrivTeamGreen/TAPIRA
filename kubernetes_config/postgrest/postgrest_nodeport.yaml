@@ -6,8 +6,10 @@ metadata:
     name: postgrest
   namespace: apiclarity
 spec:
+  type: NodePort
   ports:
     - port: 3000
       targetPort: 3000
+      nodePort: 32231
   selector:
     name: postgrest

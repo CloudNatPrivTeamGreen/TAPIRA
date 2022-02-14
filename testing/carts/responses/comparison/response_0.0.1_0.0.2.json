@@ -1,0 +1,76 @@
+{
+    "api_diffs": {
+        "changed_operations": [],
+        "general_difference_given": false,
+        "missing_endpoints": [],
+        "new_endpoints": [],
+        "potentially_privacy_related_differences_given": false
+    },
+    "service": "carts",
+    "tira_diffs": {
+        "changed_global_tira_annotation": [],
+        "changed_schema_tira_annotations": [],
+        "missing_global_tira_annotation": [],
+        "missing_schema_tira_annotations": [],
+        "new_global_tira_annotation": [
+            {
+                "utilizer": {
+                    "country": "Germany",
+                    "name": "GCloud",
+                    "non_eu_country": false
+                }
+            }
+        ],
+        "new_schema_tira_annotations": [
+            {
+                "schema_name": "Getcartresponse",
+                "schema_tira_annotation": {
+                    "profiling": {
+                        "reason": "Customer profile based on bought products."
+                    },
+                    "purposes": {
+                        "yappl": {
+                            "id": 1,
+                            "preference": [
+                                {
+                                    "rule": {
+                                        "exp_date": "2050-01-01T00:00:00.000Z",
+                                        "purpose": {
+                                            "permitted": [
+                                                "View cart"
+                                            ]
+                                        },
+                                        "valid_from": "2022-01-09T00:00:00.000Z"
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "retention-time": {
+                        "months": 2,
+                        "periodic_review": true,
+                        "review_frequency": {
+                            "days": 3
+                        }
+                    },
+                    "special_category": {
+                        "category": "Personal Data"
+                    },
+                    "utilizer": {
+                        "country": "Germany",
+                        "direct_transfer": false,
+                        "name": "GCloud",
+                        "non_eu_country": false
+                    },
+                    "utilizer_category": {
+                        "country": "Germany",
+                        "name": "E-commerce Company",
+                        "non_eu_country": false,
+                        "sector": "E-commerce",
+                        "type": "E-commerce Company"
+                    }
+                }
+            }
+        ]
+    }
+}
