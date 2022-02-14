@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useContext } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 
@@ -11,6 +11,7 @@ import {
   RoutePaths,
   RoutingParameters,
 } from '../../../components/Router/router.config';
+import VersionUploadContext from '../../../contexts/version-upload-context';
 
 const createFileFormData = (file: File): FormData => {
   const blob = new Blob([file], {
@@ -31,6 +32,7 @@ const PanelCallToActions = ({
   [Stores.TapiraApiComparisonStore]?: TapiraApiComparisonStore;
 }) => {
   const navigate = useNavigate();
+  const versionUploadContext = useContext(VersionUploadContext);
 
   const onClickPreventDefault = (event: React.MouseEvent) => {
     event.preventDefault();
@@ -44,11 +46,12 @@ const PanelCallToActions = ({
           serviceName,
           formData
         );
+      versionUploadContext.onNewVersionUpload();
       message.success(
         `The new version for ${serviceName} was successfully updated. The new version is ${newVersion}`
       );
     },
-    [serviceName, tapiraApiSpecificationsStore]
+    [serviceName, tapiraApiSpecificationsStore, versionUploadContext]
   );
 
   const uploadExistingAPISpecifications = (file: File) => {
