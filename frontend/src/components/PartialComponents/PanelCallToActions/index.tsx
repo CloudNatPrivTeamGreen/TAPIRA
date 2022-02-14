@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 
 import { Button, message } from 'antd';
@@ -100,7 +100,14 @@ const PanelCallToActions = ({
         <Button
           style={{ backgroundColor: 'greenyellow', borderColor: 'greenyellow' }}
         >
-          Evolution
+          <Link
+            to={RoutePaths.Evolution.replace(
+              RoutingParameters.ServiceName,
+              serviceName
+            )}
+          >
+            Evolution
+          </Link>
         </Button>
       </div>
     </React.Fragment>

@@ -8,40 +8,41 @@ import { inject, observer } from 'mobx-react';
 const { Title } = Typography;
 
 const ServiceSpecVersionView = (props) => {
+  const {
+    tapiraApiSpecificationsStore,
+  }: { [Stores.TapiraApiSpecificationsStore]: TapiraApiSpecificationsStore } =
+    props;
 
-  const { tapiraApiSpecificationsStore }: 
-  { [Stores.TapiraApiSpecificationsStore]: TapiraApiSpecificationsStore } = 
-  props;
+  const { serviceName, version } = useParams();
 
-  const params = useParams();
-  const servName = params.serviceName
-  const servVersion = params.version
-
-  const [api_specs, setServices] = useState<Array<string>>(new Array<string>());
+  const [serviceSpecifications, setServiceSpecifications] = useState<
+    Array<string>
+  >(new Array<string>());
 
   const getSpecs = useCallback(async () => {
-    await tapiraApiSpecificationsStore.getSpecificationsForServiceVersion(servName as string, servVersion as string);
-    setServices(tapiraApiSpecificationsStore.serviceSpecificationsVersion);
-  }, [servName, servVersion, tapiraApiSpecificationsStore]);
-  
+    await tapiraApiSpecificationsStore.getSpecificationsForService(
+      serviceName as string,
+      version as string
+    );
+    setServiceSpecifications(
+      tapiraApiSpecificationsStore.serviceSpecifications
+    );
+  }, [serviceName, tapiraApiSpecificationsStore, version]);
 
   useEffect(() => {
     getSpecs();
   }, [getSpecs]);
 
-  const spec = api_specs.map((api_spec: string) => (
-    {api_spec}
-  ));
-  
-
-  return <React.Fragment>
-    <Title>{params.serviceName} {params.version}</Title>
-    <div className="content service-version">
-      <pre>
-        {JSON.stringify(spec, null, 2)}
-      </pre>
-    </div>
-  </React.Fragment>;
+  return (
+    <React.Fragment>
+      <Title>
+        {serviceName} {version}
+      </Title>
+      <div className="content service-version">
+        <pre>{JSON.stringify(serviceSpecifications, null, 2)}</pre>
+      </div>
+    </React.Fragment>
+  );
 };
 
 export default inject(Stores.TapiraApiSpecificationsStore)(

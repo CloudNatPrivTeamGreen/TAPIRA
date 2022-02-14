@@ -5,64 +5,52 @@ class TapiraApiSpecificationsStore {
   @observable
   apiClaritySpecs!: Array<string>;
 
+  @observable
+  serviceSpecifications: any;
 
-    @observable 
-    apiClaritySpecs!: Array<string>;
+  @observable
+  currentServiceSpecificationsVersion: any;
 
-    @observable
-    serviceSpecifications: any;
+  @observable
+  specsToCompare: any;
 
-    @observable
-    serviceSpecificationsVersion: any;
+  @observable
+  versionTags!: Array<string>;
 
-    @observable
-    currentServiceSpecificationsVersion: any;
+  @action
+  async getApiclaritySpecs() {
+    const result = await tapiraApiSpecificationsService.getApiclaritySpecs();
+    this.apiClaritySpecs = result.reconstructed_services;
+  }
 
-    @observable
-    specsToCompare: any;
+  @action
+  async getAllServices() {
+    const result = await tapiraApiSpecificationsService.getAllServices();
+  }
 
-    @observable
-    versionTags!: Array<string>;
+  @action
+  async getCurrentVersionSpecForService(serviceName: string) {
+    const result =
+      await tapiraApiSpecificationsService.getCurrentVersionSpecForService(
+        serviceName
+      );
+    this.currentServiceSpecificationsVersion = result.api_spec;
+  }
 
-    @action
-    async getApiclaritySpecs() {
-        const result = await tapiraApiSpecificationsService.getApiclaritySpecs();
-        this.apiClaritySpecs = result.reconstructed_services;
-    }
+  @action
+  async uploadExistingAPISpecifications(serviceName: string, data: FormData) {
+    const result =
+      await tapiraApiSpecificationsService.uploadExistingAPISpecifications(
+        serviceName,
+        data
+      );
+    return result.created_version;
+  }
 
-    @action
-    async getAllServices() {
-        const result = await tapiraApiSpecificationsService.getAllServices();
-    }
-
-    //@action
-    //async getSpecificationsForService(serviceName: string) {
-        //const result = await tapiraApiSpecificationsService.getSpecificationsForService(serviceName);
-        //this.serviceSpecifications = result;
-    //}
-
-    @action
-    async getSpecificationsForServiceVersion(serviceName: string, servVersion: string) {
-        const result = await tapiraApiSpecificationsService.getSpecificationsForServiceVersion(serviceName, servVersion);
-        this.serviceSpecificationsVersion = result.api_specs;
-    }
-
-    @action
-    async getCurrentVersionSpecForService(serviceName: string) {
-        const result = await tapiraApiSpecificationsService.getCurrentVersionSpecForService(serviceName);
-        this.currentServiceSpecificationsVersion = result.api_spec;
-    }
-
-    @action
-    async uploadExistingAPISpecifications(serviceName: string, data: FormData) {
-        const result = await tapiraApiSpecificationsService.uploadExistingAPISpecifications(serviceName, data);
-        return result.created_version;
-    }
-
-    @action
-    saveUploadedSpecToCompare(specs: any) {
-        this.specsToCompare = specs;
-    }
+  @action
+  saveUploadedSpecToCompare(specs: any) {
+    this.specsToCompare = specs;
+  }
 
   @action
   async getSpecVersionsForService(serviceName: string) {
@@ -80,9 +68,8 @@ class TapiraApiSpecificationsStore {
         serviceName,
         version
       );
-    this.serviceSpecifications = result;
+    this.serviceSpecifications = result.api_specs;
   }
-
 }
 
 export default TapiraApiSpecificationsStore;
