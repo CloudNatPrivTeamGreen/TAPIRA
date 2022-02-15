@@ -22,7 +22,7 @@ const ApiDiffView = ({ api_diffs }: { api_diffs: IApiDiffs | undefined }) => {
       <Divider orientation="left">
         {Utils.capitalizePropertyName(apiDiffKey)}
       </Divider>
-      {api_diffs?.[apiDiffKey]?.length && (
+      {!!api_diffs?.[apiDiffKey]?.length && (
         <List
           className={`api-diff-view__${apiDiffKey}`}
           size="small"
@@ -61,7 +61,7 @@ const ApiDiffView = ({ api_diffs }: { api_diffs: IApiDiffs | undefined }) => {
   let changedOperations = (
     <React.Fragment>
       <Divider orientation="left">Missing Endpoints</Divider>
-      {api_diffs?.changed_operations?.length && (
+      {!!api_diffs?.changed_operations?.length && (
         <List
           className="api-diff-view__changed-operations"
           size="small"
