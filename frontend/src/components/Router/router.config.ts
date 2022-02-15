@@ -10,6 +10,7 @@ export enum RoutePaths {
   Service = '/service/:serviceName/:version',
   CompareSpecs = '/compare/:serviceName',
   Evolution = '/evolution/:serviceName',
+  Conflicts = 'conflicts',
 }
 
 export interface RouteObject {
@@ -18,7 +19,6 @@ export interface RouteObject {
   name: string;
   title: string;
   component: any;
-  isLayout: boolean;
   showInMenu: boolean;
   permission?: string;
 }
@@ -30,7 +30,6 @@ export const appRouters: RouteObject[] = [
     name: 'services',
     title: 'Services',
     component: LoadableComponent(() => import('../../scenes/ServicesListPage')),
-    isLayout: true,
     showInMenu: true,
   },
   {
@@ -41,7 +40,6 @@ export const appRouters: RouteObject[] = [
     component: LoadableComponent(
       () => import('../../scenes/ServiceSpecVersionView')
     ),
-    isLayout: false,
     showInMenu: false,
   },
   {
@@ -50,7 +48,6 @@ export const appRouters: RouteObject[] = [
     name: 'compare service specs',
     title: 'Compare Service Specs',
     component: LoadableComponent(() => import('../../scenes/CompareSpecsPage')),
-    isLayout: false,
     showInMenu: false,
   },
   {
@@ -59,8 +56,15 @@ export const appRouters: RouteObject[] = [
     name: 'evolution',
     title: 'Evolution',
     component: LoadableComponent(() => import('../../scenes/EvolutionPage')),
-    isLayout: false,
     showInMenu: false,
+  },
+  {
+    path: RoutePaths.Conflicts,
+    exact: true,
+    name: 'conflicts',
+    title: 'Conflicts',
+    component: LoadableComponent(() => import('../../scenes/ConflictsPage')),
+    showInMenu: true,
   },
 ];
 
