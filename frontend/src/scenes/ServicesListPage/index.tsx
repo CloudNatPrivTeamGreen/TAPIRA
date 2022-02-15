@@ -3,7 +3,7 @@ import './index.scss';
 import React, { useEffect, useCallback, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
-import { Collapse, Typography, List } from 'antd';
+import { Collapse, Typography, List, Alert } from 'antd';
 import PanelCallToActions from '../../components/PartialComponents/PanelCallToActions';
 import { Stores } from '../../stores/storeIdentifier';
 import TapiraApiSpecificationsStore from '../../stores/tapiraApiSpecificationsStore';
@@ -83,7 +83,13 @@ const TapiraServicesList = (props: any) => {
           )}
         />
       )}
-      {versionTags === null && 'No versions available'}
+      {versionTags === null && (
+        <Alert
+          message="No version available for this service"
+          type="warning"
+          showIcon
+        />
+      )}
     </Panel>
   ));
 
