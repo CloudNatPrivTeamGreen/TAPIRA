@@ -1,12 +1,8 @@
 import './index.scss';
 
 import React from 'react';
-import { Divider, List, Descriptions, Tag } from 'antd';
-import {
-  CheckCircleOutlined,
-  CloseCircleOutlined,
-  ExclamationCircleOutlined,
-} from '@ant-design/icons';
+import { Divider, List, Descriptions, Alert } from 'antd';
+import { CheckCircleOutlined, CloseCircleOutlined } from '@ant-design/icons';
 import {
   IApiDiffs,
   INewEndpoint,
@@ -52,9 +48,11 @@ const ApiDiffView = ({ api_diffs }: { api_diffs: IApiDiffs | undefined }) => {
         />
       )}
       {!api_diffs?.[apiDiffKey]?.length && (
-        <Tag icon={<ExclamationCircleOutlined />} color="warning">
-          {`No ${Utils.capitalizePropertyName(apiDiffKey)} available`}
-        </Tag>
+        <Alert
+          message={`No ${Utils.capitalizePropertyName(apiDiffKey)} available`}
+          type="warning"
+          showIcon
+        />
       )}
     </React.Fragment>
   ));
@@ -87,9 +85,11 @@ const ApiDiffView = ({ api_diffs }: { api_diffs: IApiDiffs | undefined }) => {
         />
       )}
       {!api_diffs?.changed_operations?.length && (
-        <Tag icon={<ExclamationCircleOutlined />} color="warning">
-          No Changed Operations available
-        </Tag>
+        <Alert
+          message="No Changed Operations available"
+          type="warning"
+          showIcon
+        />
       )}
     </React.Fragment>
   );
