@@ -34,7 +34,7 @@ class TapiraApiProposalsStore {
   @action
   async getAllConflicts() {
     const result = await tapiraApiProposalsService.getAllConflicts();
-    this.allConflictsList = result;
+    this.allConflictsList = result.services;
   }
 }
 
