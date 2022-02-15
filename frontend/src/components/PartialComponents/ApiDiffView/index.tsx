@@ -49,6 +49,7 @@ const ApiDiffView = ({ api_diffs }: { api_diffs: IApiDiffs | undefined }) => {
       )}
       {!api_diffs?.[apiDiffKey]?.length && (
         <Alert
+          className="alert-message"
           message={`No ${Utils.capitalizePropertyName(apiDiffKey)} available`}
           type="warning"
           showIcon
@@ -86,6 +87,7 @@ const ApiDiffView = ({ api_diffs }: { api_diffs: IApiDiffs | undefined }) => {
       )}
       {!api_diffs?.changed_operations?.length && (
         <Alert
+          className="alert-message"
           message="No Changed Operations available"
           type="warning"
           showIcon
