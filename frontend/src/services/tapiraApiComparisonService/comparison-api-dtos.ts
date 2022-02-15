@@ -25,3 +25,13 @@ export interface IApiDiffs {
   missing_endpoints: IMissingEndpoint[];
   changed_operations: IChangedOperation[];
 }
+
+export enum ProposedMergeContext {
+  Validation = 'validation',
+  Comparison = 'comparison',
+}
+
+export interface IProposedMergeBody {
+  new_api: any;
+  old_api: any;
+}

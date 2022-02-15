@@ -59,6 +59,15 @@ const PanelCallToActions = ({
     createCallbackForUpload(formData);
   };
 
+  const onLoadJsonFile = (event: ProgressEvent<FileReader>) => {
+    if (event.target?.result === undefined) {
+      return;
+    }
+
+    const uploadedApi = JSON.parse(event.target?.result as string);
+    tapiraApiComparisonStore?.saveUploadedApiSpec(uploadedApi);
+  };
+
   const createCallBackForComparison = useCallback(
     async (formData: FormData) => {
       await tapiraApiComparisonStore?.compareSpecsForService(
@@ -81,6 +90,10 @@ const PanelCallToActions = ({
   const compareUploadedJson = (file: File) => {
     const formData = createFileFormData(file);
     createCallBackForComparison(formData);
+
+    const fileReader = new FileReader();
+    fileReader.onload = onLoadJsonFile;
+    fileReader.readAsText(file);
   };
 
   return (
