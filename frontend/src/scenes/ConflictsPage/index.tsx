@@ -12,6 +12,10 @@ const ConflictsPage = ({
     await tapiraApiProposalsStore.getAllConflicts();
   }, [tapiraApiProposalsStore]);
 
+  useEffect(() => {
+    getAllConflicts();
+  }, [getAllConflicts]);
+
   return <React.Fragment></React.Fragment>;
 };
 
