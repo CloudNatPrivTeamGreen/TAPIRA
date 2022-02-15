@@ -1,8 +1,12 @@
 import './index.scss';
 
 import React from 'react';
-import { Divider, List, Descriptions } from 'antd';
-import { CheckCircleOutlined, CloseCircleOutlined } from '@ant-design/icons';
+import { Divider, List, Descriptions, Tag } from 'antd';
+import {
+  CheckCircleOutlined,
+  CloseCircleOutlined,
+  ExclamationCircleOutlined,
+} from '@ant-design/icons';
 import {
   IApiDiffs,
   INewEndpoint,
@@ -12,50 +16,53 @@ import {
 import { Utils } from '../../../utils/utils';
 
 const ApiDiffView = ({ api_diffs }: { api_diffs: IApiDiffs | undefined }) => {
-  let displayList: string[] = [];
-  if (api_diffs?.new_endpoints?.length) {
-    displayList.push(Utils.nameof<IApiDiffs>('new_endpoints'));
-  }
-  if (api_diffs?.missing_endpoints?.length) {
-    displayList.push(Utils.nameof<IApiDiffs>('missing_endpoints'));
-  }
+  let displayList: string[] = [
+    Utils.nameof<IApiDiffs>('new_endpoints'),
+    Utils.nameof<IApiDiffs>('missing_endpoints'),
+  ];
 
   const listView = displayList.map((apiDiffKey: string) => (
     <React.Fragment key={apiDiffKey}>
       <Divider orientation="left">
         {Utils.capitalizePropertyName(apiDiffKey)}
       </Divider>
-      <List
-        className={`api-diff-view__${apiDiffKey}`}
-        size="small"
-        bordered
-        dataSource={api_diffs?.[apiDiffKey]}
-        renderItem={(item: IMissingEndpoint | INewEndpoint) => (
-          <List.Item>
-            <Descriptions>
-              {Object.keys(item).map((key: string) => (
-                <Descriptions.Item label={Utils.capitalizePropertyName(key)}>
-                  {typeof item[key] === 'boolean' && item[key] === true && (
-                    <CheckCircleOutlined className="diff-check-circle" />
-                  )}
-                  {typeof item[key] === 'boolean' && item[key] === false && (
-                    <CloseCircleOutlined className="diff-close-circle" />
-                  )}
-                  {typeof item[key] !== 'boolean' && item[key]}
-                </Descriptions.Item>
-              ))}
-            </Descriptions>
-          </List.Item>
-        )}
-      />
+      {api_diffs?.[apiDiffKey]?.length && (
+        <List
+          className={`api-diff-view__${apiDiffKey}`}
+          size="small"
+          bordered
+          dataSource={api_diffs?.[apiDiffKey]}
+          renderItem={(item: IMissingEndpoint | INewEndpoint) => (
+            <List.Item>
+              <Descriptions>
+                {Object.keys(item).map((key: string) => (
+                  <Descriptions.Item label={Utils.capitalizePropertyName(key)}>
+                    {typeof item[key] === 'boolean' && item[key] === true && (
+                      <CheckCircleOutlined className="diff-check-circle" />
+                    )}
+                    {typeof item[key] === 'boolean' && item[key] === false && (
+                      <CloseCircleOutlined className="diff-close-circle" />
+                    )}
+                    {typeof item[key] !== 'boolean' && item[key]}
+                  </Descriptions.Item>
+                ))}
+              </Descriptions>
+            </List.Item>
+          )}
+        />
+      )}
+      {!api_diffs?.[apiDiffKey]?.length && (
+        <Tag icon={<ExclamationCircleOutlined />} color="warning">
+          {`No ${Utils.capitalizePropertyName(apiDiffKey)} available`}
+        </Tag>
+      )}
     </React.Fragment>
   ));
 
-  let changedOperations;
-  if (api_diffs?.changed_operations?.length) {
-    changedOperations = (
-      <React.Fragment>
-        <Divider orientation="left">Missing Endpoints</Divider>
+  let changedOperations = (
+    <React.Fragment>
+      <Divider orientation="left">Missing Endpoints</Divider>
+      {api_diffs?.changed_operations?.length && (
         <List
           className="api-diff-view__changed-operations"
           size="small"
@@ -78,9 +85,14 @@ const ApiDiffView = ({ api_diffs }: { api_diffs: IApiDiffs | undefined }) => {
             </List.Item>
           )}
         />
-      </React.Fragment>
-    );
-  }
+      )}
+      {!api_diffs?.changed_operations?.length && (
+        <Tag icon={<ExclamationCircleOutlined />} color="warning">
+          No Changed Operations available
+        </Tag>
+      )}
+    </React.Fragment>
+  );
 
   return (
     <React.Fragment>
