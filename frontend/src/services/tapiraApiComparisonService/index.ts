@@ -1,4 +1,9 @@
+import { AxiosRequestConfig } from 'axios';
 import http from '../httpService';
+import {
+  ProposedMergeContext,
+  IProposedMergeBody,
+} from './comparison-api-dtos';
 
 class TapiraApiComparisonService {
   public async compareSpecsForService(serviceName: string, data: FormData) {
@@ -24,6 +29,27 @@ class TapiraApiComparisonService {
         new_version: newVersion,
       },
     });
+    return result.data;
+  }
+
+  public async downloadProposedMerge(
+    context: ProposedMergeContext,
+    newApi: any,
+    oldApi: any
+  ) {
+    const body: IProposedMergeBody = {
+      new_api: newApi,
+      old_api: oldApi,
+    };
+    const config: AxiosRequestConfig = {
+      params: { context },
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      responseType: 'blob',
+    };
+    const result = await http.post('proposed_merge', body, config);
+
     return result.data;
   }
 }

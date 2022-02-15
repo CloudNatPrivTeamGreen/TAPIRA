@@ -1,5 +1,7 @@
 import { action, observable } from 'mobx';
+import { ProposedMergeContext } from '../services/tapiraApiComparisonService/comparison-api-dtos';
 import tapiraApiComparisonService from '../services/tapiraApiComparisonService';
+import { downloadFile } from '../utils/download-file-helper';
 
 class TapiraApiComparisonStore {
   @observable
@@ -7,6 +9,9 @@ class TapiraApiComparisonStore {
 
   @observable
   evolutionResponse: any;
+
+  @observable
+  uploadedApiSpec: any;
 
   @action
   async compareSpecsForService(serviceName: string, data: FormData) {
@@ -29,6 +34,26 @@ class TapiraApiComparisonStore {
       newVersion
     );
     this.evolutionResponse = result;
+  }
+
+  @action
+  async downloadProposedMerge(
+    context: ProposedMergeContext,
+    newApi: any,
+    oldApi: any
+  ) {
+    const result = await tapiraApiComparisonService.downloadProposedMerge(
+      context,
+      newApi,
+      oldApi
+    );
+    const blob = new Blob([result], { type: 'application/json' });
+    downloadFile(blob, context);
+  }
+
+  @action
+  saveUploadedApiSpec(uploadedSpec: any) {
+    this.uploadedApiSpec = uploadedSpec;
   }
 }
 
