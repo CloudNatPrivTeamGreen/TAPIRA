@@ -43,26 +43,26 @@ export enum EndpointTypes {
 }
 
 export enum RequestInfo {
-  Parameter = 'parameter',
-  Header = 'header',
-  ResponseBody = 'responseBody',
-  RequestBody = 'requestBody',
+  parameter = 'parameter',
+  header = 'header',
+  responseBody = 'responseBody',
+  requestBody = 'requestBody',
 }
 
-export interface EndpointTypeInfoEntry {
+export interface TiraAnnotationInfo {
   is_removed: boolean;
   new: any;
   old: any;
 }
 
-export type EndpointTypeInfo = {
-  [key in RequestInfo]?: { [key: string]: EndpointTypeInfoEntry };
+export type PDIndicatorInfo = {
+  [key in RequestInfo]?: { [key: string]: TiraAnnotationInfo };
 } & {
   is_removed: boolean;
 };
 
 export type EvolutionEndpointInfo = {
-  [key in EndpointTypes]?: EndpointTypeInfo;
+  [key in EndpointTypes]?: PDIndicatorInfo;
 } & {
   is_removed: boolean;
 };
