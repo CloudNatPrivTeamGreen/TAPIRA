@@ -19,6 +19,14 @@ export enum RoutePaths {
   Reports = '/reports',
 }
 
+/**
+ * RoutesForTesting are just for the purpose of testing
+ * When not required need to be taken out
+ */
+export enum RoutesForTesting {
+  EvolutionTestPage = '/evolution_test',
+}
+
 export interface RouteObject {
   path: string;
   exact: boolean;
@@ -86,4 +94,21 @@ export const appRouters: RouteObject[] = [
   },
 ];
 
-export const routers = [...appRouters];
+/**
+ * testRouters are just for the purpose of testing
+ * When not required need to be taken out
+ */
+export const testRouters: RouteObject[] = [
+  {
+    path: RoutesForTesting.EvolutionTestPage,
+    exact: true,
+    name: 'evolution test',
+    title: 'Evolution Test',
+    component: LoadableComponent(
+      () => import('../../scenes/pages_for_testing/EvolutionTestPage')
+    ),
+    showInMenu: false,
+  },
+];
+
+export const routers = [...appRouters, ...testRouters];

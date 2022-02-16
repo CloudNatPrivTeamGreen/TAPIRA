@@ -3,7 +3,7 @@ import './index.scss';
 import { ReactElement } from 'react';
 import { Location, Link } from 'react-router-dom';
 import { Layout, Menu } from 'antd';
-import { appRouters, RouteObject } from '../Router/router.config';
+import { routers, RouteObject } from '../Router/router.config';
 
 const { Sider } = Layout;
 
@@ -14,7 +14,7 @@ interface ISiderMenuProps {
 const SiderMenu = ({ location }: ISiderMenuProps): ReactElement => {
   const defaultSelectedKeys = location.pathname;
 
-  const menuItems = appRouters
+  const menuItems = routers
     .filter((item: RouteObject) => item.showInMenu)
     .map((route: RouteObject) => {
       const { icon: Icon } = route;

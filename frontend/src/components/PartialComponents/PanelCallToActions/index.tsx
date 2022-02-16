@@ -10,6 +10,7 @@ import TapiraApiComparisonStore from '../../../stores/tapiraApiComparisonStore';
 import {
   RoutePaths,
   RoutingParameters,
+  RoutesForTesting,
 } from '../../../components/Router/router.config';
 import VersionUploadContext from '../../../contexts/version-upload-context';
 
@@ -117,7 +118,7 @@ const PanelCallToActions = ({
           style={{ backgroundColor: 'greenyellow', borderColor: 'greenyellow' }}
         >
           <Link
-            to={RoutePaths.Evolution.replace(
+            to={RoutesForTesting.EvolutionTestPage.replace(
               RoutingParameters.ServiceName,
               serviceName
             )}
