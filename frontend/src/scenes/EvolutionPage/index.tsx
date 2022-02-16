@@ -135,7 +135,7 @@ const EvolutionPage = ({
           </Col>
         </Row>
         <div className="specs-evolution__diffs">
-          <ApiDiffView {...tapiraApiComparisonStore?.evolutionResponse} />
+          {/* <ApiDiffView {...tapiraApiComparisonStore?.evolutionResponse} /> */}
         </div>
       </div>
     </React.Fragment>

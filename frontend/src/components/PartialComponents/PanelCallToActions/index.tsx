@@ -1,13 +1,17 @@
-import React, {useCallback, useContext} from 'react';
-import {Link, useNavigate} from 'react-router-dom';
-import {inject, observer} from 'mobx-react';
+import React, { useCallback, useContext } from 'react';
+import { useNavigate, Link } from 'react-router-dom';
+import { inject, observer } from 'mobx-react';
 
-import {Button, message} from 'antd';
+import { Button, message } from 'antd';
 import UploadJsonModal from '../UploadJsonModal';
-import {Stores} from '../../../stores/storeIdentifier';
+import { Stores } from '../../../stores/storeIdentifier';
 import TapiraApiSpecificationsStore from '../../../stores/tapiraApiSpecificationsStore';
 import TapiraApiComparisonStore from '../../../stores/tapiraApiComparisonStore';
-import {RoutePaths, RoutingParameters,} from '../../../components/Router/router.config';
+import {
+  RoutePaths,
+  RoutingParameters,
+  RoutesForTesting,
+} from '../../../components/Router/router.config';
 import VersionUploadContext from '../../../contexts/version-upload-context';
 import {ProposedMergeContext} from "../../../services/tapiraApiComparisonService/comparison-api-dtos";
 
@@ -115,7 +119,7 @@ const PanelCallToActions = ({
           style={{ backgroundColor: 'greenyellow', borderColor: 'greenyellow' }}
         >
           <Link
-            to={RoutePaths.Evolution.replace(
+            to={RoutesForTesting.EvolutionTestPage.replace(
               RoutingParameters.ServiceName,
               serviceName
             )}

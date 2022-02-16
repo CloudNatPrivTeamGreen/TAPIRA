@@ -1,0 +1,10 @@
+.evolution-test-page {
+  &__table {
+    .value-green {
+      color: green;
+    }
+    .value-red {
+      color: red;
+    }
+  }
+}

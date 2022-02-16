@@ -1,5 +1,8 @@
 import { action, observable } from 'mobx';
-import { ProposedMergeContext } from '../services/tapiraApiComparisonService/comparison-api-dtos';
+import {
+  EvolutionResponse,
+  ProposedMergeContext,
+} from '../services/tapiraApiComparisonService/comparison-api-dtos';
 import tapiraApiComparisonService from '../services/tapiraApiComparisonService';
 import { downloadFile } from '../utils/download-file-helper';
 import tapiraApiProposalsService from "../services/tapiraApiProposalsService";
@@ -9,7 +12,7 @@ class TapiraApiComparisonStore {
   compareSpecResponse: any;
 
   @observable
-  evolutionResponse: any;
+  evolutionResponse!: EvolutionResponse;
 
   @observable
   uploadedApiSpec: any;

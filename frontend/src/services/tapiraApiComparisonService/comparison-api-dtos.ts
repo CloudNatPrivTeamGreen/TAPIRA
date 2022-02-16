@@ -35,3 +35,38 @@ export interface IProposedMergeBody {
   new_api: any;
   old_api: any;
 }
+
+export enum EndpointTypes {
+  GET = 'GET',
+  POST = 'POST',
+  DELETE = 'DELETE',
+}
+
+export enum RequestInfo {
+  parameter = 'parameter',
+  header = 'header',
+  responseBody = 'responseBody',
+  requestBody = 'requestBody',
+}
+
+export interface TiraAnnotationInfo {
+  is_removed: boolean;
+  new: any;
+  old: any;
+}
+
+export type PDIndicatorInfo = {
+  [key in RequestInfo]?: { [key: string]: TiraAnnotationInfo };
+} & {
+  is_removed: boolean;
+};
+
+export type EvolutionEndpointInfo = {
+  [key in EndpointTypes]?: PDIndicatorInfo;
+} & {
+  is_removed: boolean;
+};
+
+export interface EvolutionResponse {
+  [endpoint: string]: EvolutionEndpointInfo;
+}
