@@ -1,4 +1,3 @@
-import React from 'react';
 import { ApartmentOutlined, DeleteRowOutlined } from '@ant-design/icons';
 import LoadableComponent from '../Loadable';
 

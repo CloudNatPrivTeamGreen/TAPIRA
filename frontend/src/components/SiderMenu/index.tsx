@@ -3,11 +3,9 @@ import './index.scss';
 import { ReactElement } from 'react';
 import { Location, Link } from 'react-router-dom';
 import { Layout, Menu } from 'antd';
-import { ApartmentOutlined } from '@ant-design/icons';
 import { appRouters, RouteObject } from '../Router/router.config';
 
 const { Sider } = Layout;
-const { SubMenu } = Menu;
 
 interface ISiderMenuProps {
   location: Location;
