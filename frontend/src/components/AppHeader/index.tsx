@@ -29,13 +29,6 @@ const AppHeader = ({ location }: IAppHeaderProps): ReactElement => {
       <div className="header__logo">
         <span className="name">Tapira</span>
       </div>
-      <Menu
-        theme="dark"
-        mode="horizontal"
-        defaultSelectedKeys={[defaultSelectedKeys]}
-      >
-        {menuItems}
-      </Menu>
     </Header>
   );
 };
