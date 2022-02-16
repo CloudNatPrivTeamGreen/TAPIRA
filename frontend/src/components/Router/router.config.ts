@@ -1,15 +1,23 @@
+import {
+  ApartmentOutlined,
+  DeleteRowOutlined,
+  BarsOutlined,
+} from '@ant-design/icons';
 import LoadableComponent from '../Loadable';
 
 export enum RoutingParameters {
   ServiceName = ':serviceName',
   Version = ':version',
+  Context = ':context'
 }
 
 export enum RoutePaths {
   Services = '/',
   Service = '/service/:serviceName/:version',
-  CompareSpecs = '/compare/:serviceName',
+  CompareSpecs = '/compare/:serviceName/:context',
   Evolution = '/evolution/:serviceName',
+  Conflicts = '/conflicts',
+  Reports = '/reports',
 }
 
 export interface RouteObject {
@@ -18,9 +26,9 @@ export interface RouteObject {
   name: string;
   title: string;
   component: any;
-  isLayout: boolean;
   showInMenu: boolean;
   permission?: string;
+  icon?: any;
 }
 
 export const appRouters: RouteObject[] = [
@@ -30,8 +38,8 @@ export const appRouters: RouteObject[] = [
     name: 'services',
     title: 'Services',
     component: LoadableComponent(() => import('../../scenes/ServicesListPage')),
-    isLayout: true,
     showInMenu: true,
+    icon: ApartmentOutlined,
   },
   {
     path: RoutePaths.Service,
@@ -41,7 +49,6 @@ export const appRouters: RouteObject[] = [
     component: LoadableComponent(
       () => import('../../scenes/ServiceSpecVersionView')
     ),
-    isLayout: false,
     showInMenu: false,
   },
   {
@@ -50,7 +57,6 @@ export const appRouters: RouteObject[] = [
     name: 'compare service specs',
     title: 'Compare Service Specs',
     component: LoadableComponent(() => import('../../scenes/CompareSpecsPage')),
-    isLayout: false,
     showInMenu: false,
   },
   {
@@ -59,8 +65,25 @@ export const appRouters: RouteObject[] = [
     name: 'evolution',
     title: 'Evolution',
     component: LoadableComponent(() => import('../../scenes/EvolutionPage')),
-    isLayout: false,
     showInMenu: false,
+  },
+  {
+    path: RoutePaths.Conflicts,
+    exact: true,
+    name: 'conflicts',
+    title: 'Conflicts',
+    component: LoadableComponent(() => import('../../scenes/ConflictsPage')),
+    showInMenu: true,
+    icon: DeleteRowOutlined,
+  },
+  {
+    path: RoutePaths.Reports,
+    exact: true,
+    name: 'reports',
+    title: 'Reports',
+    component: LoadableComponent(() => import('../../scenes/ReportsPage')),
+    showInMenu: true,
+    icon: BarsOutlined,
   },
 ];
 

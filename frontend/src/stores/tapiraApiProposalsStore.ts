@@ -2,6 +2,11 @@ import { action, observable } from 'mobx';
 import tapiraApiProposalsService from '../services/tapiraApiProposalsService';
 
 class TapiraApiProposalsStore {
+  @observable
+  allConflictsList!: string[];
+  @observable
+  currentReconstructedSpec: any;
+
   @action
   async deletePorposedSpecifications() {
     const result =
@@ -19,6 +24,7 @@ class TapiraApiProposalsStore {
     const result = await tapiraApiProposalsService.getProposedSpecsForService(
       serviceName
     );
+    this.currentReconstructedSpec = result
   }
 
   @action
@@ -26,6 +32,12 @@ class TapiraApiProposalsStore {
     const result = await tapiraApiProposalsService.getConflictsForService(
       serviceName
     );
+  }
+
+  @action
+  async getAllConflicts() {
+    const result = await tapiraApiProposalsService.getAllConflicts();
+    this.allConflictsList = result.services;
   }
 }
 
