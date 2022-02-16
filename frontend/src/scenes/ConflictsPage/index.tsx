@@ -2,8 +2,12 @@ import React, { useEffect, useCallback, useState } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Stores } from '../../stores/storeIdentifier';
 import TapiraApiProposalsStore from '../../stores/tapiraApiProposalsStore';
-import { Typography } from 'antd';
-
+import { List, Typography } from 'antd';
+import { Link } from 'react-router-dom';
+import {
+  RoutePaths,
+  RoutingParameters,
+} from '../../components/Router/router.config';
 import './index.scss';
 
 const { Title } = Typography;
@@ -29,16 +33,24 @@ const ConflictsPage = ({
   }, [getAllConflicts]);
 
 
+  const conflictList = allConflictsList.map((conflict: string, index: number) => (
+    
+    <List.Item>
+      <Link to=
+        {RoutePaths.CompareSpecs.replace(
+          RoutingParameters.ServiceName, conflict
+        ).replace(RoutingParameters.Version, conflict)
+      }>
+        {conflict}
+      </Link>
+    </List.Item>
+
+  ));
+
   return <React.Fragment>
     <Title> Conflicts </Title>
-    <div className="content">
-      {
-      allConflictsList.map((serv) => (
-        <div className="conflicts-list">
-          {serv}
-        </div>
-      ))
-      }
+    <div className="content conflicts-list">
+      {conflictList}
     </div>
   </React.Fragment>;
 
