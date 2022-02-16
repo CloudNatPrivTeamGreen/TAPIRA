@@ -128,8 +128,9 @@ class ChangedSchemaTiraAnnotation(Schema):
 class ApiDiffTiraSchema(Schema):
     new_global_tira_annotation = fields.List(fields.Dict(), default=[], allow_none=True)
     missing_global_tira_annotation = fields.List(fields.Dict(), default=[], allow_none=True)
-    changed_global_tira_annotation = fields.List(fields.Nested(ChangedGlobalTiraAnnotationSchema, default=None, allow_none=True), default=[],
-                                                  allow_none=True)
+    changed_global_tira_annotation = fields.List(
+        fields.Nested(ChangedGlobalTiraAnnotationSchema, default=None, allow_none=True), default=[],
+        allow_none=True)
 
     new_schema_tira_annotations = fields.List(fields.Nested(SchemaTiraAnnotation), default=[], allow_none=True)
 
@@ -146,6 +147,7 @@ class ProposedMergeRequestBodySchema(Schema):
     old_api = fields.Dict()
     new_api = fields.Dict()
 
+
 class ProposedMergeResponseSchema(Schema):
     proposed_merge = fields.Dict()
 
@@ -161,5 +163,10 @@ class AllChangesComparisonSchema(Schema):
     api_diffs = fields.Nested(ApiDiffsResponseSchema, default=None, allow_none=True)
     tira_diffs = fields.Nested(ApiDiffTiraSchema, default=None, allow_none=True)
 
+
 class ComparisonParameterSchema(Schema):
     service = fields.Str(required=True)
+
+
+class PresentationTestSchema(Schema):
+    case = fields.Str(required=True)
