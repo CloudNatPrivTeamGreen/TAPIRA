@@ -30,25 +30,28 @@ const ConflictsPage = ({
     getAllConflicts();
   }, [getAllConflicts]);
 
-  const conflictList = allConflictsList.map(
-    (conflict: string, index: number) => (
-      <List.Item key={index + conflict}>
-        <Link
-          to={RoutePaths.CompareSpecs.replace(
-            RoutingParameters.ServiceName,
-            conflict
-          ).replace(RoutingParameters.Version, conflict)}
-        >
-          {conflict}
-        </Link>
-      </List.Item>
-    )
-  );
-
   return (
     <React.Fragment>
       <Title> Conflicts </Title>
-      <div className="content conflicts-list">{conflictList}</div>
+      <div className="content conflicts-list">
+        <List
+          size="large"
+          bordered
+          dataSource={allConflictsList}
+          renderItem={(conflict: string, index: number) => (
+            <List.Item key={index + conflict} className="conflicts-list__item">
+              <Link
+                to={RoutePaths.CompareSpecs.replace(
+                  RoutingParameters.ServiceName,
+                  conflict
+                ).replace(RoutingParameters.Version, conflict)}
+              >
+                <span className="conflict-title">{conflict}</span>
+              </Link>
+            </List.Item>
+          )}
+        />
+      </div>
     </React.Fragment>
   );
 };

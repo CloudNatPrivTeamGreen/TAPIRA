@@ -1,3 +1,7 @@
 .conflicts-list {
-    font-size: 20px;
+  &__item {
+    .conflict-title {
+      font-size: 20px;
+    }
+  }
 }
