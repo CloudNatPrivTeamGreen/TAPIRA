@@ -116,7 +116,7 @@ const PanelCallToActions = ({
           buttonText="Compare"
         />
         <Button
-          style={{ backgroundColor: 'greenyellow', borderColor: 'greenyellow' }}
+          style={{ backgroundColor: '#0084bd', borderColor: '#0084bd', color: "white" }}
         >
           <Link
             to={RoutesForTesting.EvolutionTestPage.replace(
