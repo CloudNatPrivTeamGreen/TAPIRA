@@ -9,6 +9,7 @@ import {
   RoutingParameters,
 } from '../../components/Router/router.config';
 import './index.scss';
+import { Utils } from '../../utils/utils';
 
 const { Title } = Typography;
 
@@ -35,7 +36,7 @@ const ConflictsPage = ({
       <Title> Conflicts </Title>
       <div className="content conflicts-list">
         <List
-          size="large"
+          size="default"
           bordered
           dataSource={allConflictsList}
           renderItem={(conflict: string, index: number) => (
@@ -46,7 +47,9 @@ const ConflictsPage = ({
                   conflict
                 ).replace(RoutingParameters.Version, conflict)}
               >
-                <span className="conflict-title">{conflict}</span>
+                <span className="conflict-title">
+                  {Utils.capitalizePropertyName(conflict)}
+                </span>
               </Link>
             </List.Item>
           )}
