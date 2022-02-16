@@ -47,9 +47,10 @@ class TapiraApiComparisonStore {
 
   @action
   async downloadProposedMerge(
-    context: ProposedMergeContext,
-    newApi: any,
-    oldApi: any
+      service_name: string,
+      context: ProposedMergeContext,
+      newApi: any,
+      oldApi: any
   ) {
     const result = await tapiraApiComparisonService.downloadProposedMerge(
       context,
@@ -57,7 +58,7 @@ class TapiraApiComparisonStore {
       oldApi
     );
     const blob = new Blob([result], { type: 'application/json' });
-    downloadFile(blob, context);
+    downloadFile(blob, service_name  + '_merge.json');
   }
 
   @action

@@ -38,6 +38,7 @@ const CompareSpecsPage = ({
 
   const onDownloadProposedMerge = useCallback(async () => {
     await tapiraApiComparisonStore.downloadProposedMerge(
+        serviceName ? serviceName : 'unknown',
         mergeContext,
       mergeContext == ProposedMergeContext.Comparison ? tapiraApiComparisonStore.uploadedApiSpec : tapiraApiProposalsStore.currentReconstructedSpec,
       tapiraApiSpecificationsStore.currentServiceSpecificationsVersion
