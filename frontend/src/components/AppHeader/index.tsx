@@ -1,4 +1,5 @@
 import './index.scss';
+import logo from './logo.png';
 
 import { ReactElement } from 'react';
 import { Link, Location } from 'react-router-dom';
@@ -27,7 +28,7 @@ const AppHeader = ({ location }: IAppHeaderProps): ReactElement => {
   return (
     <Header className="header">
       <div className="header__logo">
-        <span className="name">Tapira</span>
+        <img src={logo} alt="Logo" />
       </div>
     </Header>
   );
