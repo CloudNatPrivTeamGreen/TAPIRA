@@ -18,13 +18,16 @@ const SiderMenu = ({ location }: ISiderMenuProps): ReactElement => {
 
   const menuItems = appRouters
     .filter((item: RouteObject) => item.showInMenu)
-    .map((route: RouteObject) => (
-      <Menu.Item key={route.path} icon={<ApartmentOutlined />}>
-        <Link to={route.path}>
-          <span>{route.title}</span>
-        </Link>
-      </Menu.Item>
-    ));
+    .map((route: RouteObject) => {
+      const { icon: Icon } = route;
+      return (
+        <Menu.Item key={route.path} icon={<Icon />}>
+          <Link to={route.path}>
+            <span>{route.title}</span>
+          </Link>
+        </Menu.Item>
+      );
+    });
 
   return (
     <Sider width={300} className="site-layout-background">

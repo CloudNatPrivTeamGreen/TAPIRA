@@ -1,3 +1,5 @@
+import React from 'react';
+import { ApartmentOutlined, DeleteRowOutlined } from '@ant-design/icons';
 import LoadableComponent from '../Loadable';
 
 export enum RoutingParameters {
@@ -21,6 +23,7 @@ export interface RouteObject {
   component: any;
   showInMenu: boolean;
   permission?: string;
+  icon?: any;
 }
 
 export const appRouters: RouteObject[] = [
@@ -31,6 +34,7 @@ export const appRouters: RouteObject[] = [
     title: 'Services',
     component: LoadableComponent(() => import('../../scenes/ServicesListPage')),
     showInMenu: true,
+    icon: ApartmentOutlined,
   },
   {
     path: RoutePaths.Service,
@@ -65,6 +69,7 @@ export const appRouters: RouteObject[] = [
     title: 'Conflicts',
     component: LoadableComponent(() => import('../../scenes/ConflictsPage')),
     showInMenu: true,
+    icon: DeleteRowOutlined,
   },
 ];
 
