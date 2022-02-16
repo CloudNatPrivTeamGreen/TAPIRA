@@ -12,6 +12,7 @@ import {
   RoutingParameters,
 } from '../../components/Router/router.config';
 import VersionUploadContext from '../../contexts/version-upload-context';
+import { Utils } from '../../utils/utils';
 
 const { Title } = Typography;
 const { Panel } = Collapse;
@@ -60,7 +61,11 @@ const TapiraServicesList = (props: any) => {
   const panels = services.map((service: string, index: number) => (
     <Panel
       className="collapse__panel"
-      header={<span className="header--font-20">{service}</span>}
+      header={
+        <span className="header--font-20">
+          {Utils.capitalizePropertyName(service)}
+        </span>
+      }
       extra={<PanelCallToActions serviceName={service} />}
       key={index}
     >
