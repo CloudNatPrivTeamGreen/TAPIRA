@@ -9,51 +9,54 @@ import {
   RoutingParameters,
 } from '../../components/Router/router.config';
 import './index.scss';
+import { Utils } from '../../utils/utils';
 
 const { Title } = Typography;
-
 
 const ConflictsPage = ({
   tapiraApiProposalsStore,
 }: {
   [Stores.TapiraApiProposalsStore]: TapiraApiProposalsStore;
 }) => {
-
-  const [allConflictsList, setAllConflictsList] = useState<Array<string>>(new Array<string>());
+  const [allConflictsList, setAllConflictsList] = useState<Array<string>>(
+    new Array<string>()
+  );
 
   const getAllConflicts = useCallback(async () => {
     await tapiraApiProposalsStore.getAllConflicts();
-    setAllConflictsList(
-      tapiraApiProposalsStore.allConflictsList
-    );
+    setAllConflictsList(tapiraApiProposalsStore.allConflictsList);
   }, [tapiraApiProposalsStore]);
 
   useEffect(() => {
     getAllConflicts();
   }, [getAllConflicts]);
 
-
-  const conflictList = allConflictsList.map((conflict: string, index: number) => (
-    
-    <List.Item>
-      <Link to=
-        {RoutePaths.CompareSpecs.replace(
-          RoutingParameters.ServiceName, conflict
-        ).replace(RoutingParameters.Version, conflict)
-      }>
-        {conflict}
-      </Link>
-    </List.Item>
-
-  ));
-
-  return <React.Fragment>
-    <Title> Conflicts </Title>
-    <div className="content conflicts-list">
-      {conflictList}
-    </div>
-  </React.Fragment>;
-
+  return (
+    <React.Fragment>
+      <Title> Conflicts </Title>
+      <div className="content conflicts-list">
+        <List
+          size="default"
+          bordered
+          dataSource={allConflictsList}
+          renderItem={(conflict: string, index: number) => (
+            <List.Item key={index + conflict} className="conflicts-list__item">
+              <Link
+                to={RoutePaths.CompareSpecs.replace(
+                  RoutingParameters.ServiceName,
+                  conflict
+                ).replace(RoutingParameters.Version, conflict)}
+              >
+                <span className="conflict-title">
+                  {Utils.capitalizePropertyName(conflict)}
+                </span>
+              </Link>
+            </List.Item>
+          )}
+        />
+      </div>
+    </React.Fragment>
+  );
 };
 
 export default inject(Stores.TapiraApiProposalsStore)(observer(ConflictsPage));

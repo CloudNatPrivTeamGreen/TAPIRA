@@ -1,3 +1,8 @@
+import {
+  ApartmentOutlined,
+  DeleteRowOutlined,
+  BarsOutlined,
+} from '@ant-design/icons';
 import LoadableComponent from '../Loadable';
 
 export enum RoutingParameters {
@@ -10,7 +15,8 @@ export enum RoutePaths {
   Service = '/service/:serviceName/:version',
   CompareSpecs = '/compare/:serviceName',
   Evolution = '/evolution/:serviceName',
-  Conflicts = 'conflicts',
+  Conflicts = '/conflicts',
+  Reports = '/reports',
 }
 
 export interface RouteObject {
@@ -21,6 +27,7 @@ export interface RouteObject {
   component: any;
   showInMenu: boolean;
   permission?: string;
+  icon?: any;
 }
 
 export const appRouters: RouteObject[] = [
@@ -31,6 +38,7 @@ export const appRouters: RouteObject[] = [
     title: 'Services',
     component: LoadableComponent(() => import('../../scenes/ServicesListPage')),
     showInMenu: true,
+    icon: ApartmentOutlined,
   },
   {
     path: RoutePaths.Service,
@@ -65,6 +73,16 @@ export const appRouters: RouteObject[] = [
     title: 'Conflicts',
     component: LoadableComponent(() => import('../../scenes/ConflictsPage')),
     showInMenu: true,
+    icon: DeleteRowOutlined,
+  },
+  {
+    path: RoutePaths.Reports,
+    exact: true,
+    name: 'reports',
+    title: 'Reports',
+    component: LoadableComponent(() => import('../../scenes/ReportsPage')),
+    showInMenu: true,
+    icon: BarsOutlined,
   },
 ];
 
