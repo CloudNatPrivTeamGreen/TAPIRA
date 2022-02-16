@@ -4,6 +4,8 @@ import tapiraApiProposalsService from '../services/tapiraApiProposalsService';
 class TapiraApiProposalsStore {
   @observable
   allConflictsList!: string[];
+  @observable
+  currentReconstructedSpec: any;
 
   @action
   async deletePorposedSpecifications() {
@@ -22,6 +24,7 @@ class TapiraApiProposalsStore {
     const result = await tapiraApiProposalsService.getProposedSpecsForService(
       serviceName
     );
+    this.currentReconstructedSpec = result
   }
 
   @action

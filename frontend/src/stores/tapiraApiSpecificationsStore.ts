@@ -33,7 +33,7 @@ class TapiraApiSpecificationsStore {
     const result =
       await tapiraApiSpecificationsService.getCurrentVersionSpecForService(
         serviceName
-      );
+      ).catch(return {'api_spec': {}}});
     this.currentServiceSpecificationsVersion = result.api_spec;
   }
 

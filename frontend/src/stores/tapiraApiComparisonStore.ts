@@ -2,6 +2,7 @@ import { action, observable } from 'mobx';
 import { ProposedMergeContext } from '../services/tapiraApiComparisonService/comparison-api-dtos';
 import tapiraApiComparisonService from '../services/tapiraApiComparisonService';
 import { downloadFile } from '../utils/download-file-helper';
+import tapiraApiProposalsService from "../services/tapiraApiProposalsService";
 
 class TapiraApiComparisonStore {
   @observable
@@ -20,6 +21,14 @@ class TapiraApiComparisonStore {
       data
     );
     this.compareSpecResponse = result;
+  }
+
+  @action
+  async getConflictsForService(serviceName: string) {
+    const result = await tapiraApiProposalsService.getConflictsForService(
+        serviceName
+    );
+    this.compareSpecResponse = result
   }
 
   @action

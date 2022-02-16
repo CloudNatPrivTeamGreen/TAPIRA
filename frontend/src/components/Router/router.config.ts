@@ -8,12 +8,13 @@ import LoadableComponent from '../Loadable';
 export enum RoutingParameters {
   ServiceName = ':serviceName',
   Version = ':version',
+  Context = ':context'
 }
 
 export enum RoutePaths {
   Services = '/',
   Service = '/service/:serviceName/:version',
-  CompareSpecs = '/compare/:serviceName',
+  CompareSpecs = '/compare/:serviceName/:context',
   Evolution = '/evolution/:serviceName',
   Conflicts = '/conflicts',
   Reports = '/reports',
