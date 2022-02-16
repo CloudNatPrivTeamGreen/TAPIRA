@@ -1,5 +1,5 @@
 import { action, observable } from 'mobx';
-import testingService from '../services/testing-service';
+import testingService from '../services/testingService';
 import { EvolutionResponse } from '../services/tapiraApiComparisonService/comparison-api-dtos';
 
 /**
