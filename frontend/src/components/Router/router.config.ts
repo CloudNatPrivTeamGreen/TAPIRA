@@ -25,6 +25,7 @@ export enum RoutePaths {
  */
 export enum RoutesForTesting {
   EvolutionTestPage = '/evolution_test',
+  ReportsTestPage = '/reports_test',
 }
 
 export interface RouteObject {
@@ -83,15 +84,15 @@ export const appRouters: RouteObject[] = [
     showInMenu: true,
     icon: DeleteRowOutlined,
   },
-  {
-    path: RoutePaths.Reports,
-    exact: true,
-    name: 'reports',
-    title: 'Reports',
-    component: LoadableComponent(() => import('../../scenes/ReportsPage')),
-    showInMenu: true,
-    icon: BarsOutlined,
-  },
+  // {
+  //   path: RoutePaths.Reports,
+  //   exact: true,
+  //   name: 'reports',
+  //   title: 'Reports',
+  //   component: LoadableComponent(() => import('../../scenes/ReportsPage')),
+  //   showInMenu: true,
+  //   icon: BarsOutlined,
+  // },
 ];
 
 /**
@@ -108,6 +109,17 @@ export const testRouters: RouteObject[] = [
       () => import('../../scenes/pages_for_testing/EvolutionTestPage')
     ),
     showInMenu: false,
+  },
+  {
+    path: RoutesForTesting.ReportsTestPage,
+    exact: true,
+    name: 'report test',
+    title: 'Report Test',
+    component: LoadableComponent(
+      () => import('../../scenes/pages_for_testing/ReportsTestPage')
+    ),
+    showInMenu: true,
+    icon: BarsOutlined,
   },
 ];
 
