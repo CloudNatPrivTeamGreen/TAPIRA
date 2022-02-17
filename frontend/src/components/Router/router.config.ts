@@ -25,7 +25,7 @@ export enum RoutePaths {
  * When not required need to be taken out
  */
 export enum RoutesForTesting {
-  EvolutionTestPage = '/evolution_test',
+  EvolutionTestPage = '/evolution_test/:serviceName',
 }
 
 export interface RouteObject {

@@ -36,6 +36,9 @@ function createVersionOptions(
     );
 }
 
+const Capitalize = (str) => {
+    return str.charAt(0).toUpperCase() + str.slice(1);
+}
 
 const renderColumnData = (data: any, uniqueIdentifier: string) => {
   return (
@@ -180,15 +183,17 @@ const EvolutionTestPage = ({
                 parameterObj.align = 'center';
                 parameterObj.children = [
                     {
-                        title: 'Old',
+                        title: 'Old TIRA Annotations',
                         align: 'center',
+                        width: '50%',
                         dataIndex: `${endpoint}.${endpointType}.${requestInfoKey}.${parameter}.old`,
                         key: `${endpoint}.${endpointType}.${requestInfoKey}.${parameter}.old`,
                         render: (data: any) => renderColumnData(data, 'old'),
                     },
                   {
-                    title: 'New',
+                    title: 'New TIRA Annotations',
                     align: 'center',
+                      width: '50%',
                     dataIndex: `${endpoint}.${endpointType}.${requestInfoKey}.${parameter}.new`,
                     key: `${endpoint}.${endpointType}.${requestInfoKey}.${parameter}.new`,
                     render: (data: any) => renderColumnData(data, 'new'),
@@ -208,7 +213,7 @@ const EvolutionTestPage = ({
 
   return (
     <React.Fragment>
-      <Title level={1}>Evolution</Title>
+      <Title level={1}>Evolution - {Capitalize(serviceName)} service</Title>
         <div className="content specs-evolution">
             <Row>
                 <Col style={{textAlign: 'center'}} span={8} offset={2}>
