@@ -3,6 +3,7 @@ import './index.scss';
 import React, { useEffect, useCallback, useState } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Table, Typography, List } from 'antd';
+import { CheckCircleOutlined, CloseCircleOutlined } from '@ant-design/icons';
 import { Stores } from '../../../stores/storeIdentifier';
 import TestingStore from '../../../stores/testingStore';
 import {
@@ -14,6 +15,10 @@ import {
 
 const { Title } = Typography;
 
+const IconForBoolean = ({ present }: { present: boolean }) => {
+  return present ? <CheckCircleOutlined /> : <CloseCircleOutlined />;
+};
+
 const renderColumnData = (data: any, uniqueIdentifier: string) => {
   return (
     <List
@@ -24,10 +29,15 @@ const renderColumnData = (data: any, uniqueIdentifier: string) => {
       renderItem={(key, index) => (
         <List.Item key={key + index + uniqueIdentifier}>
           <strong>{key}: </strong>{' '}
-          {data[key] !== null && (
+          {data[key] !== null && typeof data[key] !== 'boolean' && (
             <span className="value-green">{data[key]}</span>
           )}
-          {data[key] === null && <span className="value-red">{data[key]}</span>}
+          {data[key] !== null && typeof data[key] === 'boolean' && (
+            <span className="value-green">
+              <IconForBoolean present={data[key]} />
+            </span>
+          )}
+          {data[key] === null && <span className="value-red">N/A</span>}
         </List.Item>
       )}
     />
