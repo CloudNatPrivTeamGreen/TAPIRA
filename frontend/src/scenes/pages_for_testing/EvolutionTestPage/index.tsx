@@ -27,7 +27,7 @@ const renderColumnData = (data: any, uniqueIdentifier: string) => {
           {data[key] !== null && (
             <span className="value-green">{data[key]}</span>
           )}
-          {data[key] === null && <span className="value-red">{data[key]}</span>}
+          {data[key] === null && <span className="value-red">N/A</span>}
         </List.Item>
       )}
     />
