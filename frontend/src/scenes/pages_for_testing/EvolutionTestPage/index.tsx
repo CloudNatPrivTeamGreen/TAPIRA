@@ -2,7 +2,7 @@ import './index.scss';
 
 import React, { useEffect, useCallback, useState } from 'react';
 import { inject, observer } from 'mobx-react';
-import { Table, Typography, List } from 'antd';
+import { Table, Typography, List, Tag } from 'antd';
 import { CheckCircleOutlined, CloseCircleOutlined } from '@ant-design/icons';
 import { Stores } from '../../../stores/storeIdentifier';
 import TestingStore from '../../../stores/testingStore';
@@ -37,7 +37,7 @@ const renderColumnData = (data: any, uniqueIdentifier: string) => {
               <IconForBoolean present={data[key]} />
             </span>
           )}
-          {data[key] === null && <span className="value-red">N/A</span>}
+          {data[key] === null && <Tag color="red">N/A</Tag>}
         </List.Item>
       )}
     />
