@@ -1,4 +1,4 @@
-#######################################################################################
+  #######################################################################################
 ## Global Values
 
 global:
@@ -37,7 +37,7 @@ global:
 apiclarity:
   ## Docker Image values.
   docker:
-    imageTag: "v0.8.0"
+    imageTag: "v0.6.1"
     imagePullPolicy: Always
 
 ## End of APIClarity Values
@@ -109,7 +109,7 @@ trafficSource:
 
     ## Docker Image values.
     docker:
-      imageTag: "v0.8.0"
+      imageTag: "latest"
       imagePullPolicy: Always
 
   kong:

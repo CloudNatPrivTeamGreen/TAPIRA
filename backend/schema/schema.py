@@ -163,3 +163,15 @@ class AllChangesComparisonSchema(Schema):
 
 class ComparisonParameterSchema(Schema):
     service = fields.Str(required=True)
+
+class ReportByTimestampPairRequestBody(Schema):
+    start_timestamp = fields.Str(required=True)
+    end_timestamp = fields.Str(required=True)
+
+class ReportSchema(Schema):
+    report = fields.Dict()
+    start_timestamp = fields.Str(required=True)
+    end_timestamp = fields.Str(required=True)
+
+class AllReportsSchema(Schema):
+    reports = fields.List(fields.Nested(ReportSchema(), default=None, allow_none=True), default=[], allow_none=True)

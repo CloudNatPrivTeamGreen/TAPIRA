@@ -21,6 +21,7 @@ from backend.api.proposal_api import blp as proposals_blp
 from backend.api.test_apis import test_blp
 from backend.api.merge_api import blp as merge_blp
 from backend.api.comparison_api import blp as comparison_blp
+from backend.api.report_api import blp as report_blp
 
 app.config.from_object(Config)
 api_app = Api(app)
@@ -33,4 +34,6 @@ api_app.register_blueprint(comparison_blp)
 print("Comparison Blueprint registered")
 api_app.register_blueprint(merge_blp)
 print("Merge Blueprint registered")
+api_app.register_blueprint(report_blp)
+print("Report Blueprint registered")
 api_app.register_blueprint(test_blp)
