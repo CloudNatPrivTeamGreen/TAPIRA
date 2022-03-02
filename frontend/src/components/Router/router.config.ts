@@ -8,12 +8,13 @@ import LoadableComponent from '../Loadable';
 export enum RoutingParameters {
   ServiceName = ':serviceName',
   Version = ':version',
+  Context = ':context',
 }
 
 export enum RoutePaths {
   Services = '/',
   Service = '/service/:serviceName/:version',
-  CompareSpecs = '/compare/:serviceName',
+  CompareSpecs = '/compare/:serviceName/:context',
   Evolution = '/evolution/:serviceName',
   Conflicts = '/conflicts',
   Reports = '/reports',
@@ -24,7 +25,7 @@ export enum RoutePaths {
  * When not required need to be taken out
  */
 export enum RoutesForTesting {
-  EvolutionTestPage = '/evolution_test',
+  EvolutionTestPage = '/evolution_test/:serviceName',
   ReportsTestPage = '/reports_test',
 }
 
@@ -84,15 +85,6 @@ export const appRouters: RouteObject[] = [
     showInMenu: true,
     icon: DeleteRowOutlined,
   },
-  // {
-  //   path: RoutePaths.Reports,
-  //   exact: true,
-  //   name: 'reports',
-  //   title: 'Reports',
-  //   component: LoadableComponent(() => import('../../scenes/ReportsPage')),
-  //   showInMenu: true,
-  //   icon: BarsOutlined,
-  // },
 ];
 
 /**

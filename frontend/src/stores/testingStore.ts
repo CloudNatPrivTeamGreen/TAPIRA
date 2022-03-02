@@ -24,7 +24,7 @@ class TestingStore {
   @action
   async getReportsForTesting() {
     const result = await testingService.getReportsForTesting();
-    this.reportsResponse = [result];
+    this.reportsResponse = result.reports;
   }
 }
 

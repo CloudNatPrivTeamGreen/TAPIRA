@@ -14,7 +14,7 @@ import { Utils } from '../../../utils/utils';
 const ApiDiffView = ({ api_diffs }: { api_diffs: IApiDiffs | undefined }) => {
   let displayList: string[] = [
     Utils.nameof<IApiDiffs>('new_endpoints'),
-    Utils.nameof<IApiDiffs>('missing_endpoints'),
+    Utils.nameof<IApiDiffs>('missing_endpoints')
   ];
 
   const listView = displayList.map((apiDiffKey: string) => (
@@ -60,7 +60,7 @@ const ApiDiffView = ({ api_diffs }: { api_diffs: IApiDiffs | undefined }) => {
 
   let changedOperations = (
     <React.Fragment>
-      <Divider orientation="left">Missing Endpoints</Divider>
+      <Divider orientation="left">Changed Operations</Divider>
       {!!api_diffs?.changed_operations?.length && (
         <List
           className="api-diff-view__changed-operations"

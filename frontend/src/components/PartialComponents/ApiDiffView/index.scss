@@ -1,11 +1,19 @@
 .api-diff-view {
   &__new_endpoints {
-    border-color: rgba(101, 231, 155, 0.8);
-    background-color: rgba(101, 231, 155, 0.8);
+    border-color: rgba(172, 209, 175, 0.8);
+    background-color: rgba(172, 209, 175, 0.8);
+    font-weight: bold;
   }
   &__missing_endpoints {
-    border-color: rgba(236, 63, 63, 0.8);
-    background-color: rgba(236, 63, 63, 0.8);
+    border-color: rgba(244, 113, 116, 0.8);
+    background-color: rgba(244, 113, 116, 0.8);
+    font-weight: bold;
+  }
+
+  &__changed-operations{
+    border-color: lightyellow;
+    background-color: lightyellow;
+    font-weight: bold;
   }
   .diff-check-circle,
   .diff-close-circle {

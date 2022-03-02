@@ -77,7 +77,7 @@ const ReportsTestPage = ({
       className="collapse__panel"
       header={
         <span className="header--font-20">
-          {report.timestamp.toLocaleString()}
+          {report.timestamp?.toLocaleString()}
         </span>
       }
       key={index}
