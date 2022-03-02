@@ -5,6 +5,11 @@ APICLARITY_HOST = os.getenv("api_clarity_host", default="192.168.49.2")
 APICLARITY_PORT = os.getenv("api_clarity_port", default=32231)
 APICLARITY_URL = f'http://{APICLARITY_HOST}:{APICLARITY_PORT}'
 
+
+APICLARITY_API_HOST = os.getenv("api_clarity_API_host", default="localhost")
+APICLARITY_API_PORT = os.getenv("api_clarity_API_port", default=9999)
+APICLARITY_API_URL = f'http://{APICLARITY_API_HOST}:{APICLARITY_API_PORT}'
+
 APIDIFF_HOST = os.getenv("apidiff_host", default="192.168.49.2")
 APIDIFF_PORT = os.getenv("apidiff_port", default=32230)
 APIDIFF_URL = f'http://{APIDIFF_HOST}:{APIDIFF_PORT}'

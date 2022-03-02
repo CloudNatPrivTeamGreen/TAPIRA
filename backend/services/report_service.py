@@ -1,4 +1,6 @@
 from backend.repository import report_repo
+from backend.services import apiclarity_service
+
 
 def get_report_by_timestamps(start_timestamp, end_timestamp):
     print(report_repo.find_report_by_timestamps(start_timestamp,end_timestamp))
@@ -15,3 +17,6 @@ def delete_report_by_timestamps(start_timestamp, end_timestamp):
 def get_all_reports():
     print(report_repo.find_all_reports())
     return [{"report": {}, "start_timestamp":"MOCK", "end_timestamp": "MOCK"}]
+
+def test():
+    return apiclarity_service.test()

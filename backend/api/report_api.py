@@ -64,3 +64,9 @@ class AllReports(MethodView):
                 "reports": report_service.get_all_reports()
             }
         )
+
+@blp.route("/report/test")
+class Test(MethodView):
+    @blp.response(200)
+    def get(self):
+        return report_service.test()
