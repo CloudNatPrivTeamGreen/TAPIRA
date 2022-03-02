@@ -24,7 +24,7 @@ spec:
       serviceAccountName: tapira-sa
       containers:
         - name: tapira-api-containers
-          image: milamber97/api_server_test:0.0.1
+          image: milamber97/api_server_test:0.0.2
           imagePullPolicy: Always
           ports:
             - containerPort: 5000
