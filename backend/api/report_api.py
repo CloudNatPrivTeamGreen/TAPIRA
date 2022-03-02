@@ -4,8 +4,6 @@ from flask_smorest import Blueprint, abort
 
 from backend.schema import schema
 from backend.services import report_service
-# from backend.services import collection_service as s
-# from backend.services import conflicts_service
 
 blp = Blueprint("report_api",
                 "report_api",
@@ -64,9 +62,15 @@ class AllReports(MethodView):
                 "reports": report_service.get_all_reports()
             }
         )
+    
+    def delete(self):
+        """ Delete all reports
+        """
+
+        return report_service.delete_all_reports()
 
 @blp.route("/report/test")
 class Test(MethodView):
     @blp.response(200)
     def get(self):
-        return report_service.test()
+        return report_service.create_report_with_timestamps_hardcode("2022-03-01T15:33:38Z", "2022-03-02T15:33:38Z")

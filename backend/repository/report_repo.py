@@ -14,8 +14,8 @@ def get_db():
 
     return g.db
 
-def create_report(report, start_timestamp, end_timestamp):
-    return get_db().reports.insert_one({"report": report, "start_timestamp": start_timestamp, "end_timestamp": end_timestamp})
+def create_report(report):
+    return get_db().reports.insert_one(report)
 
 def find_report_by_timestamps(start_timestamp, end_timestamp):
     return get_db().reports.find_one({"start_timestamp": start_timestamp, "end_timestamp": end_timestamp})
@@ -28,3 +28,7 @@ def delete_report_by_timestamps(start_timestamp, end_timestamp):
 
 def find_all_reports():
     return get_db().reports.find({})
+
+def delete_all_reports():
+    deleted_entries = get_db().reports.delete_many({})
+    return f'Deleted {deleted_entries.deleted_count} proposals'

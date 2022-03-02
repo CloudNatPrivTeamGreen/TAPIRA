@@ -169,7 +169,8 @@ class ReportByTimestampPairRequestBody(Schema):
     end_timestamp = fields.Str(required=True)
 
 class ReportSchema(Schema):
-    report = fields.Dict()
+    data = fields.Dict()
+    total_calls = fields.Int()
     start_timestamp = fields.Str(required=True)
     end_timestamp = fields.Str(required=True)
 

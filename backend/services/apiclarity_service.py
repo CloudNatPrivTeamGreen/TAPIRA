@@ -6,13 +6,13 @@ from backend import config
 
 # def get_hit_count_for_endpoint(first_spec, second_spec):
 
-def test():
-    print(config.APICLARITY_API_URL)
+def get_hit_count(path_parts, method, start_timestamp, end_timestamp):
     response = requests.get(url=f'{config.APICLARITY_API_URL}/api/apiEvents',
                             params={
-                                "startTime": "2022-03-01T11:43:06.156Z",
-                                "endTime": "2022-03-02T12:43:06.156Z",
-                                "method[is]": "DELETE",
+                                "startTime": start_timestamp,
+                                "endTime": end_timestamp,
+                                "method[is]": method.upper(),
+                                "path[contains]": path_parts,
                                 "showNonApi": "false",
                                 "page": 1,
                                 "pageSize": 1,
@@ -20,7 +20,4 @@ def test():
                                 "sortDir": "DESC"
                                 }
                             )
-
-    print(response.json())
     return response.json()
-

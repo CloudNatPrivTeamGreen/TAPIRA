@@ -23,7 +23,8 @@ spec:
     spec:
       containers:
         - name: tapira-api-containers
-          image: milamber97/tapira:latest
+          imagePullPolicy: Never
+          image: tapira:latest
           ports:
             - containerPort: 5000
           env:
@@ -48,4 +49,8 @@ spec:
             - name: apidiff_host
               value: apidiff-nodeport
             - name: apidiff_port
+              value: "8080"
+            - name: api_clarity_API_host
+              value: apiclarity-apiclarity.apiclarity
+            - name: api_clarity_API_port
               value: "8080"
