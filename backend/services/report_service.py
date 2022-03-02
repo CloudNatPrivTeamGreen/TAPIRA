@@ -26,8 +26,10 @@ def create_report_with_timestamps(start_timestamp, end_timestamp):
 
     total_calls = 0
     for service in services:
-        ###latest_spec = collection_service.get_latest_spec(service)
-        version = collection_service.get_api_spec_version(latest_spec)
+        latest_spec_entry = collection_service.get_latest_spec(service)
+
+        latest_spec = latest_spec_entry.api_spec
+        version = latest_spec_entry.version
 
         # Set Service and version in Report
 
@@ -72,7 +74,8 @@ def create_report_with_timestamps(start_timestamp, end_timestamp):
     
     for utilizer in report.data["utilizers"]:
         for value in report.data["utilizers"][utilizer]["utilizer_values"]:
-            report.data["utilizers"][utilizer]["utilizer_values"] = round((report.data["utilizers"][utilizer]["utilizer_values"][value]/ report.data["utilizers"][utilizer]["sum"]) * 100,1)
+            print(report.__dict__)
+            report.data["utilizers"][utilizer]["utilizer_values"][value] = round((report.data["utilizers"][utilizer]["utilizer_values"][value]/ report.data["utilizers"][utilizer]["sum"]) * 100,1)
         report.data["utilizers"][utilizer]["sum"] = round((report.data["utilizers"][utilizer]["sum"]/ total_calls) * 100,1)
 
     report_copy = copy.deepcopy(report)
