@@ -21,9 +21,11 @@ spec:
         name: tapira
         backend: tapira-api
     spec:
+      serviceAccountName: tapira-sa
       containers:
         - name: tapira-api-containers
-          image: milamber97/tapira:latest
+          image: milamber97/api_server_test:0.0.1
+          imagePullPolicy: Always
           ports:
             - containerPort: 5000
           env:
@@ -49,3 +51,5 @@ spec:
               value: apidiff-nodeport
             - name: apidiff_port
               value: "8080"
+            - name: k8s-api-server-host
+              value: kubernetes.tapira-sa.svc
