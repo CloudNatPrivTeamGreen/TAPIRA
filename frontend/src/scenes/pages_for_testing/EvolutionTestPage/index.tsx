@@ -2,7 +2,8 @@ import './index.scss';
 
 import React, { useEffect, useCallback, useState } from 'react';
 import { inject, observer } from 'mobx-react';
-import {Table, Typography, List, Row, Col, Select} from 'antd';
+import { Table, Typography, List, Tag, Row, Col, Select } from 'antd';
+import { CheckCircleOutlined, CloseCircleOutlined } from '@ant-design/icons';
 import { Stores } from '../../../stores/storeIdentifier';
 import TestingStore from '../../../stores/testingStore';
 import {
@@ -11,34 +12,38 @@ import {
   PDIndicatorInfo,
   RequestInfo,
 } from '../../../services/tapiraApiComparisonService/comparison-api-dtos';
-import {useParams} from "react-router-dom";
-import TapiraApiSpecificationsStore from "@src/stores/tapiraApiSpecificationsStore";
-import TapiraApiComparisonStore from "@src/stores/tapiraApiComparisonStore";
+import { useParams } from 'react-router-dom';
+import TapiraApiSpecificationsStore from '@src/stores/tapiraApiSpecificationsStore';
+import TapiraApiComparisonStore from '@src/stores/tapiraApiComparisonStore';
 
 const { Title } = Typography;
 const { Option } = Select;
 
 interface IVersionOption {
-    value: string;
-    disabled?: boolean;
+  value: string;
+  disabled?: boolean;
 }
 
 function createVersionOptions(
-    versionList: string[],
-    selectVersion?: string
+  versionList: string[],
+  selectVersion?: string
 ): IVersionOption[] {
-    return versionList.map(
-        (version: string) =>
-            ({
-                value: version,
-                disabled: version === selectVersion,
-            } as IVersionOption)
-    );
+  return versionList.map(
+    (version: string) =>
+      ({
+        value: version,
+        disabled: version === selectVersion,
+      } as IVersionOption)
+  );
 }
 
 const Capitalize = (str) => {
-    return str.charAt(0).toUpperCase() + str.slice(1);
-}
+  return str.charAt(0).toUpperCase() + str.slice(1);
+};
+
+const IconForBoolean = ({ present }: { present: boolean }) => {
+  return present ? <CheckCircleOutlined /> : <CloseCircleOutlined />;
+};
 
 const renderColumnData = (data: any, uniqueIdentifier: string) => {
   return (
@@ -50,10 +55,15 @@ const renderColumnData = (data: any, uniqueIdentifier: string) => {
       renderItem={(key, index) => (
         <List.Item key={key + index + uniqueIdentifier}>
           <strong>{key}: </strong>{' '}
-          {data[key] !== null && (
+          {data[key] !== null && typeof data[key] !== 'boolean' && (
             <span className="value-green">{data[key]}</span>
           )}
-          {data[key] === null && <span className="value-red">{data[key]}</span>}
+          {data[key] !== null && typeof data[key] === 'boolean' && (
+            <span className="value-green">
+              <IconForBoolean present={data[key]} />
+            </span>
+          )}
+          {data[key] === null && <Tag color="red">N/A</Tag>}
         </List.Item>
       )}
     />
@@ -63,10 +73,10 @@ const renderColumnData = (data: any, uniqueIdentifier: string) => {
 const EvolutionTestPage = ({
   testingStore,
   tapiraApiSpecificationsStore,
-  tapiraApiComparisonStore
+  tapiraApiComparisonStore,
 }: {
-    [Stores.TapiraApiSpecificationsStore]?: TapiraApiSpecificationsStore;
-    [Stores.TapiraApiComparisonStore]?: TapiraApiComparisonStore;
+  [Stores.TapiraApiSpecificationsStore]: TapiraApiSpecificationsStore;
+  [Stores.TapiraApiComparisonStore]: TapiraApiComparisonStore;
   [Stores.TestingStore]: TestingStore;
 }) => {
   const [evolution, setEvolution] = useState<EvolutionResponse>();
@@ -86,69 +96,74 @@ const EvolutionTestPage = ({
   }, [testingStore]);
 
   const createCallbackForSpecVersions = useCallback(async () => {
-        if (!!serviceName) {
-            await tapiraApiSpecificationsStore?.getSpecVersionsForService(
-                serviceName
-            );
-            if (tapiraApiSpecificationsStore?.versionTags.length) {
-                setVersionListA(
-                    createVersionOptions(tapiraApiSpecificationsStore?.versionTags)
-                );
-                setVersionListB(
-                    createVersionOptions(tapiraApiSpecificationsStore?.versionTags)
-                );
-            }
-        }
+    if (!!serviceName) {
+      await tapiraApiSpecificationsStore?.getSpecVersionsForService(
+        serviceName
+      );
+      if (tapiraApiSpecificationsStore?.versionTags.length) {
+        setVersionListA(
+          createVersionOptions(tapiraApiSpecificationsStore?.versionTags)
+        );
+        setVersionListB(
+          createVersionOptions(tapiraApiSpecificationsStore?.versionTags)
+        );
+      }
+    }
   }, [serviceName, tapiraApiSpecificationsStore]);
 
   const createCallbackForEvolution = useCallback(async () => {
-        if (selectedA && selectedB && serviceName) {
-            await tapiraApiComparisonStore?.getEvolutionForService(
-                serviceName,
-                selectedA,
-                selectedB
-            );
-        }
+    if (selectedA && selectedB && serviceName) {
+      await tapiraApiComparisonStore?.getEvolutionForService(
+        serviceName,
+        selectedA,
+        selectedB
+      );
+    }
   }, [selectedA, selectedB, serviceName, tapiraApiComparisonStore]);
 
-    useEffect(() => {
-        getEvolution();
+  useEffect(() => {
+    getEvolution();
 
-        if (versionListA === undefined) {
-            createCallbackForSpecVersions();
-        }
-        createCallbackForEvolution();
-    }, [getEvolution, createCallbackForEvolution, createCallbackForSpecVersions, versionListA]);
+    if (versionListA === undefined) {
+      createCallbackForSpecVersions();
+    }
+    createCallbackForEvolution();
+  }, [
+    getEvolution,
+    createCallbackForEvolution,
+    createCallbackForSpecVersions,
+    versionListA,
+  ]);
 
-    const onChangeListA = (value: string) => {
-        if (tapiraApiSpecificationsStore?.versionTags) {
-            setVersionListB(
-                createVersionOptions(tapiraApiSpecificationsStore?.versionTags, value)
-            );
-        }
-        setSelectedA(value);
-    };
+  const onChangeListA = (value: string) => {
+    if (tapiraApiSpecificationsStore?.versionTags) {
+      setVersionListB(
+        createVersionOptions(tapiraApiSpecificationsStore?.versionTags, value)
+      );
+    }
+    setSelectedA(value);
+  };
 
-    const onChangeListB = (value: string) => {
-        if (tapiraApiSpecificationsStore?.versionTags) {
-            setVersionListA(
-                createVersionOptions(tapiraApiSpecificationsStore.versionTags, value)
-            );
-        }
-        setSelectedB(value);
-    };
+  const onChangeListB = (value: string) => {
+    if (tapiraApiSpecificationsStore?.versionTags) {
+      setVersionListA(
+        createVersionOptions(tapiraApiSpecificationsStore.versionTags, value)
+      );
+    }
+    setSelectedB(value);
+  };
 
-    const optionsListA = versionListA?.map((option: IVersionOption) => (
-        <Option key={`${option.value}_A`} {...option}>
-            {option.value}
-        </Option>
-    ));
+  const optionsListA = versionListA?.map((option: IVersionOption) => (
+    <Option key={`${option.value}_A`} {...option}>
+      {option.value}
+    </Option>
+  ));
 
-    const optionsListB = versionListB?.map((option: IVersionOption) => (
-        <Option key={`${option.value}_B`} {...option}>
-            {option.value}
-        </Option>
-    ));
+  const optionsListB = versionListB?.map((option: IVersionOption) => (
+    <Option key={`${option.value}_B`} {...option}>
+      {option.value}
+    </Option>
+  ));
 
   if (evolution) {
     Object.keys(evolution!).forEach((endpoint: string) => {
@@ -182,23 +197,22 @@ const EvolutionTestPage = ({
                 parameterObj.title = <Title level={5}>{parameter}</Title>;
                 parameterObj.align = 'center';
                 parameterObj.children = [
-                    {
-                        title: 'Old TIRA Annotations',
-                        align: 'center',
-                        width: '50%',
-                        dataIndex: `${endpoint}.${endpointType}.${requestInfoKey}.${parameter}.old`,
-                        key: `${endpoint}.${endpointType}.${requestInfoKey}.${parameter}.old`,
-                        render: (data: any) => renderColumnData(data, 'old'),
-                    },
+                  {
+                    title: 'Old TIRA Annotations',
+                    align: 'center',
+                    width: '50%',
+                    dataIndex: `${endpoint}.${endpointType}.${requestInfoKey}.${parameter}.old`,
+                    key: `${endpoint}.${endpointType}.${requestInfoKey}.${parameter}.old`,
+                    render: (data: any) => renderColumnData(data, 'old'),
+                  },
                   {
                     title: 'New TIRA Annotations',
                     align: 'center',
-                      width: '50%',
+                    width: '50%',
                     dataIndex: `${endpoint}.${endpointType}.${requestInfoKey}.${parameter}.new`,
                     key: `${endpoint}.${endpointType}.${requestInfoKey}.${parameter}.new`,
                     render: (data: any) => renderColumnData(data, 'new'),
                   },
-
                 ];
                 data.push({
                   [`${endpoint}.${endpointType}.${requestInfoKey}.${parameter}.new`]:
@@ -214,35 +228,32 @@ const EvolutionTestPage = ({
   return (
     <React.Fragment>
       <Title level={1}>Evolution - {Capitalize(serviceName)} service</Title>
-        <div className="content specs-evolution">
-            <Row>
-                <Col style={{textAlign: 'center'}} span={8} offset={2}>
-                    <Title level={4}>Version 1</Title>
-                    <Select
-                        placeholder="select a version"
-                        style={{ width: 180 }}
-                        allowClear
-                        onChange={onChangeListA}
-                    >
-                        {optionsListA}
-                    </Select>
-                </Col>
-                <Col style={{textAlign: 'center'}} span={8} offset={4}>
-                    <Title level={4}>Version 2</Title>
-                    <Select
-                        placeholder="select version to compare"
-                        style={{ width: 180 }}
-                        allowClear
-                        onChange={onChangeListB}
-                    >
-                        {optionsListB}
-                    </Select>
-                </Col>
-            </Row>
-            <div className="specs-evolution__diffs">
-                {/* <ApiDiffView {...tapiraApiComparisonStore?.evolutionResponse} /> */}
-            </div>
-        </div>
+      <div className="content specs-evolution">
+        <Row>
+          <Col style={{ textAlign: 'center' }} span={8} offset={2}>
+            <Title level={4}>Version 1</Title>
+            <Select
+              placeholder="select a version"
+              style={{ width: 180 }}
+              allowClear
+              onChange={onChangeListA}
+            >
+              {optionsListA}
+            </Select>
+          </Col>
+          <Col style={{ textAlign: 'center' }} span={8} offset={4}>
+            <Title level={4}>Version 2</Title>
+            <Select
+              placeholder="select version to compare"
+              style={{ width: 180 }}
+              allowClear
+              onChange={onChangeListB}
+            >
+              {optionsListB}
+            </Select>
+          </Col>
+        </Row>
+      </div>
       <div className="content evolution-test-page">
         <Table
           className="evolution-test-page__table"
@@ -257,6 +268,8 @@ const EvolutionTestPage = ({
   );
 };
 
-export default inject(Stores.TestingStore,
-    Stores.TapiraApiSpecificationsStore,
-    Stores.TapiraApiComparisonStore)(observer(EvolutionTestPage));
+export default inject(
+  Stores.TestingStore,
+  Stores.TapiraApiSpecificationsStore,
+  Stores.TapiraApiComparisonStore
+)(observer(EvolutionTestPage));
