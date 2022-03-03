@@ -173,6 +173,7 @@ class ReportSchema(Schema):
     total_calls = fields.Int()
     start_timestamp = fields.Str(required=True)
     end_timestamp = fields.Str(required=True)
+    services = fields.Dict()
 
 class AllReportsSchema(Schema):
     reports = fields.List(fields.Nested(ReportSchema(), default=None, allow_none=True), default=[], allow_none=True)
