@@ -1,6 +1,9 @@
 from backend.services import apidiff_service as s
 
 def get_proposed_merge_for_validation(old_api, new_api):
+    if not old_api:
+        return new_api
+
     api_diff_reponse = s.get_all_diffs_for_two_openapi_specs("", old_api, new_api)
     api_diff = api_diff_reponse["api_diffs"]
 
@@ -13,6 +16,9 @@ def get_proposed_merge_for_validation(old_api, new_api):
 
 
 def get_proposed_merge_for_comparison(old_api, new_api):
+    if not old_api:
+        return new_api
+
     api_diff_reponse = s.get_all_diffs_for_two_openapi_specs("", old_api, new_api)
     api_diff = api_diff_reponse["api_diffs"]
     tira_diff = api_diff_reponse["tira_diffs"]

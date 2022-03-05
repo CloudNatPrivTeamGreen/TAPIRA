@@ -13,6 +13,7 @@ import {
   RoutesForTesting,
 } from '../../../components/Router/router.config';
 import VersionUploadContext from '../../../contexts/version-upload-context';
+import {ProposedMergeContext} from "../../../services/tapiraApiComparisonService/comparison-api-dtos";
 
 const createFileFormData = (file: File): FormData => {
   const blob = new Blob([file], {
@@ -79,7 +80,7 @@ const PanelCallToActions = ({
         RoutePaths.CompareSpecs.replace(
           RoutingParameters.ServiceName,
           serviceName
-        )
+        ).replace(RoutingParameters.Context, ProposedMergeContext.Comparison)
       );
       message.success(
         'The specs to compare with the actual version was uploaded successfully'
@@ -115,7 +116,7 @@ const PanelCallToActions = ({
           buttonText="Compare"
         />
         <Button
-          style={{ backgroundColor: 'greenyellow', borderColor: 'greenyellow' }}
+          style={{ backgroundColor: '#0084bd', borderColor: '#0084bd', color: "white" }}
         >
           <Link
             to={RoutesForTesting.EvolutionTestPage.replace(

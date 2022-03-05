@@ -5,6 +5,7 @@ import {
 } from '../services/tapiraApiComparisonService/comparison-api-dtos';
 import tapiraApiComparisonService from '../services/tapiraApiComparisonService';
 import { downloadFile } from '../utils/download-file-helper';
+import tapiraApiProposalsService from "../services/tapiraApiProposalsService";
 
 class TapiraApiComparisonStore {
   @observable
@@ -26,6 +27,14 @@ class TapiraApiComparisonStore {
   }
 
   @action
+  async getConflictsForService(serviceName: string) {
+    const result = await tapiraApiProposalsService.getConflictsForService(
+        serviceName
+    );
+    this.compareSpecResponse = result
+  }
+
+  @action
   async getEvolutionForService(
     serviceName: string,
     oldVersion: string,
@@ -41,9 +50,10 @@ class TapiraApiComparisonStore {
 
   @action
   async downloadProposedMerge(
-    context: ProposedMergeContext,
-    newApi: any,
-    oldApi: any
+      service_name: string,
+      context: ProposedMergeContext,
+      newApi: any,
+      oldApi: any
   ) {
     const result = await tapiraApiComparisonService.downloadProposedMerge(
       context,
@@ -51,7 +61,7 @@ class TapiraApiComparisonStore {
       oldApi
     );
     const blob = new Blob([result], { type: 'application/json' });
-    downloadFile(blob, context);
+    downloadFile(blob, service_name  + '_merge.json');
   }
 
   @action

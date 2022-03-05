@@ -9,6 +9,11 @@ class TestingService {
 
     return result.data;
   }
+
+  public async getReportsForTesting() {
+    const result = await http.get('report_test', { params: { case: 'case1' } });
+    return result.data;
+  }
 }
 
 export default new TestingService();
