@@ -24,8 +24,7 @@ spec:
       serviceAccountName: tapira-sa
       containers:
         - name: tapira-api-containers
-          image: milamber97/api_server_test:0.0.2
-          imagePullPolicy: Always
+          image: milamber97/tapira:latest
           ports:
             - containerPort: 5000
           env:
@@ -43,9 +42,9 @@ spec:
               value: mongo-nodeport-svc
             - name: mongodb_port
               value: "27017"
-            - name: api_clarity_host
+            - name: api_clarity_postgrest_host
               value: postgrest.apiclarity #<<service_name>>.<<namespace>>
-            - name: api_clarity_port
+            - name: api_clarity_postgrest_port
               value: "3000"
             - name: apidiff_host
               value: apidiff-nodeport
@@ -53,3 +52,7 @@ spec:
               value: "8080"
             - name: k8s-api-server-host
               value: kubernetes.tapira-sa.svc
+            - name: api_clarity_host
+              value: apiclarity-apiclarity.apiclarity
+            - name: api_clarity_port
+              value: "8080"

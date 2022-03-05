@@ -1,6 +1,9 @@
+from enum import Enum
+
 from flask_rest_api.fields import Upload
 from marshmallow import Schema, fields
 from marshmallow import post_load
+from marshmallow_enum import EnumField
 
 from backend.models.models import ApiDiffs
 
@@ -128,8 +131,9 @@ class ChangedSchemaTiraAnnotation(Schema):
 class ApiDiffTiraSchema(Schema):
     new_global_tira_annotation = fields.List(fields.Dict(), default=[], allow_none=True)
     missing_global_tira_annotation = fields.List(fields.Dict(), default=[], allow_none=True)
-    changed_global_tira_annotation = fields.List(fields.Nested(ChangedGlobalTiraAnnotationSchema, default=None, allow_none=True), default=[],
-                                                  allow_none=True)
+    changed_global_tira_annotation = fields.List(
+        fields.Nested(ChangedGlobalTiraAnnotationSchema, default=None, allow_none=True), default=[],
+        allow_none=True)
 
     new_schema_tira_annotations = fields.List(fields.Nested(SchemaTiraAnnotation), default=[], allow_none=True)
 
@@ -146,6 +150,7 @@ class ProposedMergeRequestBodySchema(Schema):
     old_api = fields.Dict()
     new_api = fields.Dict()
 
+
 class ProposedMergeResponseSchema(Schema):
     proposed_merge = fields.Dict()
 
@@ -161,5 +166,27 @@ class AllChangesComparisonSchema(Schema):
     api_diffs = fields.Nested(ApiDiffsResponseSchema, default=None, allow_none=True)
     tira_diffs = fields.Nested(ApiDiffTiraSchema, default=None, allow_none=True)
 
+
 class ComparisonParameterSchema(Schema):
     service = fields.Str(required=True)
+
+
+class RecordStatusEnum(Enum):
+    ON = 1
+    OFF = 2
+
+
+class RecordStatus(Schema):
+    record_status = EnumField(RecordStatusEnum)
+
+
+class ReportSchema(Schema):
+    report = fields.Dict()
+    total_calls = fields.Int()
+    start_timestamp = fields.Str(required=True)
+    end_timestamp = fields.Str(required=True)
+    services = fields.Dict()
+
+
+class AllReportsSchema(Schema):
+    reports = fields.List(fields.Nested(ReportSchema(), default=None, allow_none=True), default=[], allow_none=True)
