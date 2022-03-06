@@ -1,7 +1,8 @@
 import React, { useEffect, useCallback, useState } from 'react';
 import { inject, observer } from 'mobx-react';
-import { Typography, Collapse, List, Tag } from 'antd';
-import * as _ from 'lodash';
+import { Typography, Collapse, List } from 'antd';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import _ from 'lodash';
 import { Stores } from '../../../stores/storeIdentifier';
 import TestingStore from '../../../stores/testingStore';
 import {

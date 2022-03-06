@@ -27,8 +27,8 @@ export interface IApiDiffs {
 }
 
 export enum ProposedMergeContext {
-  Validation = 'validation',
-  Comparison = 'comparison',
+  validation = 'validation',
+  comparison = 'comparison',
 }
 
 export interface IProposedMergeBody {

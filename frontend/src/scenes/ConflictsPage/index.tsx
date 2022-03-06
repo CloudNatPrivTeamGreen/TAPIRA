@@ -10,30 +10,21 @@ import {
 } from '../../components/Router/router.config';
 import './index.scss';
 import { Utils } from '../../utils/utils';
-import {ProposedMergeContext} from "../../services/tapiraApiComparisonService/comparison-api-dtos";
-import TapiraApiComparisonStore from "../../stores/tapiraApiComparisonStore";
+import { ProposedMergeContext } from '../../services/tapiraApiComparisonService/comparison-api-dtos';
 
 const { Title } = Typography;
 
 const ConflictsPage = ({
-  tapiraApiProposalsStore, tapiraApiComparisonStore
+  tapiraApiProposalsStore,
 }: {
   [Stores.TapiraApiProposalsStore]: TapiraApiProposalsStore;
-  [Stores.TapiraApiComparisonStore]: TapiraApiComparisonStore;
 }) => {
-  const [allConflictsList, setAllConflictsList] = useState<Array<string>>(
-    new Array<string>()
-  );
+  const [allConflictsList, setAllConflictsList] = useState<string[]>([]);
 
   const getAllConflicts = useCallback(async () => {
     await tapiraApiProposalsStore.getAllConflicts();
     setAllConflictsList(tapiraApiProposalsStore.allConflictsList);
   }, [tapiraApiProposalsStore]);
-
-  const getConflictAndReconstructedSpec = async (serviceName) => {
-      await tapiraApiComparisonStore.getConflictsForService(serviceName);
-      await tapiraApiProposalsStore.getProposedSpecsForService(serviceName)
-  }
 
   useEffect(() => {
     getAllConflicts();
@@ -53,9 +44,10 @@ const ConflictsPage = ({
                 to={RoutePaths.CompareSpecs.replace(
                   RoutingParameters.ServiceName,
                   conflict
-                ).replace(RoutingParameters.Version, conflict).replace(RoutingParameters.Context, ProposedMergeContext.Validation)}
-
-                onClick={(event) => getConflictAndReconstructedSpec(conflict)}
+                ).replace(
+                  RoutingParameters.Context,
+                  ProposedMergeContext.validation
+                )}
               >
                 <span className="conflict-title">
                   {Utils.capitalizePropertyName(conflict)}
@@ -69,4 +61,4 @@ const ConflictsPage = ({
   );
 };
 
-export default inject(Stores.TapiraApiProposalsStore, Stores.TapiraApiComparisonStore)(observer(ConflictsPage));
+export default inject(Stores.TapiraApiProposalsStore)(observer(ConflictsPage));
