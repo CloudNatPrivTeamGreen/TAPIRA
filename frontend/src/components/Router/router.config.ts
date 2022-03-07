@@ -25,7 +25,6 @@ export enum RoutePaths {
  * When not required need to be taken out
  */
 export enum RoutesForTesting {
-  EvolutionTestPage = '/evolution_test/:serviceName',
   ReportsTestPage = '/reports_test',
 }
 
@@ -92,16 +91,6 @@ export const appRouters: RouteObject[] = [
  * When not required need to be taken out
  */
 export const testRouters: RouteObject[] = [
-  {
-    path: RoutesForTesting.EvolutionTestPage,
-    exact: true,
-    name: 'evolution test',
-    title: 'Evolution Test',
-    component: LoadableComponent(
-      () => import('../../scenes/pages_for_testing/EvolutionTestPage')
-    ),
-    showInMenu: false,
-  },
   {
     path: RoutesForTesting.ReportsTestPage,
     exact: true,
