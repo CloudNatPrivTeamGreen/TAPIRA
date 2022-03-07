@@ -10,7 +10,6 @@ import TapiraApiComparisonStore from '../../../stores/tapiraApiComparisonStore';
 import {
   RoutePaths,
   RoutingParameters,
-  RoutesForTesting,
 } from '../../../components/Router/router.config';
 import VersionUploadContext from '../../../contexts/version-upload-context';
 import { ProposedMergeContext } from '../../../services/tapiraApiComparisonService/comparison-api-dtos';
@@ -123,7 +122,7 @@ const PanelCallToActions = ({
           }}
         >
           <Link
-            to={RoutesForTesting.EvolutionTestPage.replace(
+            to={RoutePaths.Evolution.replace(
               RoutingParameters.ServiceName,
               serviceName
             )}
