@@ -25,7 +25,7 @@ class ApiClaritySpecs(MethodView):
         """Fetch provided and reconstructed specifications from APIClarity and save them in database.
         ---
         """
-        response = requests.get(f'{config.APICLARITY_URL}/api_inventory')
+        response = requests.get(f'{config.APICLARITY_POSTGREST_URL}/api_inventory')
         apiclarity_specs = json.loads(response.content.decode('utf-8'))
         reconstructed_services = []
         s.extract_api_specs(apiclarity_specs, reconstructed_services)

@@ -69,3 +69,15 @@ class ApiDiffs:
         self.new_endpoints = new_endpoints
         self.missing_endpoints = missing_endpoints
         self.changed_operations = changed_operations
+
+
+class Report:
+    def __init__(self, start_timestamp, end_timestamp):
+        self.report = {
+            "purposes": {},
+            "utilizers": {}
+        }
+        self.services = {}
+        self.total_calls = 0
+        self.start_timestamp = start_timestamp
+        self.end_timestamp = end_timestamp

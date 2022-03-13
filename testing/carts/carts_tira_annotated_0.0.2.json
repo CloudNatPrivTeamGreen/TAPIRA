@@ -193,20 +193,7 @@
 				},
 				"purposes": {
 					"yappl":
-						{
-						"id": 1,
-						"preference": [
-							{
-								"rule": {
-									"purpose": {
-										"permitted": ["View cart"]
-									},
-									"valid_from":"2022-01-09T00:00:00.000Z",
-									"exp_date":"2050-01-01T00:00:00.000Z"
-								}
-							}
-						]
-						}
+					"{ \"id\":123, \"preference\":[ { \"rule\":{ \"purpose\":{ \"permitted\": [ \"FitnessData Sharing\", \"Health Insurance Bonus Program\" ], \"excluded\": [] }, \"utilizer\":{ \"permitted\": [], \"excluded\": [] }, \"transformation\": [], \"valid_from\":\"2021-06-09T00:00:00.000Z\", \"exp_date\":\"0000-01-01T00:00:00.000Z\" } } ] }"
 				},
 				"profiling": {
           			"reason": "Customer profile based on bought products."
