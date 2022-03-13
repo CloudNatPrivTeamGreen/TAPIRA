@@ -15,6 +15,8 @@ APIDIFF_HOST = os.getenv("apidiff_host", default=KUBERNETES_CLUSTER_BASE_HOST)
 APIDIFF_PORT = os.getenv("apidiff_port", default=32230)
 APIDIFF_URL = f'http://{APIDIFF_HOST}:{APIDIFF_PORT}'
 
+K8S_API_SERVER_URL = os.getenv("k8s_api_server_url", default="https://kubernetes.default")
+
 mongodb_host = os.getenv("mongodb_host", default=KUBERNETES_CLUSTER_BASE_HOST)
 mongodb_port = os.getenv("mongodb_port", default=32000)
 mongodb_user = os.getenv("MONGODB_USER", default="adminuser")

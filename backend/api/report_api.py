@@ -1,8 +1,10 @@
 from flask import jsonify
 from flask.views import MethodView
 from flask_smorest import Blueprint
-from kubernetes import client, config as kub_config
+from kubernetes import client
+from kubernetes import config as kub_config
 
+from backend import config
 from backend.schema import schema
 from backend.schema.schema import RecordStatusEnum
 from backend.services import report_service
@@ -14,9 +16,10 @@ blp = Blueprint("report_api",
                 url_prefix="/api",
                 description="Collection and maintenance of specifications"
                 )
-kub_config.load_config()
-core_api = client.CoreV1Api()
-apps_api = client.AppsV1Api()
+
+kub_config.load_incluster_config()
+core_api = client.CoreV1Api(client.ApiClient())
+apps_api = client.AppsV1Api(client.ApiClient())
 
 
 @blp.route("/recording")
@@ -27,6 +30,7 @@ class ApiServerTest(MethodView):
         """Scale ApiClarity up or down and generate a report
         ---
         """
+
         record_status = query_params["record_status"]
         if record_status == RecordStatusEnum.ON:
             apps_api.patch_namespaced_deployment_scale("apiclarity-apiclarity", "apiclarity", {"spec": {"replicas": 1}})
@@ -66,13 +70,8 @@ class ApiServerTest(MethodView):
         """Fetch provided and reconstructed specifications from APIClarity and save them in database.
         ---
         """
-        print("test")
-        kub_config.load_config()
-
-        print("test1")
-        v1 = client.CoreV1Api()
         print("Listing pods with their IPs:")
-        pods = v1.list_namespaced_pod("sock-shop", watch=False)
+        pods = core_api.list_namespaced_pod("sock-shop", watch=False)
         for i in pods.items:
             print("%s\t%s\t%s" % (i.status.pod_ip, i.metadata.namespace, i.metadata.name))
         print(f'First pod:{pods.items[0]}')
