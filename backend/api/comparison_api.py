@@ -1,13 +1,9 @@
-import json
-
-from flask import request
 from flask.views import MethodView
 from flask_smorest import Blueprint, abort
 
-from backend.api import presentation_cases
 from backend.schema import schema
-from backend.services import comparison_service as s
 from backend.services import apidiff_service as diff_service
+from backend.services import comparison_service as s
 
 blp = Blueprint("comparison_api",
                 "comparison_api",
@@ -56,33 +52,3 @@ class Comparison(MethodView):
         new_version = query_params["new_version"]
         return schema.AllChangesComparisonSchema().dump(
             diff_service.get_all_diffs_for_two_versions(service_name, old_version, new_version))
-
-
-@blp.route("/evolution_test")
-class ComparisonTest(MethodView):
-
-    @blp.arguments(schema.EvolutionQueryParamsSchema, location="query")
-    def get(self, query_params):
-        """Compare api and tira diffs between two version of specifications for a service.
-
-        Compare api and tira diffs between two version of specifications for a service.
-        ---
-        """
-        service_name = query_params["service"]
-        old_version = query_params["old_version"]
-        new_version = query_params["new_version"]
-
-        return presentation_cases.evolution[f'{service_name}_{old_version}_{new_version}']
-
-
-@blp.route("/report_test")
-class ReportTest(MethodView):
-
-    def get(self):
-        """Compare api and tira diffs between two version of specifications for a service.
-
-        Compare api and tira diffs between two version of specifications for a service.
-        ---
-        """
-
-        return {"reports": presentation_cases.reports}
