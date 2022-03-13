@@ -8,6 +8,7 @@ from backend.api import presentation_cases
 from backend.schema import schema
 from backend.services import comparison_service as s
 from backend.services import apidiff_service as diff_service
+from backend.utils import get_schema_path, get_tira_changes, merge_path_entries
 
 blp = Blueprint("comparison_api",
                 "comparison_api",
@@ -54,9 +55,49 @@ class Comparison(MethodView):
         service_name = query_params["service"]
         old_version = query_params["old_version"]
         new_version = query_params["new_version"]
-        return schema.AllChangesComparisonSchema().dump(
+        changes = schema.AllChangesComparisonSchema().dump(
             diff_service.get_all_diffs_for_two_versions(service_name, old_version, new_version))
 
+        response = {}
+
+        # schema TIRA changes
+        changed_schema_json = {}
+        for entry in changes.tira_diffs.changed_schema_tira_annotations:
+            changed_schema_json[entry["schemaName"]] = get_tira_changes(entry, type="schema_changed")
+
+        missing_schema_json = {}
+        for entry in changes.tira_diffs.missing_schema_tira_annotations:
+            missing_schema_json[entry["schemaName"]] = get_tira_changes(entry["schemaTiraAnnotation"], type="missing")
+        
+        new_schema_json = {}
+        for entry in changes.tira_diffs.new_schema_tira_annotations:
+            new_schema_json[entry["schemaName"]] = get_tira_changes(entry["schemaTiraAnnotation"], type="new")
+
+        response["schemas"] = {"changed": changed_schema_json, "missing": missing_schema_json, "new": new_schema_json}
+
+        # global TIRA changes
+        entries = {"oldGlobalTiraAnnotation": 
+                    {obj["key"]: obj["oldGlobalTiraAnnotation"] for obj in changes.tira_diffs.changed_global_tira_annotations},
+                   "newGlobalTiraAnnotation":
+                    {obj["key"]: obj["newGlobalTiraAnnotation"] for obj in changes.tira_diffs.changed_global_tira_annotations}}
+        changed_global_json = get_tira_changes(entries, type="global_changed")
+
+        entries = {k: v for global_obj in changes.tira_diffs.missing_global_tira_annotations for k, v in global_obj.items()}
+        missing_global_json = get_tira_changes(entries, type="missing")
+        
+        entries = {k: v for global_obj in changes.tira_diffs.new_global_tira_annotations for k, v in global_obj.items()}
+        new_global_json = get_tira_changes(entries, type="new")
+
+        response["global"] = {"changed": changed_global_json, "missing": missing_global_json, "new": new_global_json}
+
+        # paths of schema TIRA changes
+        paths = []
+        new_and_changed_schemas = list(changed_schema_json.keys()) + list(new_schema_json.keys())
+        for entry in new_and_changed_schemas:
+            paths.append(get_schema_path(entry, new_version["paths"]))
+        for entry in list(missing_global_json.keys()):
+            paths.append(get_schema_path(entry, new_version["paths"], old_version["paths"], missing=True))
+        response["paths"] = merge_path_entries(paths)
 
 @blp.route("/evolution_test")
 class ComparisonTest(MethodView):
