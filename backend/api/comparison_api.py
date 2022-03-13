@@ -95,9 +95,10 @@ class Comparison(MethodView):
         new_and_changed_schemas = list(changed_schema_json.keys()) + list(new_schema_json.keys())
         for entry in new_and_changed_schemas:
             paths.append(get_schema_path(entry, new_version["paths"]))
-        for entry in list(missing_global_json.keys()):
+        for entry in list(missing_schema_json.keys()):
             paths.append(get_schema_path(entry, new_version["paths"], old_version["paths"], missing=True))
         response["paths"] = merge_path_entries(paths)
+        return response
 
 @blp.route("/evolution_test")
 class ComparisonTest(MethodView):
