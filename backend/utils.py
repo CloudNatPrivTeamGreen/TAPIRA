@@ -1,10 +1,5 @@
-from ctypes import Union
 import json
-from logging import exception
-from msilib.schema import Error
-from typing import List, Tuple
-
-from jsondiff import diff
+from typing import List, Tuple, Union
 
 from version_parser import Version
 
