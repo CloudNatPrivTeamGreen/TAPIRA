@@ -163,6 +163,11 @@ class AllChangesComparisonSchema(Schema):
     api_diffs = fields.Nested(ApiDiffsResponseSchema, default=None, allow_none=True)
     tira_diffs = fields.Nested(ApiDiffTiraSchema, default=None, allow_none=True)
 
+class TiraChangesComparisonSchema(Schema):
+    service = fields.Dict(required=True)
+    api_diffs = fields.Dict(required=True)
+    tira_diffs = fields.Dict(required=True)
+
 
 class ComparisonParameterSchema(Schema):
     service = fields.Str(required=True)
