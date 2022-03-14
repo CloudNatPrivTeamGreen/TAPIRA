@@ -45,7 +45,7 @@ class Upload(MethodView):
 class Comparison(MethodView):
 
     @blp.arguments(schema.EvolutionQueryParamsSchema, location="query")
-    @blp.response(200, schema.AllChangesComparisonSchema)
+    @blp.response(200, schema.TiraChangesComparisonSchema)
     def get(self, query_params):
         """Compare api and tira diffs between two version of specifications for a service.
 
