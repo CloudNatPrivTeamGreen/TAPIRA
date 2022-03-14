@@ -68,7 +68,7 @@ def transform_spec(spec):
 def get_tira_changes(annotation: dict, type: str) -> dict:
     new_annotation = {}
     old_annotation = {}
-
+    
     if "changed" in type:
         if type == "schema_changed":
             unfiltered_new_annotation = annotation["newSchemaTiraAnnotation"]
@@ -81,36 +81,52 @@ def get_tira_changes(annotation: dict, type: str) -> dict:
                 for key_, val_ in val.items():
                     if key_ == "review_frequency":
                         for key__, val__ in val_.items():
-                            try:
-                                if unfiltered_new_annotation[key][key_][key__] != unfiltered_old_annotation[key][key_][key__]:
-                                    new_annotation[key + "." + key_ + "." + key__] = None
-                                    old_annotation[key + "." + key_ + "." + key__] = val__
-                            except KeyError:
-                                new_annotation[key + "." + key_ + "." + key__] = None
-                                old_annotation[key + "." + key_ + "." + key__] = val__
+                            if key in unfiltered_old_annotation and key_ in unfiltered_old_annotation[key] and key__ in unfiltered_old_annotation[key][key_]:
+                                old_val = unfiltered_old_annotation[key][key_][key__]
+                                try:
+                                    if  val__ != old_val:
+                                        new_annotation[key + "." + key_ + "." + key__] = val__
+                                        old_annotation[key + "." + key_ + "." + key__] = old_val
+                                except KeyError:
+                                    new_annotation[key + "." + key_ + "." + key__] = val__
+                                    old_annotation[key + "." + key_ + "." + key__] = old_val
+                            else:
+                                new_annotation[key + "." + key_ + "." + key__] = val__
+                                old_annotation[key + "." + key_ + "." + key__] = None
                     else:
-                        try:
-                            if unfiltered_new_annotation[key][key_] != unfiltered_old_annotation[key][key_]:
-                                new_annotation[key + "." + key_] = None
-                                old_annotation[key + "." + key_] = val_
-                        except KeyError:
-                            new_annotation[key + "." + key_] = None
-                            old_annotation[key + "." + key_] = val_
+                        if key in unfiltered_old_annotation and key_ in unfiltered_old_annotation[key]:
+                            old_val = unfiltered_old_annotation[key][key_]
+                            try:
+                                if val_ != old_val:
+                                    new_annotation[key + "." + key_] = val_
+                                    old_annotation[key + "." + key_] = old_val
+                            except KeyError:
+                                new_annotation[key + "." + key_] = val_
+                                old_annotation[key + "." + key_] = old_val
+                        else:
+                            new_annotation[key + "." + key_] = val_
+                            old_annotation[key + "." + key_] = None
             elif key == "purposes":
                 if "yappl" in val:
-                    if unfiltered_new_annotation[key]["yappl"] != unfiltered_old_annotation[key]["yappl"]:
-                        new_annotation[key + "." + "yappl"] = None
-                        old_annotation[key + "." + "yappl"] = json.dumps(val["yappl"])
+                    old_val = unfiltered_old_annotation[key]["yappl"]
+                    if val["yappl"] != old_val:
+                        new_annotation[key + "." + "yappl"] = json.dumps(val["yappl"])
+                        old_annotation[key + "." + "yappl"] = old_val
             else:
                 try:
                     for key_, val_ in val.items():
-                        try:
-                            if unfiltered_new_annotation[key][key_] != unfiltered_old_annotation[key][key_]:
-                                new_annotation[key + "." + key_] = None
-                                old_annotation[key + "." + key_] = val_
-                        except KeyError:
-                            new_annotation[key + "." + key_] = None
-                            old_annotation[key + "." + key_] = val_
+                        if key in unfiltered_old_annotation and key_ in unfiltered_old_annotation[key]:
+                            old_val = unfiltered_old_annotation[key][key_]
+                            try:
+                                if val_ != old_val:
+                                    new_annotation[key + "." + key_] = val_
+                                    old_annotation[key + "." + key_] = old_val
+                            except KeyError:
+                                new_annotation[key + "." + key_] = val_
+                                old_annotation[key + "." + key_] = old_val
+                        else:
+                            new_annotation[key + "." + key_] = val_
+                            old_annotation[key + "." + key_] = None
                 except AttributeError:
                     print(key, val, unfiltered_new_annotation)
 
