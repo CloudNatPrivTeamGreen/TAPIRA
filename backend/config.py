@@ -1,18 +1,27 @@
 import os
 
+KUBERNETES_CLUSTER_BASE_HOST = "192.168.49.2"
+LOCALHOST = "localhost"
 
-APICLARITY_HOST = os.getenv("api_clarity_host", default="192.168.49.2")
-APICLARITY_PORT = os.getenv("api_clarity_port", default=32231)
-APICLARITY_URL = f'http://{APICLARITY_HOST}:{APICLARITY_PORT}'
+APICLARITY_POSTGREST_HOST = os.getenv("api_clarity_postgrest_host", default=KUBERNETES_CLUSTER_BASE_HOST)
+APICLARITY_POSTGREST_PORT = os.getenv("api_clarity_postgrest_port", default=32231)
+APICLARITY_POSTGREST_URL = f'http://{APICLARITY_POSTGREST_HOST}:{APICLARITY_POSTGREST_PORT}'
 
-APIDIFF_HOST = os.getenv("apidiff_host", default="192.168.49.2")
+APICLARITY_API_HOST = os.getenv("api_clarity_host", default=KUBERNETES_CLUSTER_BASE_HOST)
+APICLARITY_API_PORT = os.getenv("api_clarity_port", default=31999)
+APICLARITY_API_URL = f'http://{APICLARITY_API_HOST}:{APICLARITY_API_PORT}'
+
+APIDIFF_HOST = os.getenv("apidiff_host", default=KUBERNETES_CLUSTER_BASE_HOST)
 APIDIFF_PORT = os.getenv("apidiff_port", default=32230)
 APIDIFF_URL = f'http://{APIDIFF_HOST}:{APIDIFF_PORT}'
 
-mongodb_host = os.getenv("mongodb_host", default="192.168.49.2")
+K8S_API_SERVER_URL = os.getenv("k8s_api_server_url", default="https://kubernetes.default")
+
+mongodb_host = os.getenv("mongodb_host", default=KUBERNETES_CLUSTER_BASE_HOST)
 mongodb_port = os.getenv("mongodb_port", default=32000)
 mongodb_user = os.getenv("MONGODB_USER", default="adminuser")
 mongodb_password = os.getenv("MONGODB_PASSWORD", default="password123")
+
 
 class Config:
     """Default configuration"""

@@ -1,13 +1,9 @@
-import json
-
-from flask import request
 from flask.views import MethodView
 from flask_smorest import Blueprint, abort
 
-from backend.api import presentation_cases
 from backend.schema import schema
-from backend.services import comparison_service as s
 from backend.services import apidiff_service as diff_service
+from backend.services import comparison_service as s
 from backend.utils import get_schema_path, get_tira_changes, merge_path_entries
 
 blp = Blueprint("comparison_api",

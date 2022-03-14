@@ -1,3 +1,6 @@
 PROVIDED_SPEC_TYPE = "provided"
 RECONSTRUCTED_SPEC_TYPE = "reconstructed"
 
+OPENAPI_V2 = 2
+OPENAPI_V3 = 3
+

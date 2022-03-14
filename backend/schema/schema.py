@@ -1,6 +1,9 @@
+from enum import Enum
+
 from flask_rest_api.fields import Upload
 from marshmallow import Schema, fields
 from marshmallow import post_load
+from marshmallow_enum import EnumField
 
 from backend.models.models import ApiDiffs
 
@@ -173,5 +176,22 @@ class ComparisonParameterSchema(Schema):
     service = fields.Str(required=True)
 
 
-class PresentationTestSchema(Schema):
-    case = fields.Str(required=True)
+class RecordStatusEnum(Enum):
+    ON = 1
+    OFF = 2
+
+
+class RecordStatus(Schema):
+    record_status = EnumField(RecordStatusEnum)
+
+
+class ReportSchema(Schema):
+    report = fields.Dict()
+    total_calls = fields.Int()
+    start_timestamp = fields.Str(required=True)
+    end_timestamp = fields.Str(required=True)
+    services = fields.Dict()
+
+
+class AllReportsSchema(Schema):
+    reports = fields.List(fields.Nested(ReportSchema(), default=None, allow_none=True), default=[], allow_none=True)
