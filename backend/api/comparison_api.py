@@ -60,32 +60,33 @@ class Comparison(MethodView):
         # schema TIRA changes
         changed_schema_json = {}
         for entry in changes["tira_diffs"]["changed_schema_tira_annotations"]:
-            changed_schema_json[entry["schemaName"]] = get_tira_changes(entry, type="schema_changed")
+            changed_schema_json[entry["schema_name"]] = get_tira_changes(entry, type="schema_changed")
 
         missing_schema_json = {}
         for entry in changes["tira_diffs"]["missing_schema_tira_annotations"]:
-            missing_schema_json[entry["schemaName"]] = get_tira_changes(entry["schemaTiraAnnotation"], type="missing")
+            missing_schema_json[entry["schema_name"]] = get_tira_changes(entry["schema_tira_annotation"], type="missing")
         
         new_schema_json = {}
         for entry in changes["tira_diffs"]["new_schema_tira_annotations"]:
-            new_schema_json[entry["schemaName"]] = get_tira_changes(entry["schemaTiraAnnotation"], type="new")
+            new_schema_json[entry["schema_name"]] = get_tira_changes(entry["schema_tira_annotation"], type="new")
+
+
 
         response["schemas"] = {"changed": changed_schema_json, "missing": missing_schema_json, "new": new_schema_json}
-
         # global TIRA changes
-        entries = {"oldGlobalTiraAnnotation": 
-                    {obj["key"]: obj["oldGlobalTiraAnnotation"] for obj in changes["tira_diffs"]["changed_global_tira_annotations"]},
-                   "newGlobalTiraAnnotation":
-                    {obj["key"]: obj["newGlobalTiraAnnotation"] for obj in changes["tira_diffs"]["changed_global_tira_annotations"]}}
+        entries = {"old_global_tira_annotation":
+                    {obj["key"]: obj["old_global_tira_annotation"] for obj in changes["tira_diffs"]["changed_global_tira_annotation"]},
+                   "new_global_tira_annotation":
+                    {obj["key"]: obj["new_global_tira_annotation"] for obj in changes["tira_diffs"]["changed_global_tira_annotation"]}}
         changed_global_json = get_tira_changes(entries, type="global_changed")
 
-        entries = {k: v for global_obj in changes["tira_diffs"]["missing_global_tira_annotations"] for k, v in global_obj.items()}
+        entries = {k: v for global_obj in changes["tira_diffs"]["missing_global_tira_annotation"] for k, v in global_obj.items()}
         missing_global_json = get_tira_changes(entries, type="missing")
         
-        entries = {k: v for global_obj in changes["tira_diffs"]["new_global_tira_annotations"] for k, v in global_obj.items()}
+        entries = {k: v for global_obj in changes["tira_diffs"]["new_global_tira_annotation"] for k, v in global_obj.items()}
         new_global_json = get_tira_changes(entries, type="new")
 
-        response["global"] = {"changed": changed_global_json, "missing": missing_global_json, "new": new_global_json}
+        response["global_changes"] = {"changed": changed_global_json, "missing": missing_global_json, "new": new_global_json}
 
         # paths of schema TIRA changes
         paths = []
@@ -98,32 +99,3 @@ class Comparison(MethodView):
             paths.append(get_schema_path(entry, new_spec["paths"], old_spec["paths"], missing=True))
         response["paths"] = merge_path_entries(paths)
         return response
-
-@blp.route("/evolution_test")
-class ComparisonTest(MethodView):
-
-    @blp.arguments(schema.EvolutionQueryParamsSchema, location="query")
-    def get(self, query_params):
-        """Compare api and tira diffs between two version of specifications for a service.
-
-        Compare api and tira diffs between two version of specifications for a service.
-        ---
-        """
-        service_name = query_params["service"]
-        old_version = query_params["old_version"]
-        new_version = query_params["new_version"]
-
-        return presentation_cases.evolution[f'{service_name}_{old_version}_{new_version}']
-
-
-@blp.route("/report_test")
-class ReportTest(MethodView):
-
-    def get(self):
-        """Compare api and tira diffs between two version of specifications for a service.
-
-        Compare api and tira diffs between two version of specifications for a service.
-        ---
-        """
-
-        return {"reports": presentation_cases.reports}

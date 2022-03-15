@@ -167,9 +167,10 @@ class AllChangesComparisonSchema(Schema):
     tira_diffs = fields.Nested(ApiDiffTiraSchema, default=None, allow_none=True)
 
 class TiraChangesComparisonSchema(Schema):
-    service = fields.Dict(required=True)
-    api_diffs = fields.Dict(required=True)
-    tira_diffs = fields.Dict(required=True)
+    schemas = fields.Dict()
+    global_changes = fields.Dict()
+    paths = fields.Dict()
+
 
 
 class ComparisonParameterSchema(Schema):
