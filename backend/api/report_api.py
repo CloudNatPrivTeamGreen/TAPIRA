@@ -17,7 +17,7 @@ blp = Blueprint("report_api",
                 description="Collection and maintenance of specifications"
                 )
 
-kub_config.load_incluster_config()
+kub_config.load_config()
 core_api = client.CoreV1Api(client.ApiClient())
 apps_api = client.AppsV1Api(client.ApiClient())
 

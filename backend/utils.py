@@ -168,7 +168,7 @@ def get_tira_changes(annotation: dict, type: str) -> dict:
     return {"old": old_annotation, "new": new_annotation}
 
 
-def schema_path_walk(schema_name: str, oas: dict, entry: str) -> Tuple(bool, dict):
+def schema_path_walk(schema_name: str, oas: dict, entry: str) -> Tuple[bool, dict]:
     for key, val in oas.items():
         if type(val) is dict:
             found, path = schema_path_walk(schema_name, val, entry)
