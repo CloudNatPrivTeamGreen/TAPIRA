@@ -58,30 +58,30 @@ class Comparison(MethodView):
 
         # schema TIRA changes
         changed_schema_json = {}
-        for entry in changes.tira_diffs.changed_schema_tira_annotations:
+        for entry in changes["tira_diffs"]["changed_schema_tira_annotations"]:
             changed_schema_json[entry["schemaName"]] = get_tira_changes(entry, type="schema_changed")
 
         missing_schema_json = {}
-        for entry in changes.tira_diffs.missing_schema_tira_annotations:
+        for entry in changes["tira_diffs"]["missing_schema_tira_annotations"]:
             missing_schema_json[entry["schemaName"]] = get_tira_changes(entry["schemaTiraAnnotation"], type="missing")
         
         new_schema_json = {}
-        for entry in changes.tira_diffs.new_schema_tira_annotations:
+        for entry in changes["tira_diffs"]["new_schema_tira_annotations"]:
             new_schema_json[entry["schemaName"]] = get_tira_changes(entry["schemaTiraAnnotation"], type="new")
 
         response["schemas"] = {"changed": changed_schema_json, "missing": missing_schema_json, "new": new_schema_json}
 
         # global TIRA changes
         entries = {"oldGlobalTiraAnnotation": 
-                    {obj["key"]: obj["oldGlobalTiraAnnotation"] for obj in changes.tira_diffs.changed_global_tira_annotations},
+                    {obj["key"]: obj["oldGlobalTiraAnnotation"] for obj in changes["tira_diffs"]["changed_global_tira_annotations"]},
                    "newGlobalTiraAnnotation":
-                    {obj["key"]: obj["newGlobalTiraAnnotation"] for obj in changes.tira_diffs.changed_global_tira_annotations}}
+                    {obj["key"]: obj["newGlobalTiraAnnotation"] for obj in changes["tira_diffs"]["changed_global_tira_annotations"]}}
         changed_global_json = get_tira_changes(entries, type="global_changed")
 
-        entries = {k: v for global_obj in changes.tira_diffs.missing_global_tira_annotations for k, v in global_obj.items()}
+        entries = {k: v for global_obj in changes["tira_diffs"]["missing_global_tira_annotations"] for k, v in global_obj.items()}
         missing_global_json = get_tira_changes(entries, type="missing")
         
-        entries = {k: v for global_obj in changes.tira_diffs.new_global_tira_annotations for k, v in global_obj.items()}
+        entries = {k: v for global_obj in changes["tira_diffs"]["new_global_tira_annotations"] for k, v in global_obj.items()}
         new_global_json = get_tira_changes(entries, type="new")
 
         response["global"] = {"changed": changed_global_json, "missing": missing_global_json, "new": new_global_json}
