@@ -4,6 +4,7 @@ from flask_smorest import Blueprint, abort
 from backend.schema import schema
 from backend.services import apidiff_service as diff_service
 from backend.services import comparison_service as s
+from backend.services import get_single_spec_by_name_and_version as get_spec
 from backend.utils import get_schema_path, get_tira_changes, merge_path_entries
 
 blp = Blueprint("comparison_api",
@@ -89,10 +90,12 @@ class Comparison(MethodView):
         # paths of schema TIRA changes
         paths = []
         new_and_changed_schemas = list(changed_schema_json.keys()) + list(new_schema_json.keys())
+        new_spec = get_spec(service_name, new_version)["api_spec"]
+        old_spec = get_spec(service_name, old_version)["api_spec"]
         for entry in new_and_changed_schemas:
-            paths.append(get_schema_path(entry, new_version["paths"]))
+            paths.append(get_schema_path(entry, new_spec["paths"]))
         for entry in list(missing_schema_json.keys()):
-            paths.append(get_schema_path(entry, new_version["paths"], old_version["paths"], missing=True))
+            paths.append(get_schema_path(entry, new_spec["paths"], old_spec["paths"], missing=True))
         response["paths"] = merge_path_entries(paths)
         return response
 
