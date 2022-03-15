@@ -66,11 +66,11 @@ def get_tira_changes(annotation: dict, type: str) -> dict:
     
     if "changed" in type:
         if type == "schema_changed":
-            unfiltered_new_annotation = annotation["newSchemaTiraAnnotation"]
-            unfiltered_old_annotation = annotation["oldSchemaTiraAnnotation"]
+            unfiltered_new_annotation = annotation["new_schema_tira_annotation"]
+            unfiltered_old_annotation = annotation["old_schema_tira_annotation"]
         if type == "global_changed":            
-            unfiltered_new_annotation = annotation["newGlobalTiraAnnotation"]
-            unfiltered_old_annotation = annotation["oldGlobalTiraAnnotation"]
+            unfiltered_new_annotation = annotation["new_global_tira_annotation"]
+            unfiltered_old_annotation = annotation["old_global_tira_annotation"]
         for key, val in unfiltered_new_annotation.items():
             if key == "retention-time":
                 for key_, val_ in val.items():
