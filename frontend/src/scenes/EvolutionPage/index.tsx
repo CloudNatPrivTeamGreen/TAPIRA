@@ -230,6 +230,7 @@ const EvolutionTestPage = ({
               title="Fetch Evolution"
               type="primary"
               onClick={createCallbackForEvolution}
+              disabled={!(selectedA && selectedB)}
             >
               Fetch Evolution
             </Button>
