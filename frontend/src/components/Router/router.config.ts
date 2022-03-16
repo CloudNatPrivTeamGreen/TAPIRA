@@ -25,7 +25,6 @@ export enum RoutePaths {
  * When not required need to be taken out
  */
 export enum RoutesForTesting {
-  EvolutionTestPage = '/evolution_test/:serviceName',
   ReportsTestPage = '/reports_test',
 }
 
@@ -85,34 +84,15 @@ export const appRouters: RouteObject[] = [
     showInMenu: true,
     icon: DeleteRowOutlined,
   },
-];
-
-/**
- * testRouters are just for the purpose of testing
- * When not required need to be taken out
- */
-export const testRouters: RouteObject[] = [
   {
-    path: RoutesForTesting.EvolutionTestPage,
+    path: RoutePaths.Reports,
     exact: true,
-    name: 'evolution test',
-    title: 'Evolution Test',
-    component: LoadableComponent(
-      () => import('../../scenes/pages_for_testing/EvolutionTestPage')
-    ),
-    showInMenu: false,
-  },
-  {
-    path: RoutesForTesting.ReportsTestPage,
-    exact: true,
-    name: 'report test',
-    title: 'Report Test',
-    component: LoadableComponent(
-      () => import('../../scenes/pages_for_testing/ReportsTestPage')
-    ),
+    name: 'reports',
+    title: 'Reports',
+    component: LoadableComponent(() => import('../../scenes/ReportsPage')),
     showInMenu: true,
     icon: BarsOutlined,
   },
 ];
 
-export const routers = [...appRouters, ...testRouters];
+export const routers = [...appRouters];

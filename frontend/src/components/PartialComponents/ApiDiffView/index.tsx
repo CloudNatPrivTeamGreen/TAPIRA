@@ -8,13 +8,13 @@ import {
   INewEndpoint,
   IMissingEndpoint,
   IChangedOperation,
-} from '../../../services/tapiraApiComparisonService/comparison-api-dtos';
+} from '../../../services/tapiraApiComparisonService/comparison-api';
 import { Utils } from '../../../utils/utils';
 
 const ApiDiffView = ({ api_diffs }: { api_diffs: IApiDiffs | undefined }) => {
   let displayList: string[] = [
     Utils.nameof<IApiDiffs>('new_endpoints'),
-    Utils.nameof<IApiDiffs>('missing_endpoints')
+    Utils.nameof<IApiDiffs>('missing_endpoints'),
   ];
 
   const listView = displayList.map((apiDiffKey: string) => (

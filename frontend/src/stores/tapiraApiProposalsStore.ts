@@ -24,7 +24,7 @@ class TapiraApiProposalsStore {
     const result = await tapiraApiProposalsService.getProposedSpecsForService(
       serviceName
     );
-    this.currentReconstructedSpec = result["proposal"]
+    this.currentReconstructedSpec = result.proposal;
   }
 
   @action

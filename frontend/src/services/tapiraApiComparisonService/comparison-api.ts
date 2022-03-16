@@ -27,8 +27,8 @@ export interface IApiDiffs {
 }
 
 export enum ProposedMergeContext {
-  Validation = 'validation',
-  Comparison = 'comparison',
+  validation = 'validation',
+  comparison = 'comparison',
 }
 
 export interface IProposedMergeBody {
@@ -69,19 +69,4 @@ export type EvolutionEndpointInfo = {
 
 export interface EvolutionResponse {
   [endpoint: string]: EvolutionEndpointInfo;
-}
-
-export interface Report {
-  purposes: any;
-  utilizers: any;
-  profiling: any;
-}
-
-export interface IServiceVersion {
-  [service: string]: string;
-}
-export interface ReportResponse {
-  timestamp: Date;
-  services: IServiceVersion;
-  report: Report;
 }
