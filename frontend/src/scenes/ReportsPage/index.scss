@@ -1,0 +1,18 @@
+.reports-page {
+  .reports-cta {
+    text-align: right;
+    padding-bottom: 20px;
+    button:not(:last-child) {
+      margin-right: 20px;
+    }
+  }
+  .collapse__panel {
+    .header--font-18 {
+      font-size: 18px;
+    }
+    .mr-30 {
+      display: inline-block;
+      margin-right: 30px;
+    }
+  }
+}
