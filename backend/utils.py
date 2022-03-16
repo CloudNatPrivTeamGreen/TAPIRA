@@ -60,15 +60,15 @@ def transform_spec(spec):
 # def reduce_differences(new, old):
 # ... reduce_differences(schema_differences['new_schema_tira_annotation'], schema_differences['old_schema_tira_annotation'])
 
-def get_tira_changes(annotation: dict, type: str) -> dict:
+def get_tira_changes(annotation: dict, change_type: str) -> dict:
     new_annotation = {}
     old_annotation = {}
     
-    if "changed" in type:
-        if type == "schema_changed":
+    if "changed" in change_type:
+        if change_type == "schema_changed":
             unfiltered_new_annotation = annotation["new_schema_tira_annotation"]
             unfiltered_old_annotation = annotation["old_schema_tira_annotation"]
-        if type == "global_changed":            
+        if change_type == "global_changed":            
             unfiltered_new_annotation = annotation["new_global_tira_annotation"]
             unfiltered_old_annotation = annotation["old_global_tira_annotation"]
         for key, val in unfiltered_new_annotation.items():
@@ -125,7 +125,7 @@ def get_tira_changes(annotation: dict, type: str) -> dict:
                             new_annotation[key + str(idx + 1 + count) + "." + key_] = None
                             old_annotation[key + str(idx + 1 + count) + "." + key_] = val_  
 
-    elif type == "new":
+    elif change_type == "new":
         for key, val in annotation.items():
             if key == "retention-time":
                 for key_, val_ in val.items():
@@ -151,7 +151,7 @@ def get_tira_changes(annotation: dict, type: str) -> dict:
                             new_annotation[key + str(idx + 1) + "." + key_] = val_
                             old_annotation[key + str(idx + 1) + "." + key_] = None
 
-    elif type == "missing":
+    elif change_type == "missing":
         for key, val in annotation.items():
             if key == "retention-time":
                 for key_, val_ in val.items():
