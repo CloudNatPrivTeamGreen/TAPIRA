@@ -12,7 +12,7 @@ import {
   RoutingParameters,
 } from '../../../components/Router/router.config';
 import VersionUploadContext from '../../../contexts/version-upload-context';
-import { ProposedMergeContext } from '../../../services/tapiraApiComparisonService/comparison-api-dtos';
+import { ProposedMergeContext } from '../../../services/tapiraApiComparisonService/comparison-api';
 
 const createFileFormData = (file: File): FormData => {
   const blob = new Blob([file], {

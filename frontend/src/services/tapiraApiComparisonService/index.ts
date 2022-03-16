@@ -1,6 +1,6 @@
 import { AxiosRequestConfig } from 'axios';
 import http from '../httpService';
-import {IProposedMergeBody, ProposedMergeContext} from "@services/tapiraApiComparisonService/comparison-api-dtos";
+import { IProposedMergeBody, ProposedMergeContext } from './comparison-api';
 
 class TapiraApiComparisonService {
   public async compareSpecsForService(serviceName: string, data: FormData) {

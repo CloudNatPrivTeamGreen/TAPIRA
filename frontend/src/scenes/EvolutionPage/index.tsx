@@ -10,7 +10,7 @@ import {
   EvolutionResponse,
   PDIndicatorInfo,
   RequestInfo,
-} from '../../services/tapiraApiComparisonService/comparison-api-dtos';
+} from '../../services/tapiraApiComparisonService/comparison-api';
 import { useParams } from 'react-router-dom';
 import TapiraApiSpecificationsStore from '../../stores/tapiraApiSpecificationsStore';
 import TapiraApiComparisonStore from '../../stores/tapiraApiComparisonStore';
@@ -262,7 +262,6 @@ const EvolutionTestPage = ({
 };
 
 export default inject(
-  Stores.TestingStore,
   Stores.TapiraApiSpecificationsStore,
   Stores.TapiraApiComparisonStore
 )(observer(EvolutionTestPage));

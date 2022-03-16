@@ -9,7 +9,7 @@ import { Stores } from '../../stores/storeIdentifier';
 import TapiraApiComparisonStore from '../../stores/tapiraApiComparisonStore';
 import TapiraApiSpecificationsStore from '../../stores/tapiraApiSpecificationsStore';
 import ApiDiffView from '../../components/PartialComponents/ApiDiffView';
-import { ProposedMergeContext } from '../../services/tapiraApiComparisonService/comparison-api-dtos';
+import { ProposedMergeContext } from '../../services/tapiraApiComparisonService/comparison-api';
 import TapiraApiProposalsStore from '../../stores/tapiraApiProposalsStore';
 
 const { Title } = Typography;

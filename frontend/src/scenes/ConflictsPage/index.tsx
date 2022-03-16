@@ -10,7 +10,7 @@ import {
 } from '../../components/Router/router.config';
 import './index.scss';
 import { Utils } from '../../utils/utils';
-import { ProposedMergeContext } from '../../services/tapiraApiComparisonService/comparison-api-dtos';
+import { ProposedMergeContext } from '../../services/tapiraApiComparisonService/comparison-api';
 
 const { Title } = Typography;
 

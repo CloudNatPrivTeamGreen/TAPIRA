@@ -24,7 +24,7 @@ spec:
       serviceAccountName: tapira-sa
       containers:
         - name: tapira-api-containers
-          image: milamber97/tapira:6.7.1
+          image: milamber97/tapira:latest
           ports:
             - containerPort: 5000
           env:

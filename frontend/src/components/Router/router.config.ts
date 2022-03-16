@@ -84,24 +84,15 @@ export const appRouters: RouteObject[] = [
     showInMenu: true,
     icon: DeleteRowOutlined,
   },
-];
-
-/**
- * testRouters are just for the purpose of testing
- * When not required need to be taken out
- */
-export const testRouters: RouteObject[] = [
   {
-    path: RoutesForTesting.ReportsTestPage,
+    path: RoutePaths.Reports,
     exact: true,
-    name: 'report test',
-    title: 'Report Test',
-    component: LoadableComponent(
-      () => import('../../scenes/pages_for_testing/ReportsTestPage')
-    ),
+    name: 'reports',
+    title: 'Reports',
+    component: LoadableComponent(() => import('../../scenes/ReportsPage')),
     showInMenu: true,
     icon: BarsOutlined,
   },
 ];
 
-export const routers = [...appRouters, ...testRouters];
+export const routers = [...appRouters];

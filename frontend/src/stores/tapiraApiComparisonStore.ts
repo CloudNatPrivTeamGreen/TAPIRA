@@ -2,10 +2,10 @@ import { action, observable } from 'mobx';
 import {
   EvolutionResponse,
   ProposedMergeContext,
-} from '../services/tapiraApiComparisonService/comparison-api-dtos';
+} from '../services/tapiraApiComparisonService/comparison-api';
 import tapiraApiComparisonService from '../services/tapiraApiComparisonService';
 import { downloadFile } from '../utils/download-file-helper';
-import tapiraApiProposalsService from "../services/tapiraApiProposalsService";
+import tapiraApiProposalsService from '../services/tapiraApiProposalsService';
 
 class TapiraApiComparisonStore {
   @observable
@@ -29,9 +29,9 @@ class TapiraApiComparisonStore {
   @action
   async getConflictsForService(serviceName: string) {
     const result = await tapiraApiProposalsService.getConflictsForService(
-        serviceName
+      serviceName
     );
-    this.compareSpecResponse = result
+    this.compareSpecResponse = result;
   }
 
   @action
@@ -50,10 +50,10 @@ class TapiraApiComparisonStore {
 
   @action
   async downloadProposedMerge(
-      service_name: string,
-      context: ProposedMergeContext,
-      newApi: any,
-      oldApi: any
+    service_name: string,
+    context: ProposedMergeContext,
+    newApi: any,
+    oldApi: any
   ) {
     const result = await tapiraApiComparisonService.downloadProposedMerge(
       context,
@@ -61,7 +61,7 @@ class TapiraApiComparisonStore {
       oldApi
     );
     const blob = new Blob([result], { type: 'application/json' });
-    downloadFile(blob, service_name  + '_merge.json');
+    downloadFile(blob, service_name + '_merge.json');
   }
 
   @action
