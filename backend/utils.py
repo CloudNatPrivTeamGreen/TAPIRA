@@ -146,8 +146,8 @@ def get_tira_changes(annotation: dict, change_type: str) -> dict:
                         new_annotation[key + "." + key_] = val_
                         old_annotation[key + "." + key_] = None
                 else:
-                    for entry in val:
-                        for idx, (key_, val_) in enumerate(entry.items()):
+                    for idx, entry in enumerate(val):
+                        for key_, val_ in entry.items():
                             new_annotation[key + str(idx + 1) + "." + key_] = val_
                             old_annotation[key + str(idx + 1) + "." + key_] = None
 
@@ -172,8 +172,8 @@ def get_tira_changes(annotation: dict, change_type: str) -> dict:
                         new_annotation[key + "." + key_] = None
                         old_annotation[key + "." + key_] = val_
                 else:
-                    for entry in val:
-                        for idx, (key_, val_) in enumerate(entry.items()):
+                    for idx, entry in enumerate(val):
+                        for key_, val_ in entry.items():
                             new_annotation[key + str(idx + 1) + "." + key_] = None
                             old_annotation[key + str(idx + 1) + "." + key_] = val_
 
