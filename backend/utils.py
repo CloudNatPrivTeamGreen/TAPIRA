@@ -60,15 +60,16 @@ def transform_spec(spec):
 # def reduce_differences(new, old):
 # ... reduce_differences(schema_differences['new_schema_tira_annotation'], schema_differences['old_schema_tira_annotation'])
 
-def get_tira_changes(annotation: dict, type: str) -> dict:
+
+def get_tira_changes(annotation: dict, change_type: str) -> dict:
     new_annotation = {}
     old_annotation = {}
     
-    if "changed" in type:
-        if type == "schema_changed":
+    if "changed" in change_type:
+        if change_type == "schema_changed":
             unfiltered_new_annotation = annotation["new_schema_tira_annotation"]
             unfiltered_old_annotation = annotation["old_schema_tira_annotation"]
-        if type == "global_changed":            
+        if change_type == "global_changed":            
             unfiltered_new_annotation = annotation["new_global_tira_annotation"]
             unfiltered_old_annotation = annotation["old_global_tira_annotation"]
         for key, val in unfiltered_new_annotation.items():
@@ -78,11 +79,7 @@ def get_tira_changes(annotation: dict, type: str) -> dict:
                         for key__, val__ in val_.items():
                             if key in unfiltered_old_annotation and key_ in unfiltered_old_annotation[key] and key__ in unfiltered_old_annotation[key][key_]:
                                 old_val = unfiltered_old_annotation[key][key_][key__]
-                                try:
-                                    if  val__ != old_val:
-                                        new_annotation[key + "." + key_ + "." + key__] = val__
-                                        old_annotation[key + "." + key_ + "." + key__] = old_val
-                                except KeyError:
+                                if  val__ != old_val:
                                     new_annotation[key + "." + key_ + "." + key__] = val__
                                     old_annotation[key + "." + key_ + "." + key__] = old_val
                             else:
@@ -91,11 +88,7 @@ def get_tira_changes(annotation: dict, type: str) -> dict:
                     else:
                         if key in unfiltered_old_annotation and key_ in unfiltered_old_annotation[key]:
                             old_val = unfiltered_old_annotation[key][key_]
-                            try:
-                                if val_ != old_val:
-                                    new_annotation[key + "." + key_] = val_
-                                    old_annotation[key + "." + key_] = old_val
-                            except KeyError:
+                            if val_ != old_val:
                                 new_annotation[key + "." + key_] = val_
                                 old_annotation[key + "." + key_] = old_val
                         else:
@@ -108,24 +101,32 @@ def get_tira_changes(annotation: dict, type: str) -> dict:
                         new_annotation[key + "." + "yappl"] = json.dumps(val["yappl"])
                         old_annotation[key + "." + "yappl"] = old_val
             else:
-                try:
+                if type(val) is dict:
                     for key_, val_ in val.items():
                         if key in unfiltered_old_annotation and key_ in unfiltered_old_annotation[key]:
                             old_val = unfiltered_old_annotation[key][key_]
-                            try:
-                                if val_ != old_val:
-                                    new_annotation[key + "." + key_] = val_
-                                    old_annotation[key + "." + key_] = old_val
-                            except KeyError:
+                            if val_ != old_val:
                                 new_annotation[key + "." + key_] = val_
                                 old_annotation[key + "." + key_] = old_val
                         else:
                             new_annotation[key + "." + key_] = val_
                             old_annotation[key + "." + key_] = None
-                except AttributeError:
-                    print(key, val, unfiltered_new_annotation)
+                else:
+                    if key in unfiltered_old_annotation:
+                        old_val = unfiltered_old_annotation[key]
+                    else:
+                        old_val = []
+                    for idx, entry in enumerate([x for x in val if x not in old_val]):
+                        for key_, val_ in entry.items():
+                            new_annotation[key + str(idx + 1) + "." + key_] = val_
+                            old_annotation[key + str(idx + 1) + "." + key_] = None
+                        count = idx + 1
+                    for idx2, entry in enumerate([x for x in old_val if x not in val]):
+                        for key_, val_ in entry.items():
+                            new_annotation[key + str(idx2 + 1 + count) + "." + key_] = None
+                            old_annotation[key + str(idx2 + 1 + count) + "." + key_] = val_  
 
-    elif type == "new":
+    elif change_type == "new":
         for key, val in annotation.items():
             if key == "retention-time":
                 for key_, val_ in val.items():
@@ -141,11 +142,17 @@ def get_tira_changes(annotation: dict, type: str) -> dict:
                     new_annotation[key + "." + "yappl"] = json.dumps(val["yappl"])
                     old_annotation[key + "." + "yappl"] = None
             else:
-                for key_, val_ in val.items():
-                    new_annotation[key + "." + key_] = val_
-                    old_annotation[key + "." + key_] = None
+                if type(val) is dict:
+                    for key_, val_ in val.items():
+                        new_annotation[key + "." + key_] = val_
+                        old_annotation[key + "." + key_] = None
+                else:
+                    for idx, entry in enumerate(val):
+                        for key_, val_ in entry.items():
+                            new_annotation[key + str(idx + 1) + "." + key_] = val_
+                            old_annotation[key + str(idx + 1) + "." + key_] = None
 
-    elif type == "missing":
+    elif change_type == "missing":
         for key, val in annotation.items():
             if key == "retention-time":
                 for key_, val_ in val.items():
@@ -161,9 +168,15 @@ def get_tira_changes(annotation: dict, type: str) -> dict:
                     new_annotation[key + "." + "yappl"] = None
                     old_annotation[key + "." + "yappl"] = json.dumps(val["yappl"])
             else:
-                for key_, val_ in val.items():
-                    new_annotation[key + "." + key_] = None
-                    old_annotation[key + "." + key_] = val_
+                if type(val) is dict:
+                    for key_, val_ in val.items():
+                        new_annotation[key + "." + key_] = None
+                        old_annotation[key + "." + key_] = val_
+                else:
+                    for idx, entry in enumerate(val):
+                        for key_, val_ in entry.items():
+                            new_annotation[key + str(idx + 1) + "." + key_] = None
+                            old_annotation[key + str(idx + 1) + "." + key_] = val_
 
     return {"old": old_annotation, "new": new_annotation}
 
