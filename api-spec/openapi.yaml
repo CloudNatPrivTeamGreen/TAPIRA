@@ -271,12 +271,12 @@ paths:
     get:
       parameters:
         - in: query
-          name: old_version
+          name: new_version
           required: true
           schema:
             type: string
         - in: query
-          name: new_version
+          name: old_version
           required: true
           schema:
             type: string
@@ -291,7 +291,7 @@ paths:
           content:
             application/json:
               schema:
-                "$ref": "#/components/schemas/AllChangesComparison"
+                "$ref": "#/components/schemas/TiraChangesComparison"
         '422':
           "$ref": "#/components/responses/UNPROCESSABLE_ENTITY"
         default:
@@ -377,6 +377,52 @@ paths:
           "$ref": "#/components/responses/DEFAULT_ERROR"
       tags:
         - testing
+  "/api/recording":
+    post:
+      parameters:
+        - in: query
+          name: record_status
+          required: false
+          schema: {}
+      responses:
+        '422':
+          "$ref": "#/components/responses/UNPROCESSABLE_ENTITY"
+        default:
+          "$ref": "#/components/responses/DEFAULT_ERROR"
+      summary: Scale ApiClarity up or down and generate a report
+      tags:
+        - report_api
+  "/api/reports":
+    get:
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/AllReports"
+        default:
+          "$ref": "#/components/responses/DEFAULT_ERROR"
+      summary: Get all reports
+      description: Returns a list of all reports.
+      tags:
+        - report_api
+    delete:
+      responses:
+        default:
+          "$ref": "#/components/responses/DEFAULT_ERROR"
+      summary: Delete all reports
+      tags:
+        - report_api
+  "/api/api_server":
+    get:
+      responses:
+        default:
+          "$ref": "#/components/responses/DEFAULT_ERROR"
+      summary: Fetch provided and reconstructed specifications from APIClarity and
+        save them in database.
+      tags:
+        - report_api
 tags:
   - name: specs_api
     description: Collection and maintenance of specifications
@@ -390,24 +436,26 @@ tags:
       context.
   - name: testing
     description: Endpoints for easier testing
+  - name: report_api
+    description: Collection and maintenance of specifications
 openapi: 3.0.2
 components:
   schemas:
     Error:
       type: object
       properties:
-        message:
-          type: string
-          description: Error message
-        status:
-          type: string
-          description: Error name
         errors:
           type: object
           description: Errors
+        status:
+          type: string
+          description: Error name
         code:
           type: integer
           description: Error code
+        message:
+          type: string
+          description: Error message
     PaginationMetadata:
       type: object
       properties:
@@ -453,10 +501,10 @@ components:
           type: string
         created_at_date:
           type: string
-        api_spec:
-          type: object
         name:
           type: string
+        api_spec:
+          type: object
       required:
         - name
     ApiSpecs:
@@ -487,40 +535,40 @@ components:
       properties:
         number_of_deleted:
           type: string
+    MissingEndpoint:
+      type: object
+      properties:
+        path_url:
+          type: string
+          nullable: true
+        path_is_still_present:
+          type: boolean
+        summary:
+          type: string
+          default:
+          nullable: true
+        method:
+          type: string
+          nullable: true
     NewEndpoint:
       type: object
       properties:
+        path_url:
+          type: string
+          nullable: true
+        summary:
+          type: string
+          default:
+          nullable: true
         method:
           type: string
           nullable: true
         path_is_new:
           type: boolean
-        path_url:
-          type: string
-          nullable: true
-        summary:
-          type: string
-          default:
-          nullable: true
-    MissingEndpoint:
-      type: object
-      properties:
-        method:
-          type: string
-          nullable: true
-        path_is_still_present:
-          type: boolean
-        path_url:
-          type: string
-          nullable: true
-        summary:
-          type: string
-          default:
-          nullable: true
     ChangedOperation:
       type: object
       properties:
-        method:
+        path_url:
           type: string
           nullable: true
         changed_fields:
@@ -529,17 +577,15 @@ components:
           items:
             type: string
             nullable: true
-        path_url:
+        method:
           type: string
           nullable: true
     ApiDiffsResponse:
       type: object
       properties:
-        new_endpoints:
-          type: array
+        potentially_privacy_related_differences_given:
+          type: boolean
           nullable: true
-          items:
-            "$ref": "#/components/schemas/NewEndpoint"
         general_difference_given:
           type: boolean
           nullable: true
@@ -548,13 +594,27 @@ components:
           nullable: true
           items:
             "$ref": "#/components/schemas/MissingEndpoint"
+        new_endpoints:
+          type: array
+          nullable: true
+          items:
+            "$ref": "#/components/schemas/NewEndpoint"
         changed_operations:
           type: array
           nullable: true
           items:
             "$ref": "#/components/schemas/ChangedOperation"
-        potentially_privacy_related_differences_given:
-          type: boolean
+    ChangedGlobalTiraAnnotation:
+      type: object
+      properties:
+        new_global_tira_annotation:
+          type: object
+          nullable: true
+        old_global_tira_annotation:
+          type: object
+          nullable: true
+        key:
+          type: string
           nullable: true
     SchemaTiraAnnotation:
       type: object
@@ -568,35 +628,40 @@ components:
     ChangedSchemaTiraAnnotation:
       type: object
       properties:
-        old_schema_tira_annotation:
-          type: object
-          nullable: true
         new_schema_tira_annotation:
           type: object
           nullable: true
         schema_name:
           type: string
           nullable: true
-    ChangedGlobalTiraAnnotation:
-      type: object
-      properties:
-        new_global_tira_annotation:
+        old_schema_tira_annotation:
           type: object
-          nullable: true
-        old_global_tira_annotation:
-          type: object
-          nullable: true
-        key:
-          type: string
           nullable: true
     ApiDiffTira:
       type: object
       properties:
+        changed_global_tira_annotation:
+          type: array
+          nullable: true
+          items:
+            nullable: true
+            allOf:
+              - "$ref": "#/components/schemas/ChangedGlobalTiraAnnotation"
+        new_global_tira_annotation:
+          type: array
+          nullable: true
+          items:
+            type: object
         missing_global_tira_annotation:
           type: array
           nullable: true
           items:
             type: object
+        missing_schema_tira_annotations:
+          type: array
+          nullable: true
+          items:
+            "$ref": "#/components/schemas/SchemaTiraAnnotation"
         new_schema_tira_annotations:
           type: array
           nullable: true
@@ -607,23 +672,6 @@ components:
           nullable: true
           items:
             "$ref": "#/components/schemas/ChangedSchemaTiraAnnotation"
-        missing_schema_tira_annotations:
-          type: array
-          nullable: true
-          items:
-            "$ref": "#/components/schemas/SchemaTiraAnnotation"
-        new_global_tira_annotation:
-          type: array
-          nullable: true
-          items:
-            type: object
-        changed_global_tira_annotation:
-          type: array
-          nullable: true
-          items:
-            nullable: true
-            allOf:
-              - "$ref": "#/components/schemas/ChangedGlobalTiraAnnotation"
     AllChangesComparison:
       type: object
       properties:
@@ -631,14 +679,23 @@ components:
           nullable: true
           allOf:
             - "$ref": "#/components/schemas/ApiDiffsResponse"
+        service:
+          type: string
         tira_diffs:
           nullable: true
           allOf:
             - "$ref": "#/components/schemas/ApiDiffTira"
-        service:
-          type: string
       required:
         - service
+    TiraChangesComparison:
+      type: object
+      properties:
+        schemas:
+          type: object
+        global_changes:
+          type: object
+        paths:
+          type: object
     ProposedMergeRequestBody:
       type: object
       properties:
@@ -646,6 +703,32 @@ components:
           type: object
         old_api:
           type: object
+    Report:
+      type: object
+      properties:
+        total_calls:
+          type: integer
+        end_timestamp:
+          type: string
+        report:
+          type: object
+        services:
+          type: object
+        start_timestamp:
+          type: string
+      required:
+        - end_timestamp
+        - start_timestamp
+    AllReports:
+      type: object
+      properties:
+        reports:
+          type: array
+          nullable: true
+          items:
+            nullable: true
+            allOf:
+              - "$ref": "#/components/schemas/Report"
   responses:
     DEFAULT_ERROR:
       description: Default error response
