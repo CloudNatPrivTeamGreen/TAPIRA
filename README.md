@@ -8,26 +8,32 @@ The APIRepo application requires that the postgresql database of APIClarity is a
 The application exposes one REST endpoint `/update` which, if it gets triggered, pulls all reconstructed API specs from APIClarity, labels them with name, port, version and date and stores them in the mongoDB data inside the `api_specifications` collection.
 A example API specification entry in the database can be found in the `sample_entry_api_repository.json` file.
 
-# How to run
-
-#  (incase you dont have kubectl) run the following command 
+# Setup Instructions
+##  In case you dont have kubectl, run the following command 
+```bash
 alias kubectl="minikube kubectl --"     
 kubectl create namespace sock-shop
+```
 
+## Instantiate sock-shop demo and add APIClarity repo to `helm`
+```bash
 kubectl apply -f https://raw.githubusercontent.com/microservices-demo/microservices-demo/master/deploy/kubernetes/complete-demo.yaml
-
 helm repo add apiclarity https://apiclarity.github.io/apiclarity
+```
 
-###for Next command uses values.yml located at startstop branch ( this one its working
-# and has the preconfigured TAP functionality and namespace)
-# You need to be on the same folder as the values yml 
-
+## Locate `values.yml` in the TAPIRA directory and upgrade `helm`
+```bash
 helm upgrade --values values.yaml --create-namespace apiclarity apiclarity/apiclarity -n apiclarity --install
+```
 
-#Load Test  ( working  added --net=hotst to the structure ) Replace IP with cluster IP  IP
-docker run --net=host --rm weaveworksdemos/load-test -d 1 -h 192.168.49.2:30001 -c 300 -r 200
+## (Optional) Load Testing
+```bash
+# Replace [IP] with cluster IP  IP
+docker run --net=host --rm weaveworksdemos/load-test -d 1 -h [IP]:30001 -c 300 -r 200
+```
 
+## Enable and execute the deployment script
+```bash
 chmod +x ./deploy.sh
-
-#Starts TAPIRA
 ./deploy.sh
+```
