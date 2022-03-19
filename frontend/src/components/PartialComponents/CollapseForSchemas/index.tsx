@@ -45,7 +45,7 @@ const schemaPropPanels = (
     <Panel
       header={schemaPropKey}
       key={`${schemaPropKey}.${index}`}
-      className={schemaName}
+      className={`schema-type--${schemaName}`}
     >
       <OldNewTable data={schemaProp[schemaPropKey]} />
     </Panel>

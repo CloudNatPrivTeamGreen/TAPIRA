@@ -158,17 +158,17 @@ const EvolutionTestPage = ({
         </div>
         <div className="evolution-page__collapse-container">
           <Collapse accordion>
-            <Panel header="Schemas" key="1">
+            <Panel header="Schemas" key="1" className="schemas">
               {!!evolution?.schemas && (
                 <CollapseForSchemas schemas={evolution.schemas} />
               )}
             </Panel>
-            <Panel header="Paths" key="2">
+            <Panel header="Paths" key="2" className="paths">
               {!!evolution?.paths && (
                 <EvolutionPaths pathsInfo={evolution?.paths} />
               )}
             </Panel>
-            <Panel header="Global" key="3">
+            <Panel header="Global" key="3" className="global-changes">
               {!!evolution?.global_changes && (
                 <GlobalChangesList globalChanges={evolution?.global_changes} />
               )}

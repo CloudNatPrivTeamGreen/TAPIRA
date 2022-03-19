@@ -10,7 +10,7 @@ const { Panel } = Collapse;
 
 interface PathInfoListitem {
   title: string;
-  isRemoved: boolean;
+  color: string;
 }
 
 const renderInfoList = (flattenedObj: any) => {
@@ -32,12 +32,16 @@ const renderInfoList = (flattenedObj: any) => {
     if (splittedKey.length === 5) {
       dataSource.push({
         title: splittedKey[3],
-        isRemoved: flattenedObj[key],
+        color: flattenedObj[key] ? 'red' : 'green',
       });
     } else if (splittedKey.length === 3) {
       dataSource.push({
         title: splittedKey[1],
-        isRemoved: flattenedObj[key],
+        color: sortedKeys.some((key) => key.split('.').length === 5)
+          ? ''
+          : flattenedObj[key]
+          ? 'red'
+          : 'green',
       });
     }
   }
@@ -47,9 +51,7 @@ const renderInfoList = (flattenedObj: any) => {
       bordered
       dataSource={dataSource}
       renderItem={(item) => (
-        <List.Item
-          className={item.isRemoved ? 'path-info--red' : 'path-info--green'}
-        >
+        <List.Item className={`path-info--${item.color}`}>
           {item.title}
         </List.Item>
       )}

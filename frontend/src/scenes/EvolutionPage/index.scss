@@ -5,4 +5,34 @@
       margin-top: 38px;
     }
   }
+  &__collapse-container {
+    .schemas {
+      .schema-type--missing {
+        .ant-collapse-header {
+          background-color: rgba(244, 146, 9, 0.91);
+        }
+      }
+      .schema-type--new {
+        .ant-collapse-header {
+          background-color: rgba(104, 255, 103, 0.58);
+        }
+      }
+      .schema-type--old {
+        .ant-collapse-header {
+          background-color: rgba(210, 103, 103, 1);
+        }
+      }
+    }
+    .paths {
+      .path-info--red {
+        background-color: rgba(210, 103, 103, 1);
+      }
+      .path-info--green {
+        background-color: rgba(104, 255, 103, 0.58);
+      }
+    }
+    .global-changes {
+      text-align: center;
+    }
+  }
 }
