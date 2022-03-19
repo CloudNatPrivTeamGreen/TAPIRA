@@ -10,6 +10,7 @@ import TapiraApiSpecificationsStore from '../../stores/tapiraApiSpecificationsSt
 import TapiraApiComparisonStore from '../../stores/tapiraApiComparisonStore';
 import CollapseForSchemas from '../../components/PartialComponents/CollapseForSchemas';
 import GlobalChangesList from '../../components/PartialComponents/GlobalChangesList';
+import EvolutionPaths from '../../components/PartialComponents/EvolutionPaths';
 import { Utils } from '../../utils/utils';
 
 const { Title } = Typography;
@@ -163,7 +164,9 @@ const EvolutionTestPage = ({
               )}
             </Panel>
             <Panel header="Paths" key="2">
-              nothing
+              {!!evolution?.paths && (
+                <EvolutionPaths pathsInfo={evolution?.paths} />
+              )}
             </Panel>
             <Panel header="Global" key="3">
               {!!evolution?.global_changes && (

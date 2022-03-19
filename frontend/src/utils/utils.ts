@@ -55,4 +55,11 @@ export abstract class Utils {
     }
     return result;
   }
+
+  public static sortObjectKeys(
+    obj: any,
+    sortFunc: (key1: string, key2: string) => number
+  ): Array<string> {
+    return Object.keys(obj).sort(sortFunc);
+  }
 }

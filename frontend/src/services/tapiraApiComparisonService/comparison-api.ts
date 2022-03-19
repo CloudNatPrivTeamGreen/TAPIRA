@@ -78,10 +78,22 @@ export enum AllEndpointTypes {
   put = 'put',
 }
 
-export type PathInfo = {
-  [key in AllEndpointTypes]: any;
+export type Responses = {
+  [key: string]: any;
 } & {
-  is_removed: boolean;
+  isRemoved: boolean;
+};
+
+export type PathEvolutionInfo = {
+  [key: string]: Responses;
+} & {
+  isRemoved: boolean;
+};
+
+export type PathInfo = {
+  [key in AllEndpointTypes]: PathEvolutionInfo;
+} & {
+  isRemoved: boolean;
 };
 export interface Path {
   [path: string]: PathInfo;
