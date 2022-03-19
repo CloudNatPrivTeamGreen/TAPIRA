@@ -1,6 +1,6 @@
 import { action, observable } from 'mobx';
 import {
-  EvolutionResponse,
+  Evolution,
   ProposedMergeContext,
 } from '../services/tapiraApiComparisonService/comparison-api';
 import tapiraApiComparisonService from '../services/tapiraApiComparisonService';
@@ -12,7 +12,7 @@ class TapiraApiComparisonStore {
   compareSpecResponse: any;
 
   @observable
-  evolutionResponse!: EvolutionResponse;
+  evolution!: Evolution;
 
   @observable
   uploadedApiSpec: any;
@@ -45,7 +45,7 @@ class TapiraApiComparisonStore {
       oldVersion,
       newVersion
     );
-    this.evolutionResponse = result;
+    this.evolution = result;
   }
 
   @action
