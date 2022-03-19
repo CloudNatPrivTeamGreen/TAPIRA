@@ -2,22 +2,35 @@ import './index.scss';
 
 import React, { useEffect, useCallback, useState } from 'react';
 import { inject, observer } from 'mobx-react';
-import { Table, Typography, List, Tag, Row, Col, Select, Button } from 'antd';
+import {
+  Table,
+  Typography,
+  List,
+  Tag,
+  Row,
+  Col,
+  Select,
+  Button,
+  Collapse,
+} from 'antd';
 import { CheckCircleOutlined, CloseCircleOutlined } from '@ant-design/icons';
 import { Stores } from '../../stores/storeIdentifier';
 import {
   EndpointTypes,
-  EvolutionResponse,
+  Evolution,
   PDIndicatorInfo,
   RequestInfo,
 } from '../../services/tapiraApiComparisonService/comparison-api';
 import { useParams } from 'react-router-dom';
 import TapiraApiSpecificationsStore from '../../stores/tapiraApiSpecificationsStore';
 import TapiraApiComparisonStore from '../../stores/tapiraApiComparisonStore';
+import CollapseForSchemas from '../../components/PartialComponents/CollapseForSchemas';
+import GlobalChangesList from '../../components/PartialComponents/GlobalChangesList';
 import { Utils } from '../../utils/utils';
 
 const { Title } = Typography;
 const { Option } = Select;
+const { Panel } = Collapse;
 
 interface IVersionOption {
   value: string;
@@ -37,35 +50,6 @@ function createVersionOptions(
   );
 }
 
-const IconForBoolean = ({ present }: { present: boolean }) => {
-  return present ? <CheckCircleOutlined /> : <CloseCircleOutlined />;
-};
-
-const renderColumnData = (data: any, uniqueIdentifier: string) => {
-  return (
-    <List
-      key={uniqueIdentifier}
-      size="small"
-      bordered
-      dataSource={Object.keys(data)}
-      renderItem={(key, index) => (
-        <List.Item key={key + index + uniqueIdentifier}>
-          <strong>{key}: </strong>{' '}
-          {data[key] !== null && typeof data[key] !== 'boolean' && (
-            <span className="value-green">{data[key]}</span>
-          )}
-          {data[key] !== null && typeof data[key] === 'boolean' && (
-            <span className="value-green">
-              <IconForBoolean present={data[key]} />
-            </span>
-          )}
-          {data[key] === null && <Tag color="red">N/A</Tag>}
-        </List.Item>
-      )}
-    />
-  );
-};
-
 const EvolutionTestPage = ({
   tapiraApiSpecificationsStore,
   tapiraApiComparisonStore,
@@ -73,14 +57,12 @@ const EvolutionTestPage = ({
   [Stores.TapiraApiSpecificationsStore]: TapiraApiSpecificationsStore;
   [Stores.TapiraApiComparisonStore]: TapiraApiComparisonStore;
 }) => {
-  const [evolution, setEvolution] = useState<EvolutionResponse>();
+  const [evolution, setEvolution] = useState<Evolution>();
   const { serviceName } = useParams();
   const [versionListA, setVersionListA] = useState<IVersionOption[]>();
   const [versionListB, setVersionListB] = useState<IVersionOption[]>();
   const [selectedA, setSelectedA] = useState<string>();
   const [selectedB, setSelectedB] = useState<string>();
-  const data: { [key: string]: any }[] = [];
-  const columns: any[] = [];
 
   const createCallbackForSpecVersions = useCallback(async () => {
     if (!!serviceName) {
@@ -106,7 +88,7 @@ const EvolutionTestPage = ({
         selectedB
       );
 
-      setEvolution(tapiraApiComparisonStore.evolutionResponse);
+      setEvolution(tapiraApiComparisonStore.evolution);
     }
   }, [selectedA, selectedB, serviceName, tapiraApiComparisonStore]);
 
@@ -146,73 +128,13 @@ const EvolutionTestPage = ({
     </Option>
   ));
 
-  if (evolution) {
-    Object.keys(evolution!).forEach((endpoint: string) => {
-      const endpointType: string | undefined = Object.keys(
-        evolution![endpoint]
-      ).find((key) => key in EndpointTypes);
-      const pdIndicatorInfo: PDIndicatorInfo | undefined =
-        evolution![endpoint][endpointType!];
-      const endpointObj: { [key: string]: any } = {};
-      columns.push(endpointObj);
-      endpointObj.title = (
-        <Title level={4}>
-          {endpointType}: {endpoint}
-        </Title>
-      );
-      endpointObj.children = [];
-      if (pdIndicatorInfo)
-        Object.keys(pdIndicatorInfo)
-          .filter((key: string) => key in RequestInfo)
-          .forEach((requestInfoKey: string) => {
-            const requestInfoObj: { [key: string]: any } = {};
-            endpointObj.children.push(requestInfoObj);
-            requestInfoObj.title = <Title level={5}>{requestInfoKey}</Title>;
-            requestInfoObj.align = 'center';
-            requestInfoObj.children = [];
-            Object.keys(pdIndicatorInfo[requestInfoKey])
-              .filter((key) => key !== 'is_removed')
-              .forEach((parameter: string) => {
-                const parameterObj: { [key: string]: any } = {};
-                requestInfoObj.children.push(parameterObj);
-                parameterObj.title = <Title level={5}>{parameter}</Title>;
-                parameterObj.align = 'center';
-                parameterObj.children = [
-                  {
-                    title: 'Old TIRA Annotations',
-                    align: 'center',
-                    width: '50%',
-                    dataIndex: `${endpoint}.${endpointType}.${requestInfoKey}.${parameter}.old`,
-                    key: `${endpoint}.${endpointType}.${requestInfoKey}.${parameter}.old`,
-                    render: (data: any) => renderColumnData(data, 'old'),
-                  },
-                  {
-                    title: 'New TIRA Annotations',
-                    align: 'center',
-                    width: '50%',
-                    dataIndex: `${endpoint}.${endpointType}.${requestInfoKey}.${parameter}.new`,
-                    key: `${endpoint}.${endpointType}.${requestInfoKey}.${parameter}.new`,
-                    render: (data: any) => renderColumnData(data, 'new'),
-                  },
-                ];
-                data.push({
-                  [`${endpoint}.${endpointType}.${requestInfoKey}.${parameter}.new`]:
-                    pdIndicatorInfo[requestInfoKey][parameter]['new'],
-                  [`${endpoint}.${endpointType}.${requestInfoKey}.${parameter}.old`]:
-                    pdIndicatorInfo[requestInfoKey][parameter]['old'],
-                });
-              });
-          });
-    });
-  }
-
   return (
     <React.Fragment>
       <Title level={1}>
         Evolution - {Utils.capitalizePropertyName(serviceName ?? '')} service
       </Title>
-      <div className="content specs-evolution">
-        <Row>
+      <div className="content evolution-page">
+        <Row className="evolution-page__ctas">
           <Col style={{ textAlign: 'center' }} span={8} offset={2}>
             <Title level={4}>Version 1</Title>
             <Select
@@ -247,16 +169,21 @@ const EvolutionTestPage = ({
             </Select>
           </Col>
         </Row>
-      </div>
-      <div className="content evolution-test-page">
-        <Table
-          className="evolution-test-page__table"
-          columns={columns}
-          dataSource={data}
-          bordered
-          size="middle"
-          pagination={false}
-        />
+        <Collapse accordion className="evolution-page__collapse-container">
+          <Panel header="Schemas" key="1">
+            {!!evolution?.schemas && (
+              <CollapseForSchemas schemas={evolution.schemas} />
+            )}
+          </Panel>
+          <Panel header="Paths" key="2">
+            nothing
+          </Panel>
+          <Panel header="Global" key="3">
+            {!!evolution?.global_changes && (
+              <GlobalChangesList globalChanges={evolution?.global_changes} />
+            )}
+          </Panel>
+        </Collapse>
       </div>
     </React.Fragment>
   );

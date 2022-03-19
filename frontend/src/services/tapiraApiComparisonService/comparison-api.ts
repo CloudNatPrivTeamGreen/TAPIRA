@@ -70,3 +70,42 @@ export type EvolutionEndpointInfo = {
 export interface EvolutionResponse {
   [endpoint: string]: EvolutionEndpointInfo;
 }
+
+export enum AllEndpointTypes {
+  delete = 'delete',
+  get = 'get',
+  post = 'post',
+  put = 'put',
+}
+
+export type PathInfo = {
+  [key in AllEndpointTypes]: any;
+} & {
+  is_removed: boolean;
+};
+export interface Path {
+  [path: string]: PathInfo;
+}
+
+export interface NewAndOld {
+  new: any;
+  old: any;
+}
+
+export interface GlobalChanges {
+  changed: NewAndOld;
+  missing: NewAndOld;
+  new: NewAndOld;
+}
+
+export interface Schemas {
+  changed: { [path: string]: { new: any; old: any } };
+  missing: { [path: string]: { new: any; old: any } };
+  new: { [path: string]: { new: any; old: any } };
+}
+
+export interface Evolution {
+  global_changes: GlobalChanges;
+  paths: Path;
+  schemas: Schemas;
+}

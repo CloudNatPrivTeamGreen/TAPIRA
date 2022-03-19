@@ -26,4 +26,33 @@ export abstract class Utils {
 
     return arr.join(' ');
   }
+
+  public static uuidv4() {
+    return `${1e7}-${1e3}-${4e3}-${8e3}-${1e11}`.replace(/[018]/g, (c) =>
+      (
+        ((Number(c) ^ crypto.getRandomValues(new Uint8Array(1))[0]) & 15) >>
+        (Number(c) / 4)
+      ).toString(16)
+    );
+  }
+
+  public static flattenObject(obj: any): any {
+    let result = {};
+
+    for (const i in obj) {
+      if (
+        typeof obj[i] === 'object' &&
+        !Array.isArray(obj[i]) &&
+        obj[i] !== null
+      ) {
+        const temp = Utils.flattenObject(obj[i]);
+        for (const j in temp) {
+          result[i + '.' + j] = temp[j];
+        }
+      } else {
+        result[i] = obj[i];
+      }
+    }
+    return result;
+  }
 }
