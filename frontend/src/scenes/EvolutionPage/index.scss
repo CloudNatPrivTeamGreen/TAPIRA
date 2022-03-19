@@ -1,10 +1,8 @@
-.specs-evolution {
-  &__diffs {
-    margin-top: 30px;
+.evolution-page {
+  &__ctas {
+    margin-bottom: 30px;
+    .fetch-evolution-button {
+      margin-top: 38px;
+    }
   }
-
-}
-
-.version_container{
-  text-align: center;
 }

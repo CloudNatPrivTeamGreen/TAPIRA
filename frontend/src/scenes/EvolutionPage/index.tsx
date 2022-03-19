@@ -2,25 +2,9 @@ import './index.scss';
 
 import React, { useEffect, useCallback, useState } from 'react';
 import { inject, observer } from 'mobx-react';
-import {
-  Table,
-  Typography,
-  List,
-  Tag,
-  Row,
-  Col,
-  Select,
-  Button,
-  Collapse,
-} from 'antd';
-import { CheckCircleOutlined, CloseCircleOutlined } from '@ant-design/icons';
+import { Typography, Row, Col, Select, Button, Collapse } from 'antd';
 import { Stores } from '../../stores/storeIdentifier';
-import {
-  EndpointTypes,
-  Evolution,
-  PDIndicatorInfo,
-  RequestInfo,
-} from '../../services/tapiraApiComparisonService/comparison-api';
+import { Evolution } from '../../services/tapiraApiComparisonService/comparison-api';
 import { useParams } from 'react-router-dom';
 import TapiraApiSpecificationsStore from '../../stores/tapiraApiSpecificationsStore';
 import TapiraApiComparisonStore from '../../stores/tapiraApiComparisonStore';
@@ -134,56 +118,60 @@ const EvolutionTestPage = ({
         Evolution - {Utils.capitalizePropertyName(serviceName ?? '')} service
       </Title>
       <div className="content evolution-page">
-        <Row className="evolution-page__ctas">
-          <Col style={{ textAlign: 'center' }} span={8} offset={2}>
-            <Title level={4}>Version 1</Title>
-            <Select
-              placeholder="select a version"
-              style={{ width: 180 }}
-              allowClear
-              onChange={onChangeListA}
-            >
-              {optionsListA}
-            </Select>
-          </Col>
-          <Col span={2} offset={1}>
-            <Title />
-            <Button
-              title="Fetch Evolution"
-              type="primary"
-              onClick={createCallbackForEvolution}
-              disabled={!(selectedA && selectedB)}
-            >
-              Fetch Evolution
-            </Button>
-          </Col>
-          <Col style={{ textAlign: 'center' }} span={8} offset={1}>
-            <Title level={4}>Version 2</Title>
-            <Select
-              placeholder="select version to compare"
-              style={{ width: 180 }}
-              allowClear
-              onChange={onChangeListB}
-            >
-              {optionsListB}
-            </Select>
-          </Col>
-        </Row>
-        <Collapse accordion className="evolution-page__collapse-container">
-          <Panel header="Schemas" key="1">
-            {!!evolution?.schemas && (
-              <CollapseForSchemas schemas={evolution.schemas} />
-            )}
-          </Panel>
-          <Panel header="Paths" key="2">
-            nothing
-          </Panel>
-          <Panel header="Global" key="3">
-            {!!evolution?.global_changes && (
-              <GlobalChangesList globalChanges={evolution?.global_changes} />
-            )}
-          </Panel>
-        </Collapse>
+        <div className="evolution-page__ctas">
+          <Row>
+            <Col style={{ textAlign: 'center' }} span={8} offset={2}>
+              <Title level={4}>Version 1</Title>
+              <Select
+                placeholder="select a version"
+                style={{ width: 180 }}
+                allowClear
+                onChange={onChangeListA}
+              >
+                {optionsListA}
+              </Select>
+            </Col>
+            <Col span={2} offset={1}>
+              <Button
+                className="fetch-evolution-button"
+                title="Fetch Evolution"
+                type="primary"
+                onClick={createCallbackForEvolution}
+                disabled={!(selectedA && selectedB)}
+              >
+                Fetch Evolution
+              </Button>
+            </Col>
+            <Col style={{ textAlign: 'center' }} span={8} offset={1}>
+              <Title level={4}>Version 2</Title>
+              <Select
+                placeholder="select version to compare"
+                style={{ width: 180 }}
+                allowClear
+                onChange={onChangeListB}
+              >
+                {optionsListB}
+              </Select>
+            </Col>
+          </Row>
+        </div>
+        <div className="evolution-page__collapse-container">
+          <Collapse accordion>
+            <Panel header="Schemas" key="1">
+              {!!evolution?.schemas && (
+                <CollapseForSchemas schemas={evolution.schemas} />
+              )}
+            </Panel>
+            <Panel header="Paths" key="2">
+              nothing
+            </Panel>
+            <Panel header="Global" key="3">
+              {!!evolution?.global_changes && (
+                <GlobalChangesList globalChanges={evolution?.global_changes} />
+              )}
+            </Panel>
+          </Collapse>
+        </div>
       </div>
     </React.Fragment>
   );
