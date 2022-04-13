@@ -9,7 +9,7 @@ The application exposes one REST endpoint `/update` which, if it gets triggered,
 A example API specification entry in the database can be found in the `sample_entry_api_repository.json` file.
 
 # Setup Instructions
-##  In case you dont have kubectl, run the following command 
+##  In case you don't have `kubectl`, run the following command 
 ```bash
 alias kubectl="minikube kubectl --"     
 kubectl create namespace sock-shop
